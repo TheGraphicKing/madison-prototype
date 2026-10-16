@@ -17,6 +17,7 @@ import { Mark } from "@/components/core/mark";
 import { DataTable } from "@/components/core/data-table";
 import { Documents } from "./documents";
 import { Calendar } from "./calendar";
+import { useSceneSupport } from "@/components/scene/support";
 
 const CoverageField = dynamic(() => import("./field3d").then((m) => m.CoverageField), { ssr: false, loading: () => <div className="h-full w-full bg-surface" /> });
 
@@ -39,15 +40,8 @@ export function Coverage() {
   const view: View = VIEWS.some((x) => x.value === v) ? v : "field";
   const highlight = (sp.get("state") as FourState | null) ?? null;
   const pos = position();
-  const [webgl, setWebgl] = useState(true);
-  useEffect(() => {
-    try {
-      const c = document.createElement("canvas");
-      setWebgl(Boolean(c.getContext("webgl2") || c.getContext("webgl")));
-    } catch {
-      setWebgl(false);
-    }
-  }, []);
+  const support = useSceneSupport();
+  const webgl = support !== "2d";
   const setView = (nv: View) => router.replace(`/coverage/?view=${nv}${highlight ? `&state=${highlight}` : ""}`, { scroll: false });
   const setState = (s: FourState | null) => router.replace(`/coverage/?view=${view}${s ? `&state=${s}` : ""}`, { scroll: false });
 
