@@ -4,7 +4,7 @@
 // with soft shadows, a Lightformer environment (no HDR files), a matte ground with contact
 // shadows, and subtle ambient occlusion. Matte, soft, no bloom, no glow.
 import { Canvas } from "@react-three/fiber";
-import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
+import { ContactShadows, Environment, Html, Lightformer } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
 import * as THREE from "three";
 import type { ReactNode } from "react";
@@ -48,6 +48,10 @@ export function Stage({
         <color attach="background" args={[tk["--ground"]]} />
         <LightRig tk={tk} extent={extent} />
         {ground ? <Ground tk={tk} size={extent * 5} /> : null}
+        {/* drei drops the first Html it mounts in a scene; this empty one takes that slot */}
+        <Html position={[0, -1000, 0]} style={{ display: "none" }}>
+          <span />
+        </Html>
         {children}
         {ao ? (
           <EffectComposer multisampling={4}>

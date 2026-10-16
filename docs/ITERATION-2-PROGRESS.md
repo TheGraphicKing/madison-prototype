@@ -22,8 +22,8 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F15 | Real 3D coverage field | [x] | Done (F) · coverage/field3d.tsx on the scene kit: perspective camera, camera controls with fly-to, instanced rounded blocks with height by urgency, rings on known gaps, light rig, contact shadows, ambient occlusion, rise on load · phase-f/*, f38/coverage_* |
 | F16 | Plot detail panel | [x] | Done (F) · coverage/plot-detail.tsx: four counts, what we are covered by, what is not covered with owner and reason, next steps; opens for every plot; plot= in the URL selects one · phase-f/coverage_view_field_plot_reg-01-* |
 | F17 | Consequences and accepted gaps | [x] | Done (F) · What we are accepting (who, until when, why) and What it means (headline, what happens, who is affected, exam risk word, Illustrative only line) from consequences.json, with a sensible default for other plots |
-| F18 | Compact obligation filters | [ ] | |
-| F19 | Obligation page with lineage and history tabs | [ ] | |
+| F18 | Compact obligation filters | [x] | Done (G) · obligations/register.tsx: one row under 56 px with search, State, Regulation, Owner and Process popovers with checkboxes, Saved views and the count; table columns obligation, citation, certainty, owner, state, last change · phase-g/obligations-* |
+| F19 | Obligation page with lineage and history tabs | [x] | Done (G) · obligations/obligation-room.tsx: header with the rule words, state, owner, certainty; tabs What stands behind it (3D stack of six layers on the scene kit with a drift break and dashed missing layers, a Chain toggle, the selected layer on the right), History and Open items; React Flow removed from the code and package.json · phase-g/obligations_D-* |
 | F20 | 20 tasks, legible | [x] | Done (B, polished in H) · `src/data/tasks.json` v2; `phase-b/tasks-elena-*`, `phase-b/tasks-anthony-*` (glyph, title, from, why, due, state chip, one action); 20 tasks across 8 assignees (data has 8, not 9) |
 | F21 | Reports clear and deep | [ ] | |
 | F22 | Record chain and list | [ ] | |
@@ -52,7 +52,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 - [x] D Change room
 - [x] E Today and Rule changes
 - [x] F Coverage 3D v2
-- [ ] G Obligations
+- [x] G Obligations
 - [ ] H Tasks, Reports, Record
 - [ ] I Subtract, polish, ship (click-crawl, demo loops, DEMO.md, deploy)
 
