@@ -36,7 +36,7 @@ const TYPE = [
   { cls: "t-page", name: "Page title", spec: "28 / 34 · 500", sample: "Provisional credit for card and ACH disputes" },
   { cls: "t-section", name: "Section title", spec: "18 / 26 · 500, sentence case", sample: "Where Northgate stands" },
   { cls: "t-body", name: "Body", spec: "15 / 24", sample: "Provisional credit for card and ACH error claims moves from 10 business days to 5 business days." },
-  { cls: "t-small", name: "Small", spec: "13 / 20", sample: "Northgate offers consumer EFT and debit cards." },
+  { cls: "t-small", name: "Small", spec: "13 / 20", sample: "Northgate offers consumer electronic transfers and debit cards." },
   { cls: "text-[12.5px] leading-[18px] font-medium text-ink3", name: "Label", spec: "12.5 / 18 · 500 · sentence case", sample: "What you've been given" },
   { cls: "t-label", name: "Mono metadata", spec: "JetBrains Mono 10.5 · caps · table headers only", sample: "Citation · effective · owner" },
   { cls: "t-data", name: "Mono data", spec: "JetBrains Mono 12.5 · ids and citations", sample: "12 CFR 1005.11(c)(2)  D-1005-E2" },
@@ -259,7 +259,7 @@ export function Gallery() {
                 <PopoverContent>
                   <div className="p-2">
                     <MonoLabel>Bank fact</MonoLabel>
-                    <p className="mt-1 text-ink2">Consumer EFT: yes. Debit cards: yes.</p>
+                    <p className="mt-1 text-ink2">Electronic transfers: yes. Debit cards: yes.</p>
                   </div>
                 </PopoverContent>
               </Popover>

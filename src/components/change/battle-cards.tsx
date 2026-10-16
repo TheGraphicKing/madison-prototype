@@ -111,7 +111,7 @@ const FACTS_FOR: Record<string, string[]> = {
   "RC-2026-017": ["consumer_deposits"],
 };
 const FLAG_LABEL: Record<string, string> = {
-  consumer_eft: "Consumer EFT",
+  consumer_eft: "Electronic transfers",
   debit_cards: "Debit cards",
   prepaid_cards: "Prepaid cards",
   wires: "Wires",
@@ -453,4 +453,9 @@ export function CloseBody({ change }: { change: RuleChange }) {
       </p>
     </div>
   );
+}
+
+export function AppliesChip({ verdict, className }: { verdict: string; className?: string }) {
+  const tone = verdict === "Applies" ? "bg-ok-soft text-ok" : verdict === "Doesn't apply" ? "bg-surface2 text-ink2" : verdict === "Needs a bank fact" ? "bg-warn-soft text-warn" : "bg-info-soft text-info";
+  return <span className={cn("inline-flex h-6 shrink-0 items-center rounded-full px-2.5 text-[12px] font-medium whitespace-nowrap", tone, className)}>{verdict}</span>;
 }

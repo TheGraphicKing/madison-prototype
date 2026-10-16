@@ -20,7 +20,7 @@ import { RunStrip } from "@/components/run/strip";
 import { usePlayback } from "@/lib/player/engine";
 import { TaskDecision } from "@/components/tasks/task-action";
 import { Diff } from "./diff";
-import { appliesVerdict, AppliesBody, Card, CloseBody, CoveredBody, LinkedBody, ObligationsBody, WhatsLeftBody, type CardKey } from "./battle-cards";
+import { appliesVerdict, AppliesBody, AppliesChip, Card, CloseBody, CoveredBody, LinkedBody, ObligationsBody, WhatsLeftBody, type CardKey } from "./battle-cards";
 
 const RUN_FOR: Record<string, string> = { "RC-2026-014": "run-rule-1005", "RC-2026-011": "run-design-mfa", "RC-2026-016": "run-coverage-1026" };
 const TAG_WORDS: Record<string, string> = {
@@ -98,7 +98,7 @@ export function ChangeRoom({ id }: { id: string }) {
     <Page>
       {live && runId ? (
         <div className="mb-8">
-          <RunStrip runId={runId} instanceKey={runId} href={`/runs/${runId}/?mode=live&from=/rules/${id}/`} />
+          <RunStrip runId={runId} instanceKey={runId} href={`/runs/${runId}/?mode=live&view=simple&from=/rules/${id}/`} />
         </div>
       ) : null}
 
@@ -187,11 +187,6 @@ export function ChangeRoom({ id }: { id: string }) {
       }} />
     </Page>
   );
-}
-
-function AppliesChip({ verdict }: { verdict: string }) {
-  const tone = verdict === "Applies" ? "bg-ok-soft text-ok" : verdict === "Doesn't apply" ? "bg-surface2 text-ink2" : verdict === "Needs a bank fact" ? "bg-warn-soft text-warn" : "bg-info-soft text-info";
-  return <span className={cn("inline-flex h-6 items-center rounded-full px-2.5 text-[12px] font-medium", tone)}>{verdict}</span>;
 }
 
 function cardSummary(key: CardKey, c: RuleChange, verdict: string, blocked: number): string {

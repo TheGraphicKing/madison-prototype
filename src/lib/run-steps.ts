@@ -69,7 +69,7 @@ export function stepResult(run: Run, key: string, st: RunState, deciderName?: st
         return s.state === "done" ? `${secs.length} sections · ${changed} changed` : `${secs.length} of 14 sections so far`;
       }
       case "scope":
-        return s.state === "done" ? "Applies: Northgate offers consumer EFT and debit cards" : "Checking the bank's facts";
+        return s.state === "done" ? "Applies: Northgate offers consumer electronic transfers and debit cards" : "Checking the bank's facts";
       case "duties":
         return s.state === "done" ? "Found 8 obligations in 9 sections" : `Found ${st.metrics.duties_found ?? 0} so far`;
       case "checks":

@@ -43,7 +43,7 @@ export function StepVisual({ run, stageKey, st }: { run: Run; stageKey: string; 
       return (
         <div className="flex flex-wrap gap-1.5">
           {[
-            ["Consumer EFT", f.consumer_eft],
+            ["Electronic transfers", f.consumer_eft],
             ["Debit cards", f.debit_cards],
             ["Prepaid cards", f.prepaid_cards],
           ].map(([k, v]) => (

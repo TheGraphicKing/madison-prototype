@@ -43,7 +43,7 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
         why: "The amendment halves the time to give provisional credit. Nothing downstream can start until Madison has read it.",
         ask: "Run Madison on the amended rule, then accept the obligations it finds.",
         blocks: ["Anthony Marsh cannot accept the impact of 12 CFR 1005.11(c)", "3 vendor checks cannot start"],
-        options: [{ id: "run", label: "Run Madison on this rule", next: "Madison reads the rule and stops for you at the decision.", primary: true, href: "/runs/run-rule-1005/?mode=live&from=/rules/RC-2026-014/" }],
+        options: [{ id: "run", label: "Run Madison on this rule", next: "Madison reads the rule and stops for you at the decision.", primary: true, href: "/runs/run-rule-1005/?mode=live&view=simple&from=/rules/RC-2026-014/" }],
       };
     case "T-298":
       base.provided.push(
@@ -65,7 +65,7 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
         ...base,
         ask: "Run the coverage check for revised Loan Estimates, then confirm the links.",
         blocks: ["RC-2026-016 cannot move to Covered"],
-        options: [{ id: "run", label: "Run the coverage check", next: "Madison compares policy, procedure and rule, then asks you to confirm.", primary: true, href: "/runs/run-coverage-1026/?mode=live&from=/rules/RC-2026-016/" }],
+        options: [{ id: "run", label: "Run the coverage check", next: "Madison compares policy, procedure and rule, then asks you to confirm.", primary: true, href: "/runs/run-coverage-1026/?mode=live&view=simple&from=/rules/RC-2026-016/" }],
       };
     case "T-289": {
       const ds = dutiesFor("RC-2026-013");

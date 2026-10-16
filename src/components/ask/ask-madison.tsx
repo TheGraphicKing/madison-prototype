@@ -67,7 +67,7 @@ export function AskMadison() {
       <button
         onClick={() => setOpen(true)}
         aria-keyshortcuts="Meta+J"
-        className={cn("no-print fixed right-6 bottom-6 z-30 max-md:right-5 max-md:bottom-5", path.startsWith("/runs/") && "bottom-[112px] max-md:bottom-5")}
+        className={cn("no-print fixed right-6 bottom-6 z-30 max-md:right-5 max-md:bottom-5", path.startsWith("/runs/") && "hidden")}
         aria-label="Ask Madison"
       >
         <span className="flex h-11 items-center gap-3 rounded-full bg-surface px-5 shadow-(--overlay-shadow) ring-1 ring-line transition-colors hover:bg-surface2">

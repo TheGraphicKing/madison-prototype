@@ -118,7 +118,7 @@ function Body({ run, stageKey, st }: { run: Run; stageKey: string; st: RunState 
             <Part title="What was read">
               <div className="flex flex-wrap gap-1.5">
                 {[
-                  ["Consumer EFT", institution.product_flags.consumer_eft],
+                  ["Electronic transfers", institution.product_flags.consumer_eft],
                   ["Debit cards", institution.product_flags.debit_cards],
                   ["Prepaid cards", institution.product_flags.prepaid_cards],
                 ].map(([k, v]) => (
@@ -129,7 +129,7 @@ function Body({ run, stageKey, st }: { run: Run; stageKey: string; st: RunState 
               </div>
             </Part>
             <Part title="What it found">
-              <p className="text-[14px] leading-[22px]">It applies. Northgate offers consumer EFT and debit cards. Prepaid accounts are not offered, so the prepaid parts do not apply.</p>
+              <p className="text-[14px] leading-[22px]">It applies. Northgate offers consumer electronic transfers and debit cards. Prepaid accounts are not offered, so the prepaid parts do not apply.</p>
               <CertaintyWord value="Clear" className="mt-2" />
             </Part>
           </>

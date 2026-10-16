@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { getChange, getDuty, handoffById, userById } from "@/data";
 import type { PersonEvent, Run } from "@/data/types";
@@ -22,6 +23,7 @@ import { PersonaSwitch } from "@/components/shell/persona-switch";
 import { ColorButton } from "@/components/shell/color-button";
 import { DecisionPanel, type Evidence } from "@/components/decision/decision-panel";
 import { StepVisual } from "./step-visual";
+import { AgentView } from "./agent-view";
 import { StepDetail } from "./step-detail";
 import { Quoted } from "./quoted";
 import { ruleSections } from "@/data";
@@ -40,7 +42,17 @@ function handoffResponses(run: Run) {
   return out;
 }
 
-export function RunView({ runId, mode, from, step }: { runId: string; mode: Mode; from: string; step?: string | null }) {
+export function RunView({ runId, mode, from, step, view: initialView = "agent" }: { runId: string; mode: Mode; from: string; step?: string | null; view?: "simple" | "agent" }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const sp = useSearchParams();
+  const [view, setViewState] = useState<"simple" | "agent">(initialView);
+  const setView = (v: "simple" | "agent") => {
+    setViewState(v);
+    const q = new URLSearchParams(sp.toString());
+    q.set("view", v);
+    router.replace(`${pathname}?${q.toString()}`, { scroll: false });
+  };
   const finished = useStore((s) => s.finishedRuns[runId]);
   const handoffState = useStore((s) => s.handoffs);
   const persona = useStore((s) => s.persona);
@@ -120,6 +132,8 @@ export function RunView({ runId, mode, from, step }: { runId: string; mode: Mode
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-3">
+            <Segmented<"simple" | "agent"> label="View" size={28} value={view} onChange={setView} options={[{ value: "simple", label: "Simple" }, { value: "agent", label: "Agent" }]} />
+            <span className="mx-1 h-5 w-px bg-line max-md:hidden" />
             {!state.done || playing ? (
               <Button variant="quiet" size={32} onClick={controls.toggle} aria-keyshortcuts="Space" className="w-[72px]">
                 {playing ? "Pause" : "Play"}
@@ -136,6 +150,17 @@ export function RunView({ runId, mode, from, step }: { runId: string; mode: Mode
         </div>
       </header>
 
+      {view === "agent" ? (
+        <AgentView
+          run={run}
+          st={state}
+          playing={playing}
+          selected={selected}
+          onSelect={setSelected}
+          checkpoint={state.pending ? <Checkpoint run={run} st={state} pending={state.pending} reviewAll={reviewAll} onReview={() => setReviewAll(true)} onRespond={respond} /> : null}
+        />
+      ) : (
+      <>
       <main className="mx-auto grid w-full max-w-[1400px] flex-1 grid-cols-[minmax(0,6fr)_minmax(0,4fr)] gap-8 px-8 pt-8 pb-6 max-lg:grid-cols-1 max-md:px-5">
         <section aria-label="The flow" className="min-w-0">
           {state.done ? <DoneSummary run={run} /> : null}
@@ -176,6 +201,8 @@ export function RunView({ runId, mode, from, step }: { runId: string; mode: Mode
       </main>
 
       <footer className="px-8 pb-6 text-[12px] text-ink3 max-md:px-5">{DISCLAIMER}</footer>
+      </>
+      )}
     </div>
   );
 }
