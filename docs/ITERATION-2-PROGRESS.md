@@ -42,7 +42,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F35 | Custom glyph set | [x] | Done (A) · `src/components/glyphs/index.tsx` (7 nav, 11 task types, chevron) · gallery `phase-a/gallery-graphite-light-1440.png` · no icon library in package.json |
 | F36 | No penalty figures | [x] | Done (F) · exposure is words only, labelled Illustrative only; scan-text flags any dollar amount on 24 routes (only the rule threshold of 100,000 is allowed) |
 | F37 | Agent view next to Simple view | [x] | Done (after D) · `run/agent-view.tsx`: three zones, Simple and Agent switch, Agent is the default for replays, `view=simple` for live runs from the change room · `f37/agent-rule-*` (running, waiting, decide, done, focus) in three themes, `f37/agent-coverage-replay-*`, `f37/agent-mfa-replay-*`, `f37/agent-rule-done-graphite-light-390.png`. Critique and next steps: `f37/CRITIQUE.md`. F38 builds on this. |
-| F38 | One 3D language (scene kit) across the product | [ ] | |
+| F38 | One 3D language (scene kit) across the product | [x] | Done · components/scene (stage, light rig, ground, AO, rounded blocks, platforms, gate, labels, guided camera) used by Coverage, the run's 3D live system (run/system-3d.tsx, default for replays and How Madison got here), the obligation lineage, the record chain and the Today mini field; team column lists agents with roles; toasts top centre; 2D fallbacks for no WebGL or reduced motion · f38/compare-*.png, f38/CRITIQUE.md, f38/rule-*-3d-*, f38/rule-*-2d-* |
 
 ## Phases
 

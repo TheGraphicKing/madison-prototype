@@ -12,7 +12,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { Run } from "@/data/types";
 import type { ItemInstance, RunState } from "@/lib/player/derive";
-import { getDuty, position, userById } from "@/data";
+import { agentById, getDuty, position, userById } from "@/data";
 import { useStore } from "@/lib/store";
 import { stepResult, stepTitle } from "@/lib/run-steps";
 import { Typed } from "@/components/core/typed";
@@ -52,7 +52,7 @@ function layoutFor(run: Run): Layout {
     stage[s.key] = { x: x0 + col * GAP_X, z: rows === 1 ? -0.8 : row === 0 ? -ROW_Z : ROW_Z, top: raised ? RAISED : H, raised, gate: s.kind === "gate", row, col };
   });
   const srcs = run.sources ?? [];
-  const sx = x0 - 4.6;
+  const sx = x0 - 6.6;
   const source: Layout["source"] = {};
   srcs.forEach((s, i) => {
     const z = srcs.length === 1 ? 0 : -3.8 + (7.6 * i) / (srcs.length - 1);
@@ -66,18 +66,18 @@ function layoutFor(run: Run): Layout {
     tray = p.col === perRow - 1 ? { x: p.x + W / 2 + 1.0, z: p.z } : { x: p.x, z: p.z + D / 2 + 1.0 };
   }
   const xr = x0 + (perRow - 1) * GAP_X;
-  const plot = run.id === "run-rule-1005" ? { x: x0 + ((perRow - 1) * GAP_X) / 2, z: ROW_Z + D / 2 + 3.1 } : undefined;
+  const plot = run.id === "run-rule-1005" ? { x: x0 + ((perRow - 1) * GAP_X) / 2, z: -ROW_Z - D / 2 - 2.1 } : undefined;
   const out: Layout["out"] = { out: { x: x0 - 1.6, z: rows === 1 ? 1.6 : ROW_Z + 1.4 }, tprm: { x: xr + 2.6, z: -1.2 }, assurance: { x: xr + 2.6, z: 1.2 } };
   const minX = sx - 2.2;
   const maxX = Math.max(xr + W / 2 + 1.6, tray ? tray.x + 0.8 : -Infinity);
-  const minZ = -4.2;
-  const maxZ = plot ? plot.z + 1.3 : (rows === 1 ? 2.8 : ROW_Z + D / 2 + 0.9) + 0.3;
+  const minZ = plot ? plot.z - 1.4 : -4.2;
+  const maxZ = (rows === 1 ? 2.8 : ROW_Z + D / 2 + 0.9) + 0.3;
   return { stage, source, tray, plot, out, bounds: { center: [(minX + maxX) / 2, 0.3, (minZ + maxZ) / 2], size: [maxX - minX, 0.8, maxZ - minZ] } };
 }
 
 /** The Regulation E plot that the run's obligations settle into: 10 by 10. */
 const PLOT_COLS = 10;
-const PLOT_CELL = 0.15;
+const PLOT_CELL = 0.2;
 function plotSlot(k: number, origin: { x: number; z: number }) {
   const c = k % PLOT_COLS;
   const r = Math.floor(k / PLOT_COLS);
@@ -292,22 +292,28 @@ function SystemScene({
   const runningKey = run.stages.find((s) => ["running", "waiting_person"].includes(st.stages[s.key].state))?.key;
   const fk = selected ?? runningKey;
   const focus: Frame | null =
-    guided && st.done && !selected && lay.plot
-      ? { center: [lay.plot.x, 0.2, lay.plot.z - 2.2], size: [12, 1, 9] }
-      : !guided || st.done || !fk
+    !guided || st.done || !fk
       ? null
       : (() => {
           const s = lay.stage[fk];
           // pan toward the work, keeping most of the system in view
           const b = lay.bounds;
-          return { center: [b.center[0] + (s.x - b.center[0]) * 0.3, s.top, b.center[2] + (s.z - b.center[2]) * 0.3], size: [b.size[0] * 0.9, 1, b.size[2] * 0.9] };
+          return { center: [b.center[0] + (s.x - b.center[0]) * 0.12, s.top, b.center[2] + (s.z - b.center[2]) * 0.12], size: [b.size[0] * 0.98, 1, b.size[2] * 0.98] };
         })();
 
   const path = run.stages.map((s) => lay.stage[s.key]);
+  const feeds = useMemo(() => {
+    const out: { source: string; stage: string }[] = [];
+    const add = (source: string, stage: string) => !out.some((f) => f.source === source && f.stage === stage) && out.push({ source, stage });
+    for (const e of run.events) if (e.type === "item" && lay.source[e.from] && lay.stage[e.to]) add(e.from, e.to);
+    const scope = run.stages.find((x) => x.key === "scope" || x.key === "suggest");
+    if (scope) for (const id of Object.keys(lay.source)) if (/profile|fr$/.test(id) && !out.some((f) => f.source === id)) add(id, id.endsWith("fr") ? run.stages[0].key : scope.key);
+    return out;
+  }, [run, lay]);
 
   return (
     <>
-      <CameraRig overview={lay.bounds} focus={focus} resetKey={reset} drift={!playing} padding={-0.12} azimuth={0} polar={47} />
+      <CameraRig overview={lay.bounds} focus={focus} resetKey={reset} drift={!playing} padding={-0.08} azimuth={0} polar={40} />
 
       {/* sources: stacks of sheets */}
       {(run.sources ?? []).map((s) => {
@@ -326,6 +332,18 @@ function SystemScene({
             </Label>
           </group>
         );
+      })}
+
+      {/* which source feeds which step: faint until the step has used it */}
+      {feeds.map((f) => {
+        const src = lay.source[f.source];
+        const s = lay.stage[f.stage];
+        if (!src || !s) return null;
+        const used = st.stages[f.stage]?.state !== "waiting";
+        const a = new THREE.Vector3(src.x + 0.62, 0.36, src.z);
+        const b = new THREE.Vector3(s.x - W / 2, 0.1, s.z);
+        const pts = new THREE.CubicBezierCurve3(a, a.clone().add(new THREE.Vector3(1.4, 0, 0)), b.clone().add(new THREE.Vector3(-1.4, 0, 0)), b).getPoints(28);
+        return <Line key={`${f.source}-${f.stage}`} points={pts} color={tk["--ink"]} lineWidth={1} transparent opacity={used ? 0.32 : 0.1} dashed={!used} dashSize={0.1} gapSize={0.08} />;
       })}
 
       {/* the path between steps */}
@@ -389,6 +407,7 @@ function SystemScene({
                 ) : result ? (
                   <span className="mt-0.5 block text-[12px] leading-[17px] text-ink2">{result}</span>
                 ) : null}
+                <span className="mt-1 block font-mono text-[9px] leading-[13px] tracking-[0.08em] text-ink3 uppercase">{s.agents.map((a) => (a.startsWith("person:") ? "You decide" : agentById(a)?.name ?? "")).join(" · ")}</span>
                 {p.gate && gateChecked && !result ? (
                   <span className="mt-0.5 block text-[12px] leading-[17px] text-ink2">
                     {gateChecked - held.length} passed{held.length ? ` · ${held.length} held back` : ""}
@@ -463,8 +482,8 @@ function PlotBase({ tk, origin, base, done, label }: { tk: Tokens; origin: { x: 
   return (
     <group>
       <Platform position={[origin.x, 0, origin.z]} size={[PLOT_COLS * PLOT_CELL + 0.24, 0.08, 10 * PLOT_CELL + 0.24]} radius={0.06} color={tk["--surface2"]} />
-      <Blocks count={items.length} items={items} size={[0.12, 0.09, 0.12]} radius={0.03} />
-      <Label position={[origin.x, 0.1, origin.z + 5 * PLOT_CELL + 0.2]} anchor="top" z={[8, 0]}>
+      <Blocks count={items.length} items={items} size={[0.16, 0.1, 0.16]} radius={0.04} />
+      <Label position={[origin.x, 0.1, origin.z - 5 * PLOT_CELL - 0.2]} anchor="bottom" z={[8, 0]}>
         <span className={cn("text-[12px] whitespace-nowrap", done ? "font-medium text-ink" : "text-ink3")}>{label}</span>
       </Label>
     </group>
