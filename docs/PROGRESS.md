@@ -3,17 +3,17 @@
 If the session is compacted: re-read `docs/PLAN.md` and this file, then continue from the first unchecked item.
 
 ## Phase 0 — Setup
-- [ ] git init, Next.js scaffold, deps, shadcn init without lucide
-- [ ] Copy data, palettes, reference
-- [ ] Build passes, first commit
+- [x] git init, Next.js scaffold, deps, shadcn init without lucide
+- [x] Copy data, palettes, reference
+- [x] Build passes, first commit
 
 ## Phase 1 — Foundation
-- [ ] palettes.css + @theme mapping, fonts, motion tokens
-- [ ] Core components (marks, brackets, ports, packets, labels, counts, chips, certainty, agent and person tags, buttons, data table, panel, overlays, tabs, segmented, typed text, sparkline, step chart)
-- [ ] App shell: rail, header, persona switch, Color button
-- [ ] All routes with static params
-- [ ] /gallery, checked in six palettes
-- [ ] Checks + screenshots + commit
+- [x] palettes.css + @theme mapping, fonts, motion tokens
+- [x] Core components (marks, brackets, ports, packets, labels, counts, chips, certainty, agent and person tags, buttons, data table, panel, overlays, tabs, segmented, typed text, sparkline, step chart)
+- [x] App shell: rail, header, persona switch, Color button
+- [x] All routes with static params
+- [x] /gallery, checked in six palettes
+- [x] Checks + screenshots + commit
 
 ## Phase 2 — Data and player
 - [ ] types.ts, index.ts getters, dates helper
