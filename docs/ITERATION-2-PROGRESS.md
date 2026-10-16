@@ -19,9 +19,9 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F12 | Real after-run battle cards | [x] | Done (D) · `change/battle-cards.tsx`: chip chain with Confirm or Reject, segmented coverage bar, blockers, gaps with consequence line, close checklist · `phase-d/rules_RC-2026-016-*`, `phase-d/rules_RC-2026-011-*` |
 | F13 | Doesn't-apply shows only Applies | [x] | Done (D) · RC-2026-018 shows only the Applies card, the bank fact and "Reopen if this changes" · `phase-d/rules_RC-2026-018-*` |
 | F14 | Card to step and step to card links | [x] | Done (D) · each card's "See how" opens the replay at its step with `from=` back; `#card-{k}` opens and scrolls to a card; `run/step-detail.tsx` links each step to its card · `phase-d/rules_RC-2026-014_touches_1-*` for the What it touches slide-over |
-| F15 | Real 3D coverage field | [ ] | |
-| F16 | Plot detail panel | [ ] | |
-| F17 | Consequences and accepted gaps | [ ] | |
+| F15 | Real 3D coverage field | [x] | Done (F) · coverage/field3d.tsx on the scene kit: perspective camera, camera controls with fly-to, instanced rounded blocks with height by urgency, rings on known gaps, light rig, contact shadows, ambient occlusion, rise on load · phase-f/*, f38/coverage_* |
+| F16 | Plot detail panel | [x] | Done (F) · coverage/plot-detail.tsx: four counts, what we are covered by, what is not covered with owner and reason, next steps; opens for every plot; plot= in the URL selects one · phase-f/coverage_view_field_plot_reg-01-* |
+| F17 | Consequences and accepted gaps | [x] | Done (F) · What we are accepting (who, until when, why) and What it means (headline, what happens, who is affected, exam risk word, Illustrative only line) from consequences.json, with a sensible default for other plots |
 | F18 | Compact obligation filters | [ ] | |
 | F19 | Obligation page with lineage and history tabs | [ ] | |
 | F20 | 20 tasks, legible | [x] | Done (B, polished in H) · `src/data/tasks.json` v2; `phase-b/tasks-elena-*`, `phase-b/tasks-anthony-*` (glyph, title, from, why, due, state chip, one action); 20 tasks across 8 assignees (data has 8, not 9) |
@@ -40,7 +40,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F33 | All three runs in the new layout | [x] | Done (C) · rule run, coverage check and control design in one layout · `phase-c/run-reg-*`, `phase-c/run-coverage-*`, `phase-c/run-mfa-*` |
 | F34 | Seven personas | [x] | Done (B) · `PERSONA_IDS` has 7 people · persona switch |
 | F35 | Custom glyph set | [x] | Done (A) · `src/components/glyphs/index.tsx` (7 nav, 11 task types, chevron) · gallery `phase-a/gallery-graphite-light-1440.png` · no icon library in package.json |
-| F36 | No penalty figures | [ ] | |
+| F36 | No penalty figures | [x] | Done (F) · exposure is words only, labelled Illustrative only; scan-text flags any dollar amount on 24 routes (only the rule threshold of 100,000 is allowed) |
 | F37 | Agent view next to Simple view | [x] | Done (after D) · `run/agent-view.tsx`: three zones, Simple and Agent switch, Agent is the default for replays, `view=simple` for live runs from the change room · `f37/agent-rule-*` (running, waiting, decide, done, focus) in three themes, `f37/agent-coverage-replay-*`, `f37/agent-mfa-replay-*`, `f37/agent-rule-done-graphite-light-390.png`. Critique and next steps: `f37/CRITIQUE.md`. F38 builds on this. |
 | F38 | One 3D language (scene kit) across the product | [ ] | |
 
@@ -51,7 +51,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 - [x] C Run view v2
 - [x] D Change room
 - [x] E Today and Rule changes
-- [ ] F Coverage 3D v2
+- [x] F Coverage 3D v2
 - [ ] G Obligations
 - [ ] H Tasks, Reports, Record
 - [ ] I Subtract, polish, ship (click-crawl, demo loops, DEMO.md, deploy)

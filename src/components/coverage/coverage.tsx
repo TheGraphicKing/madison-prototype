@@ -17,6 +17,7 @@ import { Mark } from "@/components/core/mark";
 import { DataTable } from "@/components/core/data-table";
 import { Documents } from "./documents";
 import { Calendar } from "./calendar";
+import { PlotDetail } from "./plot-detail";
 import { useSceneSupport } from "@/components/scene/support";
 
 const CoverageField = dynamic(() => import("./field3d").then((m) => m.CoverageField), { ssr: false, loading: () => <div className="h-full w-full bg-surface" /> });
@@ -84,7 +85,11 @@ export function Coverage() {
 
 function FieldView({ highlight }: { highlight: FourState | null }) {
   const { plots } = useMemo(() => coverageField(), []);
-  const [sel, setSel] = useState<number | null>(null);
+  const sp = useSearchParams();
+  const [sel, setSel] = useState<number | null>(() => {
+    const i = plots.findIndex((p) => p.regulationId === sp.get("plot"));
+    return i >= 0 ? i : null;
+  });
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && setSel(null);
     window.addEventListener("keydown", k);
@@ -125,42 +130,7 @@ function PlotPanel({ plot, onClose, plots, onPick }: { plot: Plot | null; onClos
       </aside>
     );
   }
-  const duties = plot.dutyIds.map((id) => getDuty(id)!).filter(Boolean);
-  return (
-    <aside className="flex flex-col gap-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <MonoLabel>{plot.citation}</MonoLabel>
-          <h2 className="t-section mt-1">{plot.title}</h2>
-        </div>
-        <button onClick={onClose} aria-label="Back to all plots" className="-mr-1 inline-flex size-8 items-center justify-center text-ink2 hover:text-ink">
-          <Mark kind="close" />
-        </button>
-      </div>
-      <ul className="flex flex-col border-y border-line">
-        {STATES.map((s) => (
-          <li key={s} className="flex items-center justify-between border-b border-line py-2 last:border-b-0">
-            <StatusChip state={s} />
-            <span className="t-data text-[13px]">{plot.counts[s]}</span>
-          </li>
-        ))}
-      </ul>
-      <MonoLabel>Duties named in this demo · {duties.length}</MonoLabel>
-      <ul className="flex max-h-[300px] flex-col overflow-y-auto">
-        {duties.map((d) => (
-          <li key={d.id}>
-            <Link href={`/obligations/${d.id}/`} className="block border-b border-line py-2.5 hover:bg-surface">
-              <span className="t-data text-[11px] text-ink3">{d.id}</span>
-              <span className="block text-[13.5px] leading-5">{d.plain}</span>
-              <StatusChip state={d.coverage_state} size="sm" />
-            </Link>
-          </li>
-        ))}
-        {duties.length === 0 ? <li className="text-[13px] text-ink3">No duties from this regulation are part of the demo script.</li> : null}
-      </ul>
-      <p className="text-[12px] text-ink3">{plot.total - duties.length} more on record in the register.</p>
-    </aside>
-  );
+  return <PlotDetail plot={plot} onClose={onClose} />;
 }
 
 export function MiniBar({ counts, width = 140 }: { counts: Record<FourState, number>; width?: number }) {

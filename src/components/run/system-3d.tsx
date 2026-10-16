@@ -121,7 +121,7 @@ export function System3D({
       ) : null}
       <div className="absolute right-4 bottom-4 flex flex-wrap items-center justify-end gap-2">
         {st.done && regE ? (
-          <Link href="/coverage/?view=field" className="inline-flex h-8 items-center rounded-[10px] bg-ink px-3 text-[13px] font-medium text-surface hover:opacity-90">
+          <Link href="/coverage/?view=field&plot=reg-01" className="inline-flex h-8 items-center rounded-[10px] bg-ink px-3 text-[13px] font-medium text-surface hover:opacity-90">
             Open in Coverage
           </Link>
         ) : null}
