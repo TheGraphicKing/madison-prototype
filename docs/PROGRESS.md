@@ -16,11 +16,11 @@ If the session is compacted: re-read `docs/PLAN.md` and this file, then continue
 - [x] Checks + screenshots + commit
 
 ## Phase 2 — Data and player
-- [ ] types.ts, index.ts getters, dates helper
-- [ ] zustand store, apply results, toasts, Reset demo
-- [ ] Player: pure derivation, person pauses, seek, speed, step
-- [ ] Vitest tests
-- [ ] Checks + commit
+- [x] types.ts, index.ts getters, dates helper
+- [x] zustand store, apply results, toasts, Reset demo
+- [x] Player: pure derivation, person pauses, seek, speed, step
+- [x] Vitest tests
+- [x] Checks + commit
 
 ## Phase 3 — Agent canvas
 - [ ] Schematic layout, lanes, sources, ports, connectors, packets
