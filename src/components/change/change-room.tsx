@@ -34,7 +34,7 @@ import { Mark, Square } from "@/components/core/mark";
 import { Button, ButtonLink } from "@/components/core/button";
 import { SlideOver } from "@/components/core/overlays";
 import { Count } from "@/components/core/labels";
-import { RunStrip } from "@/components/canvas/strip";
+import { RunStrip } from "@/components/run/strip";
 import { usePlayback } from "@/lib/player/engine";
 import { TaskNow } from "./task-now";
 import { DriftPair } from "./drift-pair";

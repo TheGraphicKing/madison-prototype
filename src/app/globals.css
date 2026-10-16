@@ -317,3 +317,13 @@ button:disabled {
 }
 .scrub::-moz-range-thumb { width: 10px; height: 10px; background: var(--ink); border: 0; border-radius: 0; }
 .scrub:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* the live strip's moving dots */
+@keyframes live-dot {
+  0% { left: 0; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { left: calc(100% - 8px); opacity: 0; }
+}
+.live-dot { animation: live-dot 1.05s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .live-dot { animation: none; opacity: 0.6; } }

@@ -30,7 +30,7 @@ import { MonoLabel } from "@/components/core/labels";
 import { AgentTag, PersonTag } from "@/components/core/tags";
 import { CertaintyWord, certaintyFrom, STATE_COLOR, StatusChip } from "@/components/core/status";
 import { Square } from "@/components/core/mark";
-import { Quoted } from "@/components/canvas/inspector";
+import { Quoted } from "@/components/run/quoted";
 import { ButtonLink } from "@/components/core/button";
 import { DriftPair } from "@/components/change/drift-pair";
 

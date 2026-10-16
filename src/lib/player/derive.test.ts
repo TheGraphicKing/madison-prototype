@@ -119,18 +119,3 @@ describe("results", () => {
   });
 });
 
-import { lineageOf } from "@/components/canvas/lineage";
-describe("lineage for the hover trace", () => {
-  it("a duty traces to its section, links, drift and what it touches, not its siblings", () => {
-    const l = lineageOf(reg, "D-1005-E2");
-    for (const id of ["sec-5", "doc-1005", "D-1005-E2>POL-DISP-01-4.2", "D-1005-E2>CTL-132", "touch-POL-DISP-01-4.2", "touch-PRC-DISP-06-4", "touch-CTL-132", "touch-V-MARLOW"]) expect(l.ids.has(id), id).toBe(true);
-    expect(l.ids.has("D-1005-E1")).toBe(false);
-    expect(l.ids.has("sec-4")).toBe(false);
-    expect(l.stages.has("coverage")).toBe(true);
-  });
-  it("a vendor traces back to the duties it serves", () => {
-    const l = lineageOf(reg, "touch-V-VANTREL");
-    expect(l.ids.has("ref:CTL-131")).toBe(true);
-    expect(l.ids.has("D-1005-E1")).toBe(true);
-  });
-});

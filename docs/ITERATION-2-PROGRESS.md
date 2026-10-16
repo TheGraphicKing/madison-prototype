@@ -11,9 +11,9 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F03 | Counts with deltas, small trend | [ ] | |
 | F04 | Today sections made clearer | [ ] | |
 | F06 | Duty renamed obligation everywhere | [x] | Done (A) · `scripts/scan-text.mjs` reports no duty/duties on 24 routes · `/duties` redirects to `/obligations` (`app/duties/**`) |
-| F07 | Run view: one step flow, at most 2 regions | [ ] | |
-| F08 | Agents hidden behind "Show how Madison did this" | [ ] | |
-| F09 | Flow stays viewable after deciding | [ ] | |
+| F07 | Run view: one step flow, at most 2 regions | [x] | Done (C) · `components/run/run-view.tsx`: two regions (flow 60%, detail 40%) · `phase-c/run-reg-running-*`, `phase-c/run-reg-checkpoint-*` |
+| F08 | Agents hidden behind "Show how Madison did this" | [x] | Done (C) · no agents column; agent names only inside "Show how Madison did this" (`data-how`) in `run/step-detail.tsx` |
+| F09 | Flow stays viewable after deciding | [x] | Done (C) · finished flow stays on screen with every step clickable and Replay · `phase-c/run-reg-done-graphite-light-1440.png`; replay opens finished |
 | F10 | One Decision panel in three places | [ ] | |
 | F11 | Useful before-run state | [ ] | |
 | F12 | Real after-run battle cards | [ ] | |
@@ -34,10 +34,10 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F27 | Blockers explicit in the drawer | [x] | Done (B) · `components/tasks/task-drawer.tsx`: What you've been given / What you need to provide · `phase-b/drawer-priya-H117-*`, `phase-b/drawer-margaret-H115-*` |
 | F28 | Softer components, no brackets | [x] | Done (A) · radii 14/12/10/pill in `globals.css` and core components; `core/bracket.tsx` deleted; `check-forbidden.sh` checks Bracket |
 | F29 | Calm working screens | [ ] | |
-| F30 | Replay disclaimer | [ ] | |
+| F30 | Replay disclaimer | [x] | Done (C) · disclaimer footer on every run view · all `phase-c/run-*` shots |
 | F31 | Human input unmistakable | [ ] | |
 | F32 | No new modules, repetition removed | [ ] | |
-| F33 | All three runs in the new layout | [ ] | |
+| F33 | All three runs in the new layout | [x] | Done (C) · rule run, coverage check and control design in one layout · `phase-c/run-reg-*`, `phase-c/run-coverage-*`, `phase-c/run-mfa-*` |
 | F34 | Seven personas | [x] | Done (B) · `PERSONA_IDS` has 7 people · persona switch |
 | F35 | Custom glyph set | [x] | Done (A) · `src/components/glyphs/index.tsx` (7 nav, 11 task types, chevron) · gallery `phase-a/gallery-graphite-light-1440.png` · no icon library in package.json |
 | F36 | No penalty figures | [ ] | |
@@ -46,7 +46,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 
 - [x] A Foundation v2
 - [x] B Data, tasks and handoffs
-- [ ] C Run view v2
+- [x] C Run view v2
 - [ ] D Change room
 - [ ] E Today and Rule changes
 - [ ] F Coverage 3D v2

@@ -16,7 +16,6 @@ import { StepChart } from "@/components/core/charts";
 import { ButtonLink } from "@/components/core/button";
 import { AgentTag, PersonTag } from "@/components/core/tags";
 import { Square } from "@/components/core/mark";
-import { RunCard, RunStrip } from "@/components/canvas/strip";
 import { AnimatedList } from "@/components/ui/animated-list";
 
 function greetingWord() {
@@ -82,12 +81,6 @@ export function Today() {
         </ul>
       </section>
 
-      <Section className="mt-10 md:hidden">
-        <RunStrip runId="run-rule-1005" instanceKey="card:run-rule-1005" href="/rules/RC-2026-014/" init={{ mode: "replay", loop: true, autoRespond: true, speed: 2, playing: true }} />
-      </Section>
-      <Section className="mt-10 max-md:hidden">
-        <RunCard runId="run-rule-1005" href={finished["run-rule-1005"] ? "/runs/run-rule-1005/?mode=replay&from=/" : "/rules/RC-2026-014/"} label="Live on 12 CFR 1005.11(c)" />
-      </Section>
 
       <Section>
         <SectionHead

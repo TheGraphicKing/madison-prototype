@@ -31,6 +31,7 @@ export function DecisionPanel({
   className,
   compact,
   done,
+  expandAll,
 }: {
   deciding: string;
   why: React.ReactNode;
@@ -49,10 +50,14 @@ export function DecisionPanel({
   compact?: boolean;
   /** shown instead of the options once decided */
   done?: { label: string; by: string; at: string } | null;
+  /** open every evidence item (for "Review one by one") */
+  expandAll?: boolean;
 }) {
   const persona = useStore((s) => s.persona);
   const setPersona = useStore((s) => s.setPersona);
   const [open, setOpen] = useState<Record<string, boolean>>({});
+  const [all, setAll] = useState(false);
+  const visible = expandAll || all || evidence.length <= 4 ? evidence : evidence.slice(0, 3);
   const who = userById(decider);
   const isMe = persona === decider;
 
@@ -88,8 +93,8 @@ export function DecisionPanel({
           <div>
             <div className="text-[12.5px] font-medium text-ink3">The evidence · {evidence.length}</div>
             <ul className="mt-2 flex flex-col gap-1.5">
-              {evidence.map((e) => {
-                const o = open[e.key];
+              {visible.map((e) => {
+                const o = expandAll || open[e.key];
                 return (
                   <li key={e.key} className="rounded-[10px] bg-surface2">
                     <button
@@ -109,6 +114,11 @@ export function DecisionPanel({
                 );
               })}
             </ul>
+            {visible.length < evidence.length ? (
+              <button onClick={() => setAll(true)} className="mt-2 text-[13px] font-medium underline underline-offset-4">
+                Show all {evidence.length}
+              </button>
+            ) : null}
           </div>
         ) : null}
 
@@ -141,7 +151,7 @@ export function DecisionPanel({
         )}
 
         {!isMe && !done ? (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[10px] bg-highlight/50 px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[10px] bg-surface2 px-4 py-3 shadow-[inset_0_0_0_1px_var(--line)]">
             <span className="text-[13.5px] text-ink">
               This needs {who?.name}, {who?.role}. You are viewing as {userById(persona)?.name}.
             </span>

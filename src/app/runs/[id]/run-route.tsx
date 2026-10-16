@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Canvas } from "@/components/canvas/canvas";
+import { RunView } from "@/components/run/run-view";
 import { run } from "@/data";
 
 export function RunRoute({ id }: { id: string }) {
@@ -9,5 +9,5 @@ export function RunRoute({ id }: { id: string }) {
   const r = run(id);
   const mode = sp.get("mode") === "live" ? "live" : "replay";
   const from = sp.get("from") ?? (r ? `/rules/${r.change_id}/` : "/");
-  return <Canvas runId={id} mode={mode} from={from} />;
+  return <RunView key={`${id}-${mode}`} runId={id} mode={mode} from={from} step={sp.get("step")} />;
 }

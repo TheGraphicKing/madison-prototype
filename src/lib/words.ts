@@ -5,7 +5,9 @@ export function obligationWords(text: string): string {
     .replace(/\bDuties\b/g, "Obligations")
     .replace(/\bduties\b/g, "obligations")
     .replace(/\bDuty\b/g, "Obligation")
-    .replace(/\bduty\b/g, "obligation");
+    .replace(/\bduty\b/g, "obligation")
+    // internal process tags are not bank words: "(card_disputes)" is dropped
+    .replace(/\s\([a-z]+(?:_[a-z]+)+\)/g, "");
 }
 
 export const obligationTitle = obligationWords;
