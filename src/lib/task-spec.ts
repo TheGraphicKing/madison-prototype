@@ -40,6 +40,7 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
       for (const s of sectionsFor("RC-2026-014").filter((x) => x.changed)) base.provided.push({ kind: "quote", label: `Rule ${s.section_number}`, text: s.after });
       return {
         ...base,
+        why: "The amendment halves the time to give provisional credit. Nothing downstream can start until Madison has read it.",
         ask: "Run Madison on the amended rule, then accept the obligations it finds.",
         blocks: ["Anthony Marsh cannot accept the impact of 12 CFR 1005.11(c)", "3 vendor checks cannot start"],
         options: [{ id: "run", label: "Run Madison on this rule", next: "Madison reads the rule and stops for you at the decision.", primary: true, href: "/runs/run-rule-1005/?mode=live&from=/rules/RC-2026-014/" }],
@@ -81,7 +82,13 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
       };
     }
     case "T-285":
-      return { ...base, options: [{ id: "open", label: "Open the change room", next: "Shows what Madison knows so far.", primary: true, href: "/rules/RC-2026-017/" }] };
+      return {
+        ...base,
+        decision: true,
+        ask: "Confirm the impact review for 31 CFR 1020.220 can go ahead.",
+        why: "It applies to Northgate (accounts opened through digital channels). Madison proposes the obligations once you confirm.",
+        options: [{ id: "confirm", label: "Confirm the review", next: "Tom Reed, as owner, gets the proposed obligations to review.", primary: true }],
+      };
     case "T-281":
       return {
         ...base,

@@ -186,7 +186,7 @@
   "step": "applies",
   "owner_id": "u-elena",
   "summary": "Error resolution timing for prepaid accounts.",
-  "screen_reason": "Northgate does not offer prepaid accounts (bank profile: prepaid_cards = no).",
+  "screen_reason": "Northgate does not offer prepaid accounts (bank profile: no prepaid cards).",
   "counts": null,
   "featured": false
  },

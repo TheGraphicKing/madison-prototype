@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { NeededField } from "@/data/types";
-import { getChange, taskById, userById, vendorsFor } from "@/data";
+import { taskById, userById, vendorsFor } from "@/data";
 import { useStore } from "@/lib/store";
 import { demoNowIso, fmtDate, fmtStamp, relDays } from "@/lib/dates";
-import { respondHandoff, useTaskView, type TaskState } from "@/lib/work";
-import { kindOf, taskSpec } from "@/lib/task-spec";
+import { useTaskView, type TaskState } from "@/lib/work";
+import { useTaskAction } from "./task-action";
+import { kindOf } from "@/lib/task-spec";
 import { SlideOver } from "@/components/core/overlays";
 import { Button } from "@/components/core/button";
 import { Mark } from "@/components/core/mark";
@@ -99,52 +99,14 @@ function DrawerHead({ id }: { id: string }) {
 }
 
 function DrawerBody({ taskId }: { taskId: string }) {
-  const v = useTaskView(taskId)!;
-  const t = v.task;
-  const persona = useStore((s) => s.persona);
+  const a = useTaskAction(taskId);
   const store = useStore();
-  const router = useRouter();
-  const spec = useMemo(() => taskSpec(t, v.handoff), [t, v.handoff]);
-  const [fields, setFields] = useState<Record<string, string>>({});
+  const persona = store.persona;
   const [note, setNote] = useState("");
-  const local = v.handoff ? store.handoffs[v.handoff.id] : undefined;
-  const thread = [...(v.handoff?.thread ?? []), ...(v.handoff ? store.threads[v.handoff.id] ?? [] : store.threads[t.id] ?? [])];
-  const isMine = t.assignee_id === persona;
-  const blocked = v.state === "blocked";
-  const done = v.state === "done";
+  if (!a) return null;
+  const { v, t, spec, fields, setFields, submit, options, ready, isMine, blocked, done, doneInfo, local } = a;
   const required = spec.needed.filter((f) => f.required);
-  const ready = required.every((f) => (fields[f.id] ?? "").trim().length > 0 && !(fields[f.id] ?? "").includes('"_partial"'));
-
-  useEffect(() => {
-    if (local?.fields) setFields(local.fields);
-  }, [local?.fields]);
-
-  const submit = (optionId: string) => {
-    const o = spec.options.find((x) => x.id === optionId);
-    if (o?.href) {
-      store.openTask(null);
-      router.push(o.href);
-      return;
-    }
-    if (v.handoff) {
-      respondHandoff(v.handoff.id, optionId, fields, persona);
-      return;
-    }
-    const at = demoNowIso();
-    const c = t.change_id ? getChange(t.change_id) : undefined;
-    const text = `${o?.label}: ${t.title}${c ? ` (${c.citation})` : ""}`;
-    store.decide({ label: o?.label ?? optionId, text, by: persona, at, changeId: t.change_id });
-    if (optionId === "nudge") {
-      store.toast("Reminder sent to Corvane Payments");
-      return;
-    }
-    store.completeTask(t.id, persona, at);
-    if (t.id === "T-289") store.overrideChange("RC-2026-013", { state: "linked", step: "linked" });
-    store.toast(`${o?.label ?? "Done"}.`);
-  };
-
-  // the optionless primary gate: required fields first
-  const options = spec.options.map((o) => ({ ...o, disabled: (o.primary && !o.href && !ready) || blocked || !isMine }));
+  const thread = [...(v.handoff?.thread ?? []), ...(v.handoff ? store.threads[v.handoff.id] ?? [] : store.threads[t.id] ?? [])];
 
   const given = (
     <Block title="What you've been given">
@@ -230,7 +192,7 @@ function DrawerBody({ taskId }: { taskId: string }) {
             next={nextPerson(t.id)}
             onChoose={submit}
             form={form}
-            done={done ? { label: local?.option ? spec.options.find((o) => o.id === local.option)?.label ?? "Done" : "Done", by: local?.by ?? store.tasksDone[t.id]?.by ?? t.assignee_id, at: local?.at ?? store.tasksDone[t.id]?.at ?? demoNowIso() } : null}
+            done={doneInfo}
           />
         </>
       ) : (
@@ -322,7 +284,7 @@ function Block({ title, children }: { title: string; children: React.ReactNode }
   );
 }
 
-function Field({ f, value, onChange, disabled, changeId }: { f: NeededField; value: string; onChange: (v: string) => void; disabled?: boolean; changeId?: string }) {
+export function Field({ f, value, onChange, disabled, changeId }: { f: NeededField; value: string; onChange: (v: string) => void; disabled?: boolean; changeId?: string }) {
   const label = (
     <span className="mb-1.5 flex items-center gap-2 text-[13.5px] font-medium">
       {f.label}

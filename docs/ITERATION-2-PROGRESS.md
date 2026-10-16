@@ -14,11 +14,11 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F07 | Run view: one step flow, at most 2 regions | [x] | Done (C) · `components/run/run-view.tsx`: two regions (flow 60%, detail 40%) · `phase-c/run-reg-running-*`, `phase-c/run-reg-checkpoint-*` |
 | F08 | Agents hidden behind "Show how Madison did this" | [x] | Done (C) · no agents column; agent names only inside "Show how Madison did this" (`data-how`) in `run/step-detail.tsx` |
 | F09 | Flow stays viewable after deciding | [x] | Done (C) · finished flow stays on screen with every step clickable and Replay · `phase-c/run-reg-done-graphite-light-1440.png`; replay opens finished |
-| F10 | One Decision panel in three places | [ ] | |
-| F11 | Useful before-run state | [ ] | |
-| F12 | Real after-run battle cards | [ ] | |
-| F13 | Doesn't-apply shows only Applies | [ ] | |
-| F14 | Card to step and step to card links | [ ] | |
+| F10 | One Decision panel in three places | [x] | Done (D) · `decision/decision-panel.tsx` used by the task drawer, the run Checkpoint and "Your task now" (`tasks/task-action.tsx` TaskDecision) · `phase-d/rules_RC-2026-011-*` |
+| F11 | Useful before-run state | [x] | Done (D) · "What we know": summary, diff of changed sections, effective date, likely touches, last read 05:00; Run Madison is the one primary action; no empty cards · `phase-d/rules_RC-2026-014-*` |
+| F12 | Real after-run battle cards | [x] | Done (D) · `change/battle-cards.tsx`: chip chain with Confirm or Reject, segmented coverage bar, blockers, gaps with consequence line, close checklist · `phase-d/rules_RC-2026-016-*`, `phase-d/rules_RC-2026-011-*` |
+| F13 | Doesn't-apply shows only Applies | [x] | Done (D) · RC-2026-018 shows only the Applies card, the bank fact and "Reopen if this changes" · `phase-d/rules_RC-2026-018-*` |
+| F14 | Card to step and step to card links | [x] | Done (D) · each card's "See how" opens the replay at its step with `from=` back; `#card-{k}` opens and scrolls to a card; `run/step-detail.tsx` links each step to its card · `phase-d/rules_RC-2026-014_touches_1-*` for the What it touches slide-over |
 | F15 | Real 3D coverage field | [ ] | |
 | F16 | Plot detail panel | [ ] | |
 | F17 | Consequences and accepted gaps | [ ] | |
@@ -47,7 +47,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 - [x] A Foundation v2
 - [x] B Data, tasks and handoffs
 - [x] C Run view v2
-- [ ] D Change room
+- [x] D Change room
 - [ ] E Today and Rule changes
 - [ ] F Coverage 3D v2
 - [ ] G Obligations

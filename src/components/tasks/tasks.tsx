@@ -222,7 +222,7 @@ export function WaitingList({ items, limit }: { items: ReturnType<typeof useWait
     <ul className="flex flex-col overflow-clip rounded-[14px] border border-line bg-surface">
       {items.slice(0, limit).map((w) => {
         const u = w.whoId ? userById(w.whoId) : undefined;
-        const t = w.handoffId ? allTasks.find((x) => x.handoff_id === w.handoffId) : undefined;
+        const t = w.handoffId ? allTasks.find((x) => x.handoff_id === w.handoffId) : allTasks.find((x) => x.id === w.key);
         return (
           <li key={w.key} className="flex items-center gap-4 border-b border-line px-5 py-3 last:border-b-0">
             {u ? (

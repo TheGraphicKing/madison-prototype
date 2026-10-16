@@ -121,6 +121,10 @@ export function useWaitingOn(personaId: string) {
     }
     for (const t of tasks) {
       const v = taskView(t, s);
+      // work I asked someone to do without a handoff (the Reg E fixes for Margaret Ellison)
+      if (t.requested_by_id === personaId && !t.handoff_id && t.assignee_id !== personaId && !v.hidden && v.state !== "done") {
+        out.push({ key: t.id, who: userById(t.assignee_id)?.name ?? t.assignee_id, whoId: t.assignee_id, what: t.title, since: s.finishedRuns["run-rule-1005"]?.at ?? "2026-10-16", due: t.due, changeId: t.change_id });
+      }
       if (t.assignee_id === personaId && v.state === "waiting_on_other" && !v.hidden) {
         const vendor = vendors.find((x) => t.title.includes(x.name.split(" ")[0]));
         out.push({ key: t.id, who: vendor?.name ?? "Another team", what: t.title, since: "2026-10-02", due: t.due, changeId: t.change_id });
