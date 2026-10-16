@@ -1,7 +1,12 @@
-import { Page } from "@/components/layout/page";
+import { Suspense } from "react";
+import { Tasks } from "@/components/tasks/tasks";
 
 export const metadata = { title: "My tasks" };
 
-export default function P() {
-  return <Page><h1 className="t-page">My tasks</h1></Page>;
+export default function TasksPage() {
+  return (
+    <Suspense>
+      <Tasks />
+    </Suspense>
+  );
 }

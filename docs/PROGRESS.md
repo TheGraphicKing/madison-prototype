@@ -37,16 +37,16 @@ If the session is compacted: re-read `docs/PLAN.md` and this file, then continue
 - [x] Checks + commit
 
 ## Phase 4 — Screens
-- [ ] Change room
-- [ ] Today
-- [ ] Rule changes with diff
-- [ ] My tasks
-- [ ] Coverage: Field, Map, By rule, Documents, Calendar
-- [ ] Duties register and duty room
-- [ ] Reports: index, board pack, exam
-- [ ] The record
-- [ ] Ask Madison
-- [ ] Checks + commit
+- [x] Change room
+- [x] Today
+- [x] Rule changes with diff
+- [x] My tasks
+- [x] Coverage: Field, Map, By rule, Documents, Calendar
+- [x] Duties register and duty room
+- [x] Reports: index, board pack, exam
+- [x] The record
+- [x] Ask Madison
+- [x] Checks + commit
 
 ## Phase 5 — Finish
 - [ ] Senior designer pass (docs/review.md)

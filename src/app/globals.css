@@ -248,6 +248,16 @@ button:disabled {
   .no-print {
     display: none !important;
   }
+  @page {
+    size: A4;
+    margin: 20mm 18mm 22mm;
+    @top-left { content: "Northgate Community Bank"; font: 9pt var(--font-sans); color: #666; }
+    @top-right { content: "Confidential"; font: 9pt var(--font-sans); color: #666; }
+    @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 9pt var(--font-sans); color: #666; }
+  }
+  .doc-cover { break-after: page; }
+  .doc-section { break-inside: avoid-page; }
+  main { padding: 0 !important; }
 }
 /* The canvas build-in: the one orchestrated moment per page */
 @keyframes build-node {

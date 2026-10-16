@@ -81,3 +81,16 @@ export function fmtUsd(n: number) {
 export function fmtInt(n: number) {
   return new Intl.NumberFormat("en-US").format(n);
 }
+
+/** Business days from today to a date (weekends skipped). */
+export function businessDaysFrom(iso: string, from = TODAY) {
+  const n = daysFrom(iso, from);
+  if (n <= 0) return n;
+  const [y, m, d] = from.split("-").map(Number);
+  let count = 0;
+  for (let i = 1; i <= n; i++) {
+    const wd = new Date(Date.UTC(y, m - 1, d + i)).getUTCDay();
+    if (wd !== 0 && wd !== 6) count++;
+  }
+  return count;
+}

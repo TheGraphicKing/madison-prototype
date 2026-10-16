@@ -152,3 +152,10 @@ export function resolveRef(ref: string): { label: string; detail?: string; href:
 
 import agentMetaJson from "./agent_meta.json";
 export const agentMeta = (id: string) => (agentMetaJson as unknown as Record<string, { runs_on: string; version: string }>)[id];
+
+import examHistoryJson from "./exam_history.json";
+export const examHistory = examHistoryJson as {
+  proven_by_month: { month: string; proven: number }[];
+  not_proven: string[];
+  area_links: Record<string, string>;
+};

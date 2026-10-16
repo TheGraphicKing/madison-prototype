@@ -1,7 +1,7 @@
-import { Page } from "@/components/layout/page";
+import { ExamReadiness } from "@/components/reports/reports";
 
 export const metadata = { title: "Exam readiness" };
 
-export default function P() {
-  return <Page><h1 className="t-page">Exam readiness</h1></Page>;
+export default function ExamPage() {
+  return <ExamReadiness />;
 }

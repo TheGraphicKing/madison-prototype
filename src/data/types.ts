@@ -91,6 +91,8 @@ export interface RuleChange {
   run_id?: string;
   closed_at?: Iso;
   closed_by?: string;
+  /** set during the demo when a run puts a new control in force */
+  new_control?: string;
   after_run?: {
     state: ChangeState;
     step: JourneyStep;

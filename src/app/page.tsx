@@ -1,7 +1,5 @@
-import { Page } from "@/components/layout/page";
+import { Today } from "@/components/today/today";
 
-export const metadata = { title: "Today" };
-
-export default function P() {
-  return <Page><h1 className="t-page">Today</h1></Page>;
+export default function TodayPage() {
+  return <Today />;
 }

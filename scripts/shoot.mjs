@@ -19,6 +19,8 @@ for (const w of widths) {
     await page.goto(`http://localhost:4321${p}`, { waitUntil: "networkidle" });
     await page.waitForTimeout(Number(waitArg));
     const name = (p.replace(/[/?=&]+/g, "_").replace(/^_|_$/g, "") || "today") + `-${palette}-${w}.png`;
+    const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (over > 0) console.log(`OVERFLOW ${p} @${w}: ${over}px`);
     await page.screenshot({ path: `${outDir}/${name}`, fullPage: true });
     console.log("shot", name);
   }

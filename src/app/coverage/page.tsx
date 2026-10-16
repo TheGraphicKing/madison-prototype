@@ -1,7 +1,12 @@
-import { Page } from "@/components/layout/page";
+import { Suspense } from "react";
+import { Coverage } from "@/components/coverage/coverage";
 
 export const metadata = { title: "Coverage" };
 
-export default function P() {
-  return <Page><h1 className="t-page">Coverage</h1></Page>;
+export default function CoveragePage() {
+  return (
+    <Suspense>
+      <Coverage />
+    </Suspense>
+  );
 }

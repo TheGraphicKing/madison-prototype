@@ -93,7 +93,7 @@ export function Segmented<T extends string>({
     <div
       role="radiogroup"
       aria-label={label}
-      className={cn("inline-flex items-stretch rounded-[2px] bg-surface2 p-[2px] shadow-[inset_0_0_0_1px_var(--line)]", className)}
+      className={cn("inline-flex max-w-full items-stretch overflow-x-auto rounded-[2px] bg-surface2 p-[2px] shadow-[inset_0_0_0_1px_var(--line)]", className)}
     >
       {options.map((o, i) => {
         const on = o.value === value;

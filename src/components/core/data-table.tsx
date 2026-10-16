@@ -112,7 +112,7 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full max-md:overflow-x-auto", className)}>
       <table className="w-full border-collapse text-left" aria-label={ariaLabel}>
         <thead className="sticky z-[2] bg-ground" style={{ top: stickyTop }}>
           {table.getHeaderGroups().map((g) => (

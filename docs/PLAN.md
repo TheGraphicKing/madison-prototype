@@ -129,3 +129,4 @@ Root `README.md`, `.gitignore`, `netlify.toml`, `robots: noindex`; `gh repo crea
 - **Typed output is driven by the player clock** while it runs, and continues on the wall clock when the run pauses or waits for a person, so text never freezes mid-word.
 - **While a person is awaited and the script has no narration for it,** the narration line shows the person event's own prompt (still from the script).
 - **Toasts sit top right**, below the header and under overlays, so they never cover the person bar or the done summary.
+- **Exam history** (`src/data/exam_history.json`) is added synthetic data: the pack gives 8 of 12 proven today but no history for the step chart, and names the four unproven areas only inside an Ask Madison answer.

@@ -1,0 +1,22 @@
+{
+  "_note": "Added for the exam readiness step chart; the prompt pack has the current count (8 of 12) but no history.",
+  "proven_by_month": [
+    { "month": "2026-05", "proven": 4 },
+    { "month": "2026-06", "proven": 5 },
+    { "month": "2026-07", "proven": 5 },
+    { "month": "2026-08", "proven": 6 },
+    { "month": "2026-09", "proven": 7 },
+    { "month": "2026-10", "proven": 8 }
+  ],
+  "not_proven": ["Regulation E error resolution", "Flood insurance", "Information security program", "Vendor management"],
+  "area_links": {
+    "Regulation E error resolution": "RC-2026-014",
+    "Flood insurance": "RC-2026-019",
+    "Information security program": "RC-2026-011",
+    "Vendor management": "RC-2026-011",
+    "Truth in Savings": "RC-2026-013",
+    "BSA customer identification": "RC-2026-017",
+    "Wire transfers": "RC-2026-012",
+    "Brokered deposits": "RC-2026-009"
+  }
+}

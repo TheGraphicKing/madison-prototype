@@ -1,7 +1,7 @@
-import { Page } from "@/components/layout/page";
+import { BoardPack } from "@/components/reports/reports";
 
 export const metadata = { title: "Board pack" };
 
-export default function P() {
-  return <Page><h1 className="t-page">Board pack</h1></Page>;
+export default function BoardPackPage() {
+  return <BoardPack />;
 }

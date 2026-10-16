@@ -1,5 +1,5 @@
-import { Page } from "@/components/layout/page";
 import { duties } from "@/data";
+import { DutyRoom } from "@/components/duties/duty-room";
 
 export const dynamicParams = false;
 
@@ -7,7 +7,12 @@ export function generateStaticParams() {
   return duties.map((x) => ({ id: x.id }));
 }
 
-export default async function P({ params }: { params: Promise<{ id: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return <Page><h1 className="t-page">Duty {id}</h1></Page>;
+  return { title: `${id} · ${duties.find((d) => d.id === id)?.plain ?? ""}` };
+}
+
+export default async function DutyPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <DutyRoom id={id} />;
 }

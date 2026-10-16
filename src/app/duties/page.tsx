@@ -1,7 +1,12 @@
-import { Page } from "@/components/layout/page";
+import { Suspense } from "react";
+import { Register } from "@/components/duties/register";
 
 export const metadata = { title: "Duties" };
 
-export default function P() {
-  return <Page><h1 className="t-page">Duties</h1></Page>;
+export default function DutiesPage() {
+  return (
+    <Suspense>
+      <Register />
+    </Suspense>
+  );
 }

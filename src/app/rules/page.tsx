@@ -1,7 +1,7 @@
-import { Page } from "@/components/layout/page";
+import { Rules } from "@/components/rules/rules";
 
 export const metadata = { title: "Rule changes" };
 
-export default function P() {
-  return <Page><h1 className="t-page">Rule changes</h1></Page>;
+export default function RulesPage() {
+  return <Rules />;
 }
