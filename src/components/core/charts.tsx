@@ -76,7 +76,7 @@ export function StepChart({
   compact?: boolean;
 }) {
   const id = useId();
-  const padL = compact ? 8 : 44;
+  const padL = compact ? 24 : 44;
   const padR = compact ? 30 : 64;
   const padT = compact ? 26 : 34;
   const padB = xLabels ? 26 : 10;

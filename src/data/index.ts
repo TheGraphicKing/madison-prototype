@@ -149,3 +149,6 @@ export function resolveRef(ref: string): { label: string; detail?: string; href:
   if (dr) return { label: `Drift ${dr.id}`, detail: dr.summary, href: `/rules/${getDuty(dr.obligation_id)?.change_id ?? ""}/?step=whats_left` };
   return undefined;
 }
+
+import agentMetaJson from "./agent_meta.json";
+export const agentMeta = (id: string) => (agentMetaJson as unknown as Record<string, { runs_on: string; version: string }>)[id];

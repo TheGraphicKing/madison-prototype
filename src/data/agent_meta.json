@@ -1,0 +1,17 @@
+{
+  "_note": "Synthetic model and prompt versions shown in the inspector.",
+  "RC-01": { "runs_on": "code", "version": "feed monitor v3.2" },
+  "RC-02": { "runs_on": "claude-sonnet", "version": "prompt v8" },
+  "RC-17": { "runs_on": "claude-sonnet", "version": "prompt v6" },
+  "RC-03": { "runs_on": "claude-sonnet", "version": "prompt v14" },
+  "QC-01": { "runs_on": "code", "version": "quote matcher v2.1" },
+  "RC-04": { "runs_on": "claude-opus", "version": "prompt v9" },
+  "RC-06": { "runs_on": "claude-sonnet", "version": "prompt v5" },
+  "RC-11": { "runs_on": "claude-sonnet", "version": "prompt v11" },
+  "RC-12": { "runs_on": "code", "version": "number compare v1.4" },
+  "RC-13": { "runs_on": "code", "version": "position v2.0" },
+  "RC-14": { "runs_on": "claude-sonnet", "version": "prompt v5" },
+  "CD-1": { "runs_on": "claude-opus", "version": "prompt v3" },
+  "CD-2": { "runs_on": "claude-sonnet", "version": "prompt v4" },
+  "AM-1": { "runs_on": "claude-sonnet", "version": "prompt v7" }
+}

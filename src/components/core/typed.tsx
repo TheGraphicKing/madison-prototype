@@ -32,14 +32,19 @@ export function Typed({
   const start = useRef<number | null>(null);
   const reduced = useReducedMotion();
   const controlled = elapsed !== undefined;
+  // when the player's clock stops, keep typing from where it was, on the wall clock
+  const last = useRef(0);
+  if (controlled) last.current = elapsed!;
 
   useEffect(() => {
     if (controlled || reduced) return;
     let raf = 0;
     start.current = null;
+    const from = last.current;
+    setOwn(from);
     const tick = (now: number) => {
       if (start.current === null) start.current = now;
-      const e = now - start.current - delay;
+      const e = from + now - start.current - (from > 0 ? 0 : delay);
       setOwn(Math.max(0, e));
       if (e < (text.length / cps) * 1000) raf = requestAnimationFrame(tick);
       else onDone?.();

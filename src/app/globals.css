@@ -71,6 +71,7 @@
   }
 }
 
+@layer base {
 * {
   border-color: var(--line);
 }
@@ -125,6 +126,8 @@ button {
 
 button:disabled {
   cursor: default;
+}
+
 }
 
 /* Type scale */
@@ -246,3 +249,47 @@ button:disabled {
     display: none !important;
   }
 }
+/* The canvas build-in: the one orchestrated moment per page */
+@keyframes build-node {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes build-draw {
+  from { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  to { stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+}
+@keyframes build-pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+.build-node { animation: build-node 260ms var(--ease) backwards; }
+.build-draw { stroke-dasharray: 1 0; animation: build-draw 420ms var(--ease) backwards; }
+.build-pop { transform-box: fill-box; transform-origin: center; animation: build-pop 180ms var(--ease) backwards; }
+.ring-wait::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px var(--person);
+  animation: ring-wait 1.8s var(--ease) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .build-node, .build-draw, .build-pop { animation: none; stroke-dashoffset: 0; }
+  .ring-wait::after { animation: none; opacity: 0; }
+}
+
+/* The scrubber: a hairline track drawn underneath, a square thumb */
+.scrub::-webkit-slider-runnable-track { height: 32px; background: transparent; }
+.scrub::-moz-range-track { height: 32px; background: transparent; }
+.scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 11px;
+  background: var(--ink);
+  border: 0;
+  border-radius: 0;
+}
+.scrub::-moz-range-thumb { width: 10px; height: 10px; background: var(--ink); border: 0; border-radius: 0; }
+.scrub:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }

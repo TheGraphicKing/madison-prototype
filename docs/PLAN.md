@@ -125,3 +125,7 @@ Root `README.md`, `.gitignore`, `netlify.toml`, `robots: noindex`; `gh repo crea
 - Ask Madison's suggested action `/changes/RC-2026-014` maps to `/rules/RC-2026-014` (the route the brief defines).
 - Priya has no assigned tasks in `tasks.json`; "Priya sees the MFA gap" is met by also listing tasks whose duty she owns (T-298, D-208-M1).
 - `position.by_regulation` covers 14 regulations; the remaining duties to reach 1,894 per state are spread over the other 8 regulations deterministically, so the field totals match exactly.
+- **The agent canvas is drawn in SVG and HTML, not React Flow.** Packets must sit exactly where the pure player state says at every frame and after every seek; a custom schematic (design units 900 wide, scaled to fit) gives exact ports, hop-over arcs, trays and the write-back arc. React Flow is used for the duty room's lineage graph, where free layout and pan/zoom matter more.
+- **Typed output is driven by the player clock** while it runs, and continues on the wall clock when the run pauses or waits for a person, so text never freezes mid-word.
+- **While a person is awaited and the script has no narration for it,** the narration line shows the person event's own prompt (still from the script).
+- **Toasts sit top right**, below the header and under overlays, so they never cover the person bar or the done summary.

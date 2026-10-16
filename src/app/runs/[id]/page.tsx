@@ -1,13 +1,23 @@
-import { Page } from "@/components/layout/page";
+import { Suspense } from "react";
 import { runs } from "@/data";
+import { RunRoute } from "./run-route";
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return runs.map((x) => ({ id: x.id }));
+  return runs.map((r) => ({ id: r.id }));
 }
 
-export default async function P({ params }: { params: Promise<{ id: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  return <Page><h1 className="t-page">Run {id}</h1></Page>;
+  return { title: runs.find((r) => r.id === id)?.title ?? id };
+}
+
+export default async function RunPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return (
+    <Suspense>
+      <RunRoute id={id} />
+    </Suspense>
+  );
 }

@@ -23,18 +23,18 @@ If the session is compacted: re-read `docs/PLAN.md` and this file, then continue
 - [x] Checks + commit
 
 ## Phase 3 — Agent canvas
-- [ ] Schematic layout, lanes, sources, ports, connectors, packets
-- [ ] Verifier gate, tray, D1 to D7 cells
-- [ ] Person node, docked bar, switch offer
-- [ ] Outputs column with typing, step chart
-- [ ] Bottom strip: phases, metrics, narration
-- [ ] Write-back arc, build-in, done summary
-- [ ] Hover trace, expand in place, inspector
-- [ ] Controls, keyboard, LIVE and REPLAY
-- [ ] Strip and card sizes
-- [ ] 3D depth view and fallback
-- [ ] docs/review.md comparison
-- [ ] Checks + commit
+- [x] Schematic layout, lanes, sources, ports, connectors, packets
+- [x] Verifier gate, tray, D1 to D7 cells
+- [x] Person node, docked bar, switch offer
+- [x] Outputs column with typing, step chart
+- [x] Bottom strip: phases, metrics, narration
+- [x] Write-back arc, build-in, done summary
+- [x] Hover trace, expand in place, inspector
+- [x] Controls, keyboard, LIVE and REPLAY
+- [x] Strip and card sizes
+- [x] 3D depth view and fallback
+- [x] docs/review.md comparison
+- [x] Checks + commit
 
 ## Phase 4 — Screens
 - [ ] Change room

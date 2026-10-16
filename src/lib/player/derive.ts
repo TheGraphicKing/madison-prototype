@@ -98,6 +98,9 @@ export function phaseOfStage(run: Run, key: string): Phase {
   if (stage.kind === "person") return "Decide";
   const firstGate = run.stages.findIndex((s) => s.kind === "gate" || s.kind === "person");
   const lastPerson = run.stages.map((s) => s.kind).lastIndexOf("person");
+  // a run without a verifier gate checks in the step just before the person
+  const hasGate = run.stages.some((s) => s.kind === "gate");
+  if (!hasGate && idx === firstGate - 1 && idx > 0) return "Check";
   if (firstGate >= 0 && idx < firstGate) return "Read";
   if (lastPerson >= 0 && idx > lastPerson) return "Cover";
   return "Check";
@@ -149,7 +152,8 @@ export function derive(run: Run, rawT: number, responses: Responses, opts: { hop
       }
       case "item": {
         const it = ev as ItemEvent;
-        const progress = hop <= 0 ? 1 : Math.min(1, (t - it.t) / hop);
+        // when the run is over, everything still travelling has landed
+        const progress = hop <= 0 || t >= run.duration_ms ? 1 : Math.min(1, (t - it.t) / hop);
         items.push({
           key,
           id: it.id,
@@ -211,6 +215,11 @@ export function derive(run: Run, rawT: number, responses: Responses, opts: { hop
     [...run.stages].reverse().find((s) => stages[s.key].state === "done") ??
     run.stages[0];
   const done = t >= run.duration_ms && !pending;
+  // while the flow waits for a person, the line says what they are asked
+  const pend = pending as (PersonEvent & { key: string }) | null;
+  if (pend && (!narration || run.events.filter((e) => e.type === "narrate" && e.t <= t).pop()!.t < pend.t)) {
+    narration = { text: pend.prompt, elapsed: t - pend.t };
+  }
   const activeAgents = done ? [] : running.flatMap((s) => s.agents);
 
   // bump stage agents once per stage event so code steps also register activity
