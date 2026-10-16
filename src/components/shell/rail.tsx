@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { institution, tasksFor } from "@/data";
+import { institution } from "@/data";
+import { useTaskViews } from "@/lib/work";
 import { useStore } from "@/lib/store";
 import { NAV_ITEMS } from "./crumbs";
 import { NAV_GLYPHS, GlyphChevron } from "@/components/glyphs";
@@ -30,7 +31,8 @@ export function Rail({ collapsed, onToggle }: { collapsed: boolean; onToggle: ()
   const [tip, setTip] = useState<{ label: string; y: number } | null>(null);
   const peekTimer = useRef<number | null>(null);
   const tipTimer = useRef<number | null>(null);
-  const openTasks = tasksFor(persona).filter((t) => t.state !== "done").length;
+  const views = useTaskViews();
+  const openTasks = views.filter((v) => v.task.assignee_id === persona && v.state !== "done").length;
   const wide = !collapsed || peek;
 
   const clear = () => {

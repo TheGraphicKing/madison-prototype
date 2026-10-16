@@ -98,3 +98,4 @@ Each phase ends with: `npm run build`, `npm test`, screenshots at 1440 and 390 i
 - **Store migration:** the persisted session key moves from `madison-demo` to `madison-demo-v2`, so iteration-1 sessions cannot break the new shape; Reset demo restores seed data.
 - **Static export redirects:** `/duties` and `/duties/[id]` are generated pages that redirect on the client (and with a meta refresh), because static export has no server redirects.
 - **Removing React Flow:** the obligation page's 2D chain is plain HTML and SVG.
+- **Task count:** `tasks.json` has 20 tasks across 8 assignees (Elena, Anthony, Priya, Grace, Margaret, Nadia, Ravi, Daniel); the register says 9 people. All 20 are shown.

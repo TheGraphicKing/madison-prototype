@@ -1,0 +1,200 @@
+{
+ "board_pack": {
+  "id": "RPT-BP-2026Q3",
+  "title": "Compliance position, third quarter 2026",
+  "as_of": "2026-09-30",
+  "status": "draft",
+  "prepared_by": "u-elena",
+  "approver_id": "u-anthony",
+  "how_built": [
+   {
+    "step": "Position snapshot",
+    "detail": "Four counts taken by the position calculator at 23:59 on 30 Sep",
+    "source": "RC-13"
+   },
+   {
+    "step": "Changes in the quarter",
+    "detail": "Every rule change read between 1 Jul and 30 Sep, with its state",
+    "source": "Rule changes"
+   },
+   {
+    "step": "Known gaps register",
+    "detail": "Every gap accepted by the CCO, with owner and expiry",
+    "source": "Known gaps"
+   },
+   {
+    "step": "Drafted by Madison",
+    "detail": "Sections drafted from the records above; every number links to its record",
+    "source": "Madison"
+   },
+   {
+    "step": "Reviewed by people",
+    "detail": "Elena Petrova prepared; Anthony Marsh approves",
+    "source": "Sign-off"
+   }
+  ],
+  "conclusions": [
+   "Coverage improved: 1,704 of 1,892 obligations covered, up 82 in the quarter.",
+   "Obligations with nothing behind them fell from 55 to 45.",
+   "Two changes need board attention: phishing-resistant MFA (due 1 Dec) and the Reg E 5 day credit (due 4 Jan).",
+   "Nine known gaps are open; the wire release gap expires 31 Dec."
+  ],
+  "sections": [
+   {
+    "n": 1,
+    "title": "Summary for the board",
+    "summary": "Coverage is improving; two changes need attention before year end.",
+    "blocks": [
+     "conclusions",
+     "counts"
+    ]
+   },
+   {
+    "n": 2,
+    "title": "Where we stand",
+    "summary": "Four counts and how they moved in the quarter.",
+    "blocks": [
+     "counts",
+     "trend"
+    ]
+   },
+   {
+    "n": 3,
+    "title": "Rule changes this quarter",
+    "summary": "14 read, 9 applied, 6 closed.",
+    "blocks": [
+     "changes_table"
+    ]
+   },
+   {
+    "n": 4,
+    "title": "What needs the board",
+    "summary": "Decisions or awareness needed.",
+    "blocks": [
+     "asks"
+    ]
+   },
+   {
+    "n": 5,
+    "title": "Known gaps accepted by the CCO",
+    "summary": "9 open, each with an owner and an expiry date.",
+    "blocks": [
+     "gaps_table"
+    ]
+   },
+   {
+    "n": 6,
+    "title": "Controls without recent evidence",
+    "summary": "3 key controls are quiet.",
+    "blocks": [
+     "quiet_controls"
+    ]
+   },
+   {
+    "n": 7,
+    "title": "Vendors in scope of open changes",
+    "summary": "6 vendors under review.",
+    "blocks": [
+     "vendors"
+    ]
+   },
+   {
+    "n": 8,
+    "title": "Appendix: how this report was built",
+    "summary": "Sources, snapshot times and sign-offs.",
+    "blocks": [
+     "how_built"
+    ]
+   }
+  ],
+  "comments": [
+   {
+    "by": "u-anthony",
+    "at": "2026-10-12",
+    "section": 4,
+    "text": "Add the cost estimate for the MFA rollout."
+   },
+   {
+    "by": "u-daniel",
+    "at": "2026-10-13",
+    "section": 3,
+    "text": "Confirm the brokered deposit change is closed."
+   }
+  ],
+  "additions": []
+ },
+ "exam_pack": {
+  "id": "RPT-EX-2027",
+  "title": "Federal Reserve consumer compliance exam",
+  "starts": "2027-02-08",
+  "proven": 8,
+  "in_scope": 12,
+  "areas": [
+   {
+    "name": "Regulation E error resolution",
+    "proven": false,
+    "why": "New 5 day limit not yet covered",
+    "items": [
+     "D-1005-E2",
+     "CTL-132"
+    ]
+   },
+   {
+    "name": "Flood insurance",
+    "proven": false,
+    "why": "Scope depends on one bank fact",
+    "items": [
+     "RC-2026-019"
+    ]
+   },
+   {
+    "name": "Information security program",
+    "proven": false,
+    "why": "MFA control in design",
+    "items": [
+     "D-208-M1"
+    ]
+   },
+   {
+    "name": "Vendor management",
+    "proven": false,
+    "why": "3 Reg E vendor reviews open",
+    "items": [
+     "H-113"
+    ]
+   },
+   {
+    "name": "Truth in Savings",
+    "proven": true
+   },
+   {
+    "name": "Fair lending",
+    "proven": true
+   },
+   {
+    "name": "BSA customer identification",
+    "proven": true
+   },
+   {
+    "name": "Wire transfers",
+    "proven": true
+   },
+   {
+    "name": "Brokered deposits",
+    "proven": true
+   },
+   {
+    "name": "Overdraft programs",
+    "proven": true
+   },
+   {
+    "name": "UDAP complaints",
+    "proven": true
+   },
+   {
+    "name": "Privacy notices",
+    "proven": true
+   }
+  ]
+ }
+}

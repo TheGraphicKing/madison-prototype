@@ -9,6 +9,7 @@ import { getChange, userById } from "@/data";
 import { useRunPlayer } from "@/lib/player/use-run-player";
 import type { ItemInstance } from "@/lib/player/derive";
 import { useStore } from "@/lib/store";
+import { onPersonResponse } from "@/lib/player/results";
 import { demoNowIso, fmtDate } from "@/lib/dates";
 import { MonoLabel } from "@/components/core/labels";
 import { Mark } from "@/components/core/mark";
@@ -157,6 +158,7 @@ export function Canvas({ runId, mode, from }: { runId: string; mode: Mode; from:
     const at = demoNowIso();
     const act = state.pending.actions.find((a) => a.id === actionId)!;
     controls.respond(state.pending.key, actionId, persona, at);
+    onPersonResponse(run.id, actionId);
     decide({
       label: act.label,
       text: decisionText(run.id, actionId, act.label, change?.citation ?? ""),

@@ -8,6 +8,7 @@ import { Rail, RAIL_KEY } from "./rail";
 import { Header } from "./header";
 import { Toasts } from "./toasts";
 import { PlaybackEngine } from "@/lib/player/engine";
+import { TaskDrawer } from "@/components/tasks/task-drawer";
 
 export function AppShell({ children, ask }: { children: React.ReactNode; ask?: React.ReactNode }) {
   const pathname = usePathname();
@@ -52,6 +53,7 @@ export function AppShell({ children, ask }: { children: React.ReactNode; ask?: R
         <PlaybackEngine />
         {children}
         {ask}
+        <TaskDrawer />
         <Toasts />
       </>
     );
@@ -74,6 +76,7 @@ export function AppShell({ children, ask }: { children: React.ReactNode; ask?: R
         </main>
       </div>
       {ask}
+      <TaskDrawer />
       <Toasts />
     </div>
   );

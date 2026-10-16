@@ -56,3 +56,11 @@ export function applyRunResults(inst: Instance) {
 
   s.finishRun(r.id, by, at, inst.responses);
 }
+
+/** A person's answer at a run checkpoint can hand work to someone else. */
+export function onPersonResponse(runId: string, actionId: string) {
+  if (runId === "run-coverage-1026" && actionId === "link_and_raise") {
+    // imported lazily to keep the player free of the task model
+    import("@/lib/work").then((w) => w.raiseHandoff("H-118"));
+  }
+}

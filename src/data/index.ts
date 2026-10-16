@@ -134,13 +134,17 @@ export const run = (id: string) => runMap.get(id);
 export const runForChange = (changeId: string) => runs.find((r) => r.change_id === changeId);
 
 /** Who the "Viewing as" switch offers. */
-export const PERSONA_IDS = ["u-elena", "u-anthony", "u-priya"] as const;
+export const PERSONA_IDS = ["u-elena", "u-anthony", "u-priya", "u-grace", "u-margaret", "u-nadia", "u-ravi"] as const;
 export type PersonaId = (typeof PERSONA_IDS)[number];
 
 export const personaRole: Record<PersonaId, string> = {
   "u-elena": "Analyst",
   "u-anthony": "CCO",
   "u-priya": "CISO",
+  "u-grace": "Mortgage operations",
+  "u-margaret": "Payment operations",
+  "u-nadia": "Third party risk",
+  "u-ravi": "Assurance",
 };
 
 /** Resolve any id used in citations to a label and a link. */
@@ -171,3 +175,18 @@ export const examHistory = examHistoryJson as {
   not_proven: string[];
   area_links: Record<string, string>;
 };
+
+// ---------- Iteration 2 ----------
+import handoffsJson from "./handoffs.json";
+import consequencesJson from "./consequences.json";
+import reportsV2Json from "./reports_v2.json";
+import recordV2Json from "./record_v2.json";
+import type { Consequence, Handoff, RecordEntryV2, ReportsV2 } from "./types";
+
+export const handoffs = words(handoffsJson) as Handoff[];
+export const consequences = words(consequencesJson) as Consequence[];
+export const reportsV2 = words(reportsV2Json) as ReportsV2;
+export const recordV2 = (words(recordV2Json) as RecordEntryV2[]).slice().sort((a, b) => a.at.localeCompare(b.at));
+export const handoffById = (id: string) => handoffs.find((h) => h.id === id);
+export const consequenceFor = (obligationId: string) => consequences.find((c) => c.obligation_id === obligationId);
+export const taskById = (id: string) => tasks.find((t) => t.id === id);

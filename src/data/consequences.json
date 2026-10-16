@@ -1,0 +1,82 @@
+[
+ {
+  "obligation_id": "D-1005-E2",
+  "state": "nothing_behind",
+  "headline": "Customers could wait too long for disputed money",
+  "what_happens": "From 4 Jan 2027, any card or ACH dispute not provisionally credited within 5 business days breaks the rule. Today the policy allows 10 and the procedure credits on day 7.",
+  "who_is_affected": "Consumers disputing debit card and ACH transactions (about 310 disputes a month)",
+  "exam_risk": "High",
+  "exam_note": "Error resolution timing is a common examination focus for Regulation E.",
+  "illustrative_exposure": {
+   "label": "Illustrative only (synthetic)",
+   "text": "Customer remediation for late credits and a likely supervisory finding."
+  },
+  "accepted": null,
+  "next": "Update policy 4.2 and procedure step 4, then confirm vendor timings."
+ },
+ {
+  "obligation_id": "D-1005-E4",
+  "state": "not_yet_confirmed",
+  "headline": "The tracker that proves it is quiet",
+  "what_happens": "The policy covers new-account and point-of-sale timing, but CTL-134 has produced no evidence for 43 days, so it cannot be shown to work.",
+  "who_is_affected": "Consumers with new accounts or point-of-sale disputes",
+  "exam_risk": "Medium",
+  "exam_note": "Examiners ask for proof the control ran, not only the policy.",
+  "illustrative_exposure": {
+   "label": "Illustrative only (synthetic)",
+   "text": "Unproven control; finding risk if evidence stays missing."
+  },
+  "accepted": null,
+  "next": "Get CTL-134 evidence for the last six weeks."
+ },
+ {
+  "obligation_id": "D-208-M1",
+  "state": "nothing_behind",
+  "headline": "Privileged users could be phished",
+  "what_happens": "No control requires phishing-resistant MFA for privileged access. Three vendors also hold privileged access.",
+  "who_is_affected": "61 privileged users and 3 vendors",
+  "exam_risk": "High",
+  "exam_note": "Information security programs are reviewed in every safety and soundness exam.",
+  "illustrative_exposure": {
+   "label": "Illustrative only (synthetic)",
+   "text": "Elevated breach risk; likely matter requiring attention if not fixed by 1 Dec."
+  },
+  "accepted": null,
+  "next": "Approve CTL-153 and the policy change."
+ },
+ {
+  "obligation_id": "D-208-W1",
+  "state": "known_gap",
+  "headline": "Branch fallback screen can release wires with one approver",
+  "what_happens": "CTL-118 enforces two approvers in the wire platform, but the branch fallback screen bypasses it.",
+  "who_is_affected": "Outbound wires above $100,000 released from branches (about 12 a month)",
+  "exam_risk": "Medium",
+  "exam_note": "Accepted by the CCO with a fix date.",
+  "illustrative_exposure": {
+   "label": "Illustrative only (synthetic)",
+   "text": "Fraud and error exposure on a small number of wires until the fix."
+  },
+  "accepted": {
+   "by": "u-anthony",
+   "at": "2026-06-26",
+   "until": "2026-12-31",
+   "why": "Vendor fix scheduled; branches told to route wires through the platform."
+  },
+  "next": "Confirm the vendor fix date or renew the gap."
+ },
+ {
+  "obligation_id": "D-1026-L2",
+  "state": "not_yet_confirmed",
+  "headline": "Revised estimates could go out late",
+  "what_happens": "Policy and rule say 3 business days; the procedure says 5.",
+  "who_is_affected": "Mortgage applicants with a changed circumstance (about 40 a month)",
+  "exam_risk": "Medium",
+  "exam_note": "TRID timing is routinely tested in consumer compliance exams.",
+  "illustrative_exposure": {
+   "label": "Illustrative only (synthetic)",
+   "text": "Possible tolerance cures and file-level findings."
+  },
+  "accepted": null,
+  "next": "Grace Liu updates procedure step 2."
+ }
+]

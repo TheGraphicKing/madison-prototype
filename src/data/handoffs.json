@@ -1,0 +1,340 @@
+[
+ {
+  "id": "H-118",
+  "type": "drift_fix",
+  "from_user_id": "u-elena",
+  "to_user_id": "u-grace",
+  "created_at": "2026-10-15T10:20:00Z",
+  "due": "2026-10-22",
+  "status": "open",
+  "title": "Align the Loan Estimate procedure with the policy",
+  "ask": "Update PRC-MTG-03 step 2 so revised Loan Estimates go out within 3 business days, not 5.",
+  "why": "The policy and the rule both say 3 business days. The procedure your team follows says 5, so a borrower could get a late estimate.",
+  "change_id": "RC-2026-016",
+  "obligation_id": "D-1026-L2",
+  "provided": [
+   {
+    "kind": "quote",
+    "label": "Rule 12 CFR 1026.19(e)(4)(i)",
+    "text": "within three business days of receiving information sufficient to establish that a changed circumstance applies"
+   },
+   {
+    "kind": "quote",
+    "label": "Policy POL-MTG-02 3.1",
+    "text": "a revised estimate within 3 business days of a changed circumstance"
+   },
+   {
+    "kind": "quote",
+    "label": "Procedure PRC-MTG-03 step 2",
+    "text": "within 5 business days of a documented changed circumstance"
+   },
+   {
+    "kind": "record",
+    "label": "Drift DR-029",
+    "text": "Found by the drift detector on 9 Oct"
+   }
+  ],
+  "needed": [
+   {
+    "id": "new_text",
+    "label": "New wording for step 2",
+    "kind": "text",
+    "required": true
+   },
+   {
+    "id": "effective",
+    "label": "Date the new step takes effect",
+    "kind": "date",
+    "required": true
+   },
+   {
+    "id": "approved_doc",
+    "label": "Approved procedure v2.1",
+    "kind": "file",
+    "required": false
+   }
+  ],
+  "options": [
+   {
+    "id": "fix",
+    "label": "Update the procedure"
+   },
+   {
+    "id": "dispute",
+    "label": "The procedure is right; explain why"
+   },
+   {
+    "id": "reassign",
+    "label": "Send to someone else"
+   }
+  ],
+  "blocks": [
+   "RC-2026-016 cannot move to Covered",
+   "D-1026-L2 stays Not yet confirmed"
+  ],
+  "thread": [
+   {
+    "at": "2026-10-15T10:20:00Z",
+    "by": "u-elena",
+    "text": "Raised from the coverage check. Happy to review your wording before you publish."
+   }
+  ]
+ },
+ {
+  "id": "H-117",
+  "type": "answer_owner_question",
+  "from_user_id": "u-elena",
+  "to_user_id": "u-priya",
+  "created_at": "2026-10-15T15:02:00Z",
+  "due": "2026-10-19",
+  "status": "open",
+  "title": "One question on the draft MFA control",
+  "ask": "Can a break-glass account log in without the security key?",
+  "why": "Design check D6 (cannot be bypassed) could not be decided from the documents. Your answer decides whether CTL-153 is sound.",
+  "change_id": "RC-2026-011",
+  "obligation_id": "D-208-M1",
+  "provided": [
+   {
+    "kind": "draft",
+    "label": "Draft CTL-153",
+    "text": "Phishing-resistant MFA for privileged access, including vendors, checked monthly"
+   },
+   {
+    "kind": "check",
+    "label": "D6 Cannot be bypassed",
+    "text": "Can't tell: no document describes break-glass access"
+   }
+  ],
+  "needed": [
+   {
+    "id": "answer",
+    "label": "Your answer",
+    "kind": "choice",
+    "choices": [
+     "No, break-glass needs the key",
+     "Yes, but it is vaulted and needs two officers",
+     "Yes, and it is not controlled"
+    ],
+    "required": true
+   },
+   {
+    "id": "evidence",
+    "label": "Where this is written down",
+    "kind": "text",
+    "required": false
+   }
+  ],
+  "options": [
+   {
+    "id": "answer",
+    "label": "Send answer"
+   }
+  ],
+  "blocks": [
+   "CTL-153 cannot go to the CCO for sign-off"
+  ],
+  "thread": []
+ },
+ {
+  "id": "H-116",
+  "type": "sign_off",
+  "from_user_id": "u-elena",
+  "to_user_id": "u-anthony",
+  "created_at": "2026-10-16T08:10:00Z",
+  "due": "2026-10-21",
+  "status": "waiting_on_previous",
+  "title": "Sign off CTL-153 and the policy change",
+  "ask": "Approve the new control and one sentence added to POL-ISP-01 3.1.",
+  "why": "Phishing-resistant MFA is required for privileged access by 1 Dec 2026.",
+  "change_id": "RC-2026-011",
+  "obligation_id": "D-208-M1",
+  "waits_for": "H-117",
+  "provided": [
+   {
+    "kind": "draft",
+    "label": "CTL-153 v1",
+    "text": "Seven design checks: 6 pass, 1 waiting on Priya"
+   },
+   {
+    "kind": "policy_diff",
+    "label": "POL-ISP-01 3.1",
+    "text": "Privileged access requires phishing-resistant multi-factor authentication, including for service providers."
+   }
+  ],
+  "needed": [
+   {
+    "id": "decision",
+    "label": "Decision",
+    "kind": "choice",
+    "choices": [
+     "Approve",
+     "Send back with a reason"
+    ],
+    "required": true
+   },
+   {
+    "id": "reason",
+    "label": "Reason (if sending back)",
+    "kind": "text",
+    "required": false
+   }
+  ],
+  "options": [
+   {
+    "id": "approve",
+    "label": "Approve"
+   },
+   {
+    "id": "send_back",
+    "label": "Send back"
+   }
+  ],
+  "blocks": [
+   "CTL-153 cannot go into force",
+   "3 vendor reviews cannot start"
+  ],
+  "thread": []
+ },
+ {
+  "id": "H-115",
+  "type": "upload_evidence",
+  "from_user_id": "u-ravi",
+  "to_user_id": "u-margaret",
+  "created_at": "2026-10-09T09:00:00Z",
+  "due": "2026-10-15",
+  "status": "overdue",
+  "title": "Upload evidence for CTL-132",
+  "ask": "Upload the last four weekly provisional credit timeliness reports.",
+  "why": "CTL-132 is a weekly control with no evidence for 49 days, so obligations relying on it count as Not yet confirmed.",
+  "control_id": "CTL-132",
+  "obligation_id": "D-1005-E2",
+  "provided": [
+   {
+    "kind": "record",
+    "label": "Last evidence",
+    "text": "Report for week ending 28 Aug 2026"
+   }
+  ],
+  "needed": [
+   {
+    "id": "files",
+    "label": "Weekly reports (4)",
+    "kind": "file",
+    "required": true
+   },
+   {
+    "id": "note",
+    "label": "Why they are late",
+    "kind": "text",
+    "required": false
+   }
+  ],
+  "options": [
+   {
+    "id": "upload",
+    "label": "Upload"
+   },
+   {
+    "id": "not_run",
+    "label": "The control did not run"
+   }
+  ],
+  "blocks": [
+   "D-1005-E2 and D-1005-E4 stay Not yet confirmed"
+  ],
+  "thread": [
+   {
+    "at": "2026-10-13T09:00:00Z",
+    "by": "u-ravi",
+    "text": "Reminder: two days left."
+   }
+  ]
+ },
+ {
+  "id": "H-114",
+  "type": "answer_fact",
+  "from_user_id": "u-elena",
+  "to_user_id": "u-grace",
+  "created_at": "2026-10-14T11:00:00Z",
+  "due": "2026-10-21",
+  "status": "open",
+  "title": "Does Northgate lend in special flood hazard areas?",
+  "ask": "Answer one bank fact so Madison can decide whether 12 CFR 339.3 applies.",
+  "why": "The bank profile has no answer for flood zone lending.",
+  "change_id": "RC-2026-019",
+  "provided": [
+   {
+    "kind": "record",
+    "label": "Bank profile",
+    "text": "flood_zone_lending: not answered"
+   }
+  ],
+  "needed": [
+   {
+    "id": "fact",
+    "label": "Answer",
+    "kind": "choice",
+    "choices": [
+     "Yes",
+     "No",
+     "Not sure"
+    ],
+    "required": true
+   },
+   {
+    "id": "source",
+    "label": "How you know",
+    "kind": "text",
+    "required": false
+   }
+  ],
+  "options": [
+   {
+    "id": "answer",
+    "label": "Send answer"
+   }
+  ],
+  "blocks": [
+   "RC-2026-019 stays Uncertain"
+  ],
+  "thread": []
+ },
+ {
+  "id": "H-113",
+  "type": "vendor_review",
+  "from_user_id": "u-elena",
+  "to_user_id": "u-nadia",
+  "created_at": "2026-10-16T07:40:00Z",
+  "due": "2026-11-06",
+  "status": "open",
+  "title": "Check 3 vendors against the new Reg E limit",
+  "ask": "Confirm Marlow, Corvane and Vantrel can meet provisional credit within 5 business days.",
+  "why": "They do the card and ACH dispute work, or run a control the bank relies on.",
+  "change_id": "RC-2026-014",
+  "provided": [
+   {
+    "kind": "list",
+    "label": "Vendors in scope",
+    "text": "Marlow Card Services (card disputes) · Corvane Payments (ACH disputes) · Vantrel (runs CTL-131)"
+   }
+  ],
+  "needed": [
+   {
+    "id": "outcomes",
+    "label": "Outcome per vendor",
+    "kind": "table",
+    "required": true
+   }
+  ],
+  "options": [
+   {
+    "id": "submit",
+    "label": "Submit outcomes"
+   }
+  ],
+  "blocks": [
+   "RC-2026-014 cannot close"
+  ],
+  "thread": []
+ }
+]

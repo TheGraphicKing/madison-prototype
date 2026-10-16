@@ -1,0 +1,339 @@
+[
+ {
+  "at": "2026-10-16T07:40:00Z",
+  "actor": "u-elena",
+  "kind": "person",
+  "type": "handoff",
+  "text": "Sent vendor review to Nadia Brennan",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "H-113"
+  ],
+  "signed": true,
+  "id": "E-0024",
+  "prev": "E-0023"
+ },
+ {
+  "at": "2026-10-16T07:36:00Z",
+  "actor": "u-elena",
+  "kind": "person",
+  "type": "decide",
+  "text": "Accepted 6 obligations and excluded 1 (prepaid)",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0023",
+  "prev": "E-0022"
+ },
+ {
+  "at": "2026-10-16T07:33:49Z",
+  "actor": "RC-14",
+  "kind": "agent",
+  "type": "propose",
+  "text": "Listed 3 vendors in scope",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0022",
+  "prev": "E-0021"
+ },
+ {
+  "at": "2026-10-16T07:33:42Z",
+  "actor": "RC-12",
+  "kind": "agent",
+  "type": "check",
+  "text": "Found drift between policy 4.2 and procedure step 4",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0021",
+  "prev": "E-0020"
+ },
+ {
+  "at": "2026-10-16T07:33:35Z",
+  "actor": "RC-11",
+  "kind": "agent",
+  "type": "propose",
+  "text": "Proposed 12 coverage links",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0020",
+  "prev": "E-0019"
+ },
+ {
+  "at": "2026-10-16T07:33:28Z",
+  "actor": "RC-04",
+  "kind": "agent",
+  "type": "check",
+  "text": "Held back 1 obligation: quote did not support it",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0019",
+  "prev": "E-0018"
+ },
+ {
+  "at": "2026-10-16T07:32:21Z",
+  "actor": "RC-03",
+  "kind": "agent",
+  "type": "propose",
+  "text": "Proposed 8 obligations",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0018",
+  "prev": "E-0017"
+ },
+ {
+  "at": "2026-10-16T07:32:14Z",
+  "actor": "RC-17",
+  "kind": "agent",
+  "type": "decide",
+  "text": "Decided it applies: consumer EFT and debit cards",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0017",
+  "prev": "E-0016"
+ },
+ {
+  "at": "2026-10-16T07:32:07Z",
+  "actor": "RC-02",
+  "kind": "agent",
+  "type": "read",
+  "text": "Split the rule into 14 sections",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0016",
+  "prev": "E-0015"
+ },
+ {
+  "at": "2026-10-16T07:32:00Z",
+  "actor": "RC-01",
+  "kind": "agent",
+  "type": "read",
+  "text": "Read the amended text from eCFR",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0015",
+  "prev": "E-0014"
+ },
+ {
+  "at": "2026-10-16T07:31:00Z",
+  "actor": "u-elena",
+  "kind": "person",
+  "type": "start",
+  "text": "Started Madison on 12 CFR 1005.11(c)",
+  "run_id": "run-rule-1005",
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0014",
+  "prev": "E-0013"
+ },
+ {
+  "at": "2026-10-16T05:12:00Z",
+  "actor": "RC-12",
+  "kind": "agent",
+  "type": "check",
+  "text": "Flagged drift DR-031",
+  "run_id": null,
+  "refs": [
+   "DR-031"
+  ],
+  "signed": true,
+  "id": "E-0013",
+  "prev": "E-0012"
+ },
+ {
+  "at": "2026-10-15T16:40:00Z",
+  "actor": "u-anthony",
+  "kind": "person",
+  "type": "sign_off",
+  "text": "Accepted the impact of 12 CFR 208 App. D-2 III.C",
+  "run_id": null,
+  "refs": [
+   "RC-2026-011"
+  ],
+  "signed": true,
+  "id": "E-0012",
+  "prev": "E-0011"
+ },
+ {
+  "at": "2026-10-15T15:02:00Z",
+  "actor": "u-elena",
+  "kind": "person",
+  "type": "handoff",
+  "text": "Asked Priya Raman one question on CTL-153",
+  "run_id": "run-design-mfa",
+  "refs": [
+   "H-117"
+  ],
+  "signed": true,
+  "id": "E-0011",
+  "prev": "E-0010"
+ },
+ {
+  "at": "2026-10-15T14:52:00Z",
+  "actor": "CD-2",
+  "kind": "agent",
+  "type": "check",
+  "text": "Ran seven design checks: 6 pass, 1 can't tell",
+  "run_id": "run-design-mfa",
+  "refs": [
+   "CTL-153"
+  ],
+  "signed": true,
+  "id": "E-0010",
+  "prev": "E-0009"
+ },
+ {
+  "at": "2026-10-15T14:51:00Z",
+  "actor": "CD-1",
+  "kind": "agent",
+  "type": "propose",
+  "text": "Drafted CTL-153",
+  "run_id": "run-design-mfa",
+  "refs": [
+   "CTL-153"
+  ],
+  "signed": true,
+  "id": "E-0009",
+  "prev": "E-0008"
+ },
+ {
+  "at": "2026-10-15T14:50:00Z",
+  "actor": "CD-1",
+  "kind": "agent",
+  "type": "propose",
+  "text": "Suggested the smallest fix: a new control plus one policy sentence",
+  "run_id": "run-design-mfa",
+  "refs": [
+   "CTL-153"
+  ],
+  "signed": true,
+  "id": "E-0008",
+  "prev": "E-0007"
+ },
+ {
+  "at": "2026-10-15T11:02:00Z",
+  "actor": "u-elena",
+  "kind": "person",
+  "type": "decide",
+  "text": "Confirmed link D-208-M2 to CTL-150",
+  "run_id": null,
+  "refs": [
+   "D-208-M2",
+   "CTL-150"
+  ],
+  "signed": true,
+  "id": "E-0007",
+  "prev": "E-0006"
+ },
+ {
+  "at": "2026-10-15T10:20:00Z",
+  "actor": "u-elena",
+  "kind": "person",
+  "type": "handoff",
+  "text": "Raised drift to Grace Liu",
+  "run_id": null,
+  "refs": [
+   "H-118"
+  ],
+  "signed": true,
+  "id": "E-0006",
+  "prev": "E-0005"
+ },
+ {
+  "at": "2026-10-14T09:30:00Z",
+  "actor": "RC-04",
+  "kind": "agent",
+  "type": "check",
+  "text": "Held back one proposed obligation in 12 CFR 1026.19(e)",
+  "run_id": null,
+  "refs": [
+   "RC-2026-016"
+  ],
+  "signed": true,
+  "id": "E-0005",
+  "prev": "E-0004"
+ },
+ {
+  "at": "2026-10-13T09:00:00Z",
+  "actor": "u-ravi",
+  "kind": "person",
+  "type": "handoff",
+  "text": "Reminded Margaret Ellison about CTL-132 evidence",
+  "run_id": null,
+  "refs": [
+   "H-115"
+  ],
+  "signed": true,
+  "id": "E-0004",
+  "prev": "E-0003"
+ },
+ {
+  "at": "2026-10-10T15:05:00Z",
+  "actor": "u-anthony",
+  "kind": "person",
+  "type": "sign_off",
+  "text": "Closed 12 CFR 337.6 rate cap change",
+  "run_id": null,
+  "refs": [
+   "RC-2026-009"
+  ],
+  "signed": true,
+  "id": "E-0003",
+  "prev": "E-0002"
+ },
+ {
+  "at": "2026-10-02T14:20:00Z",
+  "actor": "u-elena",
+  "kind": "person",
+  "type": "decide",
+  "text": "Confirmed 12 coverage links for Regulation E",
+  "run_id": null,
+  "refs": [
+   "RC-2026-014"
+  ],
+  "signed": true,
+  "id": "E-0002",
+  "prev": "E-0001"
+ },
+ {
+  "at": "2026-06-26T16:00:00Z",
+  "actor": "u-anthony",
+  "kind": "person",
+  "type": "sign_off",
+  "text": "Accepted known gap KG-007 until 31 Dec 2026",
+  "run_id": null,
+  "refs": [
+   "KG-007"
+  ],
+  "signed": true,
+  "id": "E-0001",
+  "prev": null
+ }
+]

@@ -10,12 +10,12 @@ export function Toasts() {
   const toasts = useStore((s) => s.toasts);
   const dismiss = useStore((s) => s.dismissToast);
   return (
-    <div aria-live="polite" className="no-print pointer-events-none fixed top-20 right-6 z-[35] flex flex-col items-end gap-2 max-md:right-5 max-md:left-5">
+    <div aria-live="polite" className="no-print pointer-events-none fixed bottom-6 left-1/2 z-[35] flex -translate-x-1/2 flex-col items-center gap-2">
       <AnimatePresence>
         {toasts.map((t) => (
           <motion.div
             key={t.id}
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}

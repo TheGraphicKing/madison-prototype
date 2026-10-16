@@ -24,28 +24,28 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F17 | Consequences and accepted gaps | [ ] | |
 | F18 | Compact obligation filters | [ ] | |
 | F19 | Obligation page with lineage and history tabs | [ ] | |
-| F20 | 20 tasks, legible | [ ] | |
+| F20 | 20 tasks, legible | [x] | Done (B, polished in H) · `src/data/tasks.json` v2; `phase-b/tasks-elena-*`, `phase-b/tasks-anthony-*` (glyph, title, from, why, due, state chip, one action); 20 tasks across 8 assignees (data has 8, not 9) |
 | F21 | Reports clear and deep | [ ] | |
 | F22 | Record chain and list | [ ] | |
 | F23 | Floating glyph rail | [x] | Done (A) · `phase-a/rail-collapsed-tooltip-graphite-light-1440.png`, `phase-a/rail-hover-expands-graphite-light-1440.png` |
 | F24 | First principles, no technical detail | [ ] | |
 | F25 | Everything clickable, 0 dead clicks | [ ] | |
-| F26 | Handed-over tasks arrive | [ ] | |
-| F27 | Blockers explicit in the drawer | [ ] | |
+| F26 | Handed-over tasks arrive | [x] | Done (B) · `lib/work.ts` handoff model; `lib/work.test.ts` loop 1 and loop 2; demo-loop screenshots in phase I |
+| F27 | Blockers explicit in the drawer | [x] | Done (B) · `components/tasks/task-drawer.tsx`: What you've been given / What you need to provide · `phase-b/drawer-priya-H117-*`, `phase-b/drawer-margaret-H115-*` |
 | F28 | Softer components, no brackets | [x] | Done (A) · radii 14/12/10/pill in `globals.css` and core components; `core/bracket.tsx` deleted; `check-forbidden.sh` checks Bracket |
 | F29 | Calm working screens | [ ] | |
 | F30 | Replay disclaimer | [ ] | |
 | F31 | Human input unmistakable | [ ] | |
 | F32 | No new modules, repetition removed | [ ] | |
 | F33 | All three runs in the new layout | [ ] | |
-| F34 | Seven personas | [ ] | |
+| F34 | Seven personas | [x] | Done (B) · `PERSONA_IDS` has 7 people · persona switch |
 | F35 | Custom glyph set | [x] | Done (A) · `src/components/glyphs/index.tsx` (7 nav, 11 task types, chevron) · gallery `phase-a/gallery-graphite-light-1440.png` · no icon library in package.json |
 | F36 | No penalty figures | [ ] | |
 
 ## Phases
 
 - [x] A Foundation v2
-- [ ] B Data, tasks and handoffs
+- [x] B Data, tasks and handoffs
 - [ ] C Run view v2
 - [ ] D Change room
 - [ ] E Today and Rule changes

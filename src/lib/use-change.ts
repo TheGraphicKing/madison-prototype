@@ -50,7 +50,6 @@ export const STATE_WORD: Record<string, string> = {
 
 /** A duty's coverage state, with what the demo changed applied (CTL-153 covers D-208-M1). */
 export function useCoverage(d: { id: string; coverage_state: import("@/data/types").CoverageState }) {
-  const mfaDone = useStore((s) => Boolean(s.finishedRuns["run-design-mfa"]));
-  if (mfaDone && d.id === "D-208-M1") return "covered" as const;
-  return d.coverage_state;
+  const override = useStore((s) => s.obligationStates[d.id]);
+  return override ?? d.coverage_state;
 }

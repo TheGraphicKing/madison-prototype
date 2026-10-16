@@ -430,3 +430,85 @@ export interface Run {
   duration_ms: number;
   events: RunEvent[];
 }
+
+// ---------- Iteration 2 ----------
+
+export type NeededField = {
+  id: string;
+  label: string;
+  kind: "text" | "date" | "file" | "choice" | "table";
+  required: boolean;
+  choices?: string[];
+};
+
+export interface Handoff {
+  id: string;
+  type: string;
+  from_user_id: string;
+  to_user_id: string;
+  created_at: Iso;
+  due: Iso;
+  status: "open" | "overdue" | "waiting_on_previous" | "done";
+  title: string;
+  ask: string;
+  why: string;
+  change_id?: string;
+  obligation_id?: string;
+  control_id?: string;
+  waits_for?: string;
+  provided: { kind: string; label: string; text: string }[];
+  needed: NeededField[];
+  options: { id: string; label: string }[];
+  blocks: string[];
+  thread: { at: Iso; by: string; text: string }[];
+}
+
+export interface Consequence {
+  obligation_id: string;
+  state: CoverageState;
+  headline: string;
+  what_happens: string;
+  who_is_affected: string;
+  exam_risk: "High" | "Medium" | "Low";
+  exam_note: string;
+  illustrative_exposure: { label: string; text: string };
+  accepted: { by: string; at: Iso; until: Iso; why: string } | null;
+  next: string;
+}
+
+export interface RecordEntryV2 {
+  id: string;
+  prev: string | null;
+  at: Iso;
+  actor: string;
+  kind: "person" | "agent";
+  type: string;
+  text: string;
+  run_id?: string | null;
+  refs: string[];
+  signed: boolean;
+}
+
+export interface ReportsV2 {
+  board_pack: {
+    id: string;
+    title: string;
+    as_of: Iso;
+    status: "draft" | "approved";
+    prepared_by: string;
+    approver_id: string;
+    how_built: { step: string; detail: string; source: string }[];
+    conclusions: string[];
+    sections: { n: number; title: string; summary: string; blocks: string[] }[];
+    comments: { by: string; at: Iso; section: number; text: string }[];
+    additions: unknown[];
+  };
+  exam_pack: {
+    id: string;
+    title: string;
+    starts: Iso;
+    proven: number;
+    in_scope: number;
+    areas: { name: string; proven: boolean; why?: string; items?: string[] }[];
+  };
+}

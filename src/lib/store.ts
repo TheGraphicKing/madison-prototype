@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { PersonaId } from "@/data";
-import type { ChangeCounts, ChangeState, JourneyStep } from "@/data/types";
+import type { ChangeCounts, ChangeState, CoverageState, JourneyStep } from "@/data/types";
 import type { Mode, PaletteId } from "@/theme/palettes";
 
 export interface Decision {
@@ -38,6 +38,36 @@ export interface ChangeOverride {
   new_control?: string;
 }
 
+export interface HandoffState {
+  status: "active" | "done";
+  option?: string;
+  fields?: Record<string, string>;
+  by?: string;
+  at?: string;
+}
+
+export interface Notice {
+  id: string;
+  to: string;
+  from: string;
+  title: string;
+  why: string;
+  at: string;
+  handoffId?: string;
+  href?: string;
+  read?: boolean;
+}
+
+export interface ReportAddition {
+  id: string;
+  kind: "note" | "section" | "attachment";
+  section?: number;
+  text: string;
+  by: string;
+  at: string;
+  status: "pending" | "accepted";
+}
+
 export interface Toast {
   id: string;
   text: string;
@@ -61,6 +91,17 @@ interface State {
   askOpen: boolean;
   /** tasks finished during the demo */
   tasksDone: Record<string, { by: string; at: string }>;
+  /** handoffs activated or answered during the demo */
+  handoffs: Record<string, HandoffState>;
+  /** notes added to handoff threads */
+  threads: Record<string, { at: string; by: string; text: string }[]>;
+  /** "Grace Liu responded" and similar, for the person who asked */
+  notices: Notice[];
+  /** obligation states changed during the demo */
+  obligationStates: Record<string, CoverageState>;
+  reportAdditions: ReportAddition[];
+  /** the task drawer, open from any screen */
+  drawerTask: string | null;
   /** bank facts answered during the demo */
   facts: Record<string, { value: string; by: string; at: string }>;
 
@@ -78,6 +119,14 @@ interface State {
   setAskOpen: (o: boolean) => void;
   completeTask: (id: string, by: string, at: string) => void;
   answerFact: (key: string, value: string, by: string, at: string) => void;
+  setHandoff: (id: string, h: HandoffState) => void;
+  addThread: (id: string, m: { at: string; by: string; text: string }) => void;
+  notify: (n: Omit<Notice, "id">) => void;
+  readNotice: (id: string) => void;
+  setObligationState: (id: string, s: CoverageState) => void;
+  addReport: (a: Omit<ReportAddition, "id">) => void;
+  acceptReport: (id: string) => void;
+  openTask: (id: string | null) => void;
   reset: () => void;
 }
 
@@ -95,6 +144,12 @@ const initial = {
   askOpen: false,
   tasksDone: {} as Record<string, { by: string; at: string }>,
   facts: {} as Record<string, { value: string; by: string; at: string }>,
+  handoffs: {} as Record<string, HandoffState>,
+  threads: {} as Record<string, { at: string; by: string; text: string }[]>,
+  notices: [] as Notice[],
+  obligationStates: {} as Record<string, CoverageState>,
+  reportAdditions: [] as ReportAddition[],
+  drawerTask: null as string | null,
 };
 
 let seq = 0;
@@ -130,6 +185,14 @@ export const useStore = create<State>()(
       setAskOpen: (askOpen) => set({ askOpen }),
       completeTask: (id, by, at) => set((s) => ({ tasksDone: { ...s.tasksDone, [id]: { by, at } } })),
       answerFact: (key, value, by, at) => set((s) => ({ facts: { ...s.facts, [key]: { value, by, at } } })),
+      setHandoff: (id, h) => set((s) => ({ handoffs: { ...s.handoffs, [id]: { ...s.handoffs[id], ...h } } })),
+      addThread: (id, m) => set((s) => ({ threads: { ...s.threads, [id]: [...(s.threads[id] ?? []), m] } })),
+      notify: (n) => set((s) => ({ notices: [{ ...n, id: uid("n") }, ...s.notices] })),
+      readNotice: (id) => set((s) => ({ notices: s.notices.map((n) => (n.id === id ? { ...n, read: true } : n)) })),
+      setObligationState: (id, st) => set((s) => ({ obligationStates: { ...s.obligationStates, [id]: st } })),
+      addReport: (a) => set((s) => ({ reportAdditions: [...s.reportAdditions, { ...a, id: uid("ra") }] })),
+      acceptReport: (id) => set((s) => ({ reportAdditions: s.reportAdditions.map((r) => (r.id === id ? { ...r, status: "accepted" } : r)) })),
+      openTask: (drawerTask) => set({ drawerTask }),
       reset: () => set((s) => ({ ...initial, palette: s.palette, mode: s.mode, toasts: [] })),
     }),
     {
@@ -147,6 +210,11 @@ export const useStore = create<State>()(
         linkDecisions: s.linkDecisions,
         tasksDone: s.tasksDone,
         facts: s.facts,
+        handoffs: s.handoffs,
+        threads: s.threads,
+        notices: s.notices,
+        obligationStates: s.obligationStates,
+        reportAdditions: s.reportAdditions,
       }),
     },
   ),
