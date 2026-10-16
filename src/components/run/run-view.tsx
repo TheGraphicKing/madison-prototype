@@ -123,7 +123,7 @@ export function RunView({ runId, mode, from, step, view: initialView = "agent" }
             <Link href={from} className="flex shrink-0 items-center gap-1.5 text-[13px] text-ink2 hover:text-ink">
               <Mark kind="chevron-left" size={12} /> {from.startsWith("/rules/") ? "Change room" : from.startsWith("/record") ? "The record" : from.startsWith("/tasks") ? "My tasks" : "Back"}
             </Link>
-            <h1 className="min-w-0 truncate text-[19px] leading-7 font-medium tracking-[-0.01em]">
+            <h1 className="shrink-0 whitespace-nowrap max-md:shrink max-md:whitespace-normal text-[19px] leading-7 font-medium tracking-[-0.01em]">
               <span className="t-data mr-2 text-[13px] text-ink2">{change?.citation}</span>How Madison worked
             </h1>
             <span className="inline-flex h-6 shrink-0 items-center gap-1.5 rounded-full bg-surface2 px-2.5 text-[12px] font-medium">

@@ -181,7 +181,7 @@ export function Gate({ position, width, height, color, paneColor, fill }: { posi
         <meshStandardMaterial color={color} roughness={0.85} />
       </mesh>
       <mesh geometry={pane} position={[0, height * 0.48, 0]}>
-        <meshStandardMaterial color={paneColor} roughness={0.6} transparent opacity={0.28} depthWrite={false} />
+        <meshStandardMaterial color={paneColor} roughness={0.7} transparent opacity={0.42} depthWrite={false} />
       </mesh>
       {/* the gate fills from the floor up as obligations pass */}
       <mesh geometry={bar} position={[0, 0.06 + Math.max(0, Math.min(1, fill)) * (height - 0.16), 0]}>

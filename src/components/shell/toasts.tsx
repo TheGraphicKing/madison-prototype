@@ -5,17 +5,17 @@ import { AnimatePresence, motion } from "motion/react";
 import { useStore } from "@/lib/store";
 import { Square } from "@/components/core/mark";
 
-/** Toasts in plain words, bottom centre. Polite live region. */
+/** Toasts in plain words, top centre under the header, so they never cover the work. Polite live region. */
 export function Toasts() {
   const toasts = useStore((s) => s.toasts);
   const dismiss = useStore((s) => s.dismissToast);
   return (
-    <div aria-live="polite" className="no-print pointer-events-none fixed bottom-6 left-1/2 z-[35] flex w-[min(560px,calc(100vw-40px))] -translate-x-1/2 flex-col items-center gap-2">
+    <div aria-live="polite" className="no-print pointer-events-none fixed top-[76px] left-1/2 z-[35] flex w-[min(560px,calc(100vw-40px))] -translate-x-1/2 flex-col items-center gap-2">
       <AnimatePresence>
         {toasts.map((t) => (
           <motion.div
             key={t.id}
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}

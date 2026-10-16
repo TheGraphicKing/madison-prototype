@@ -47,7 +47,7 @@ export function Stage({
       >
         <color attach="background" args={[tk["--ground"]]} />
         <LightRig tk={tk} extent={extent} />
-        {ground ? <Ground tk={tk} size={extent * 4} /> : null}
+        {ground ? <Ground tk={tk} size={extent * 5} /> : null}
         {children}
         {ao ? (
           <EffectComposer multisampling={4}>
@@ -95,11 +95,7 @@ export function LightRig({ tk, extent = 10 }: { tk: Tokens; extent?: number }) {
 export function Ground({ tk, size = 40, y = 0 }: { tk: Tokens; size?: number; y?: number }) {
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, y - 0.002, 0]} receiveShadow>
-        <planeGeometry args={[size, size]} />
-        <shadowMaterial transparent opacity={0.12} color={new THREE.Color(tk["--ink"])} />
-      </mesh>
-      <ContactShadows position={[0, y, 0]} opacity={0.22} scale={size * 0.6} blur={2.4} far={2.5} resolution={512} color={tk["--ink"]} frames={Infinity} />
+      <ContactShadows position={[0, y, 0]} opacity={0.22} scale={size * 1.2} blur={2.4} far={2.5} resolution={1024} color={tk["--ink"]} frames={Infinity} />
     </>
   );
 }
