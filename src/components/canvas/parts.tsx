@@ -114,7 +114,7 @@ export function PersonBar({
       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
       role="region"
       aria-label="A person decides"
-      className="no-print fixed bottom-[104px] left-1/2 z-40 w-[min(820px,calc(100vw-40px))] -translate-x-1/2 rounded-[4px] border border-ink bg-surface shadow-(--overlay-shadow)"
+      className="no-print fixed bottom-[104px] left-1/2 z-40 w-[min(820px,calc(100vw-40px))] -translate-x-1/2 rounded-[14px] border border-ink bg-surface shadow-(--overlay-shadow)"
     >
       <div className="flex items-center gap-4 px-5 py-4 max-md:flex-col max-md:items-start">
         <span className="relative ring-wait shrink-0 rounded-full">
@@ -163,7 +163,7 @@ function ReviewDialog({ pending, onClose, onAccept }: { run: Run; pending: Perso
     <Dialog
       open
       onOpenChange={(o) => !o && onClose()}
-      title="Review the duties one by one"
+      title="Review the obligations one by one"
       className="w-[min(640px,calc(100vw-40px))]"
       footer={
         <>
@@ -179,7 +179,7 @@ function ReviewDialog({ pending, onClose, onAccept }: { run: Run; pending: Perso
               onClose();
             }}
           >
-            Accept {nIn} duties and exclude {nOut}
+            Accept {nIn} obligations and exclude {nOut}
           </Button>
         </>
       }
@@ -194,7 +194,7 @@ function ReviewDialog({ pending, onClose, onAccept }: { run: Run; pending: Perso
                 role="checkbox"
                 aria-checked={!out}
                 onClick={() => setExcluded((e) => ({ ...e, [id]: !e[id] }))}
-                className="mt-[3px] flex size-4 shrink-0 items-center justify-center rounded-[2px] shadow-[inset_0_0_0_1px_var(--ink)]"
+                className="mt-[3px] flex size-4 shrink-0 items-center justify-center rounded-[10px] shadow-[inset_0_0_0_1px_var(--ink)]"
               >
                 {!out ? <Mark kind="check" size={12} /> : null}
               </button>
@@ -210,7 +210,7 @@ function ReviewDialog({ pending, onClose, onAccept }: { run: Run; pending: Perso
           );
         })}
       </ul>
-      {!matches ? <p className="mt-3 text-[13px] text-ink2">In this prototype, the script continues with 6 accepted and the prepaid duty excluded.</p> : null}
+      {!matches ? <p className="mt-3 text-[13px] text-ink2">In this prototype, the script continues with 6 accepted and the prepaid obligation excluded.</p> : null}
     </Dialog>
   );
 }
@@ -265,7 +265,7 @@ export function ExpandedStage({
               key={x.key}
               onClick={() => onSwitch(x.key)}
               className={cn(
-                "flex h-7 items-center gap-1.5 rounded-[2px] px-2.5 text-[12px]",
+                "flex h-7 items-center gap-1.5 rounded-[10px] px-2.5 text-[12px]",
                 x.key === stageKey ? "bg-ink text-surface" : "bg-surface text-ink2 shadow-[inset_0_0_0_1px_var(--line)] hover:text-ink",
               )}
             >
@@ -278,7 +278,7 @@ export function ExpandedStage({
           <Mark kind="close" size={12} /> Collapse
         </button>
       </div>
-      <div className="relative min-h-0 flex-1 overflow-y-auto rounded-[2px] bg-surface p-6 shadow-[inset_0_0_0_1px_var(--ink)]">
+      <div className="relative min-h-0 flex-1 overflow-y-auto rounded-[10px] bg-surface p-6 shadow-[inset_0_0_0_1px_var(--ink)]">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
             <MonoLabel>{stage.kind === "gate" ? "Verifier gate" : stage.kind === "person" ? "A person decides" : stage.kind === "code" ? "Code step" : "Agent step"}</MonoLabel>

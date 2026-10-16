@@ -46,13 +46,13 @@ export function StatusChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 whitespace-nowrap",
-        size === "sm" ? "text-[12px] leading-4" : "t-small",
-        "text-ink2",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 whitespace-nowrap",
+        size === "sm" ? "h-6 text-[12px] leading-4" : "h-7 text-[13px] leading-5",
         className,
       )}
+      style={{ background: STATE_SOFT[state], color: STATE_COLOR[state] }}
     >
-      <Square size={6} color={STATE_COLOR[state]} filled={state !== "proposed"} />
+      <Square size={6} color={STATE_COLOR[state]} filled={state !== "proposed"} className="rounded-[2px]" />
       {label ?? STATE_LABEL[state]}
     </span>
   );

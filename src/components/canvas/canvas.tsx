@@ -311,7 +311,7 @@ export function Canvas({ runId, mode, from }: { runId: string; mode: Mode; from:
 }
 
 export function decisionText(runId: string, actionId: string, label: string, citation: string) {
-  if (runId === "run-rule-1005" && actionId === "accept_all") return `Accepted 6 duties and excluded 1 (prepaid) for ${citation}`;
+  if (runId === "run-rule-1005" && actionId === "accept_all") return `Accepted 6 obligations and excluded 1 (prepaid) for ${citation}`;
   if (runId === "run-design-mfa" && actionId === "answer") return "Answered D6 for CTL-153: break-glass accounts are vaulted and need two officers";
   if (runId === "run-design-mfa" && actionId === "sign") return "Signed off CTL-153 and the change to POL-ISP-01 3.1";
   if (runId === "run-coverage-1026" && actionId === "link_and_raise") return "Linked POL-MTG-02 3.1 to D-1026-L2 and raised drift DR-029 to Grace Liu";

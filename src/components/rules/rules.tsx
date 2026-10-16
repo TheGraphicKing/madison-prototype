@@ -137,7 +137,7 @@ export function Rules() {
           onChange={setFilter}
           options={FILTERS.map((x) => ({ value: x.value, label: x.label, count: changes.filter((c) => x.test(c, openTasks)).length }))}
         />
-        <label className="relative flex h-8 min-w-[240px] flex-1 items-center rounded-[2px] bg-surface shadow-[inset_0_0_0_1px_var(--line)] focus-within:shadow-[inset_0_0_0_1px_var(--ink)] md:max-w-[320px]">
+        <label className="relative flex h-8 min-w-[240px] flex-1 items-center rounded-[10px] bg-surface shadow-[inset_0_0_0_1px_var(--line)] focus-within:shadow-[inset_0_0_0_1px_var(--ink)] md:max-w-[320px]">
           <span className="sr-only">Search rule changes</span>
           <input
             value={q}
@@ -210,7 +210,7 @@ export function Rules() {
                   </span>
                 ),
               },
-              { id: "d", header: "Duties", width: "90px", align: "right", sortValue: (r) => r.duties_on_record, cell: (r) => <span className="t-data">{r.duties_on_record}</span> },
+              { id: "d", header: "Obligations", width: "90px", align: "right", sortValue: (r) => r.duties_on_record, cell: (r) => <span className="t-data">{r.duties_on_record}</span> },
             ]}
             stickyTop={64}
           />
@@ -226,7 +226,7 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
       aria-pressed={on}
       onClick={onClick}
       className={cn(
-        "inline-flex h-7 items-center gap-1.5 rounded-[2px] px-2.5 text-[12.5px] transition-colors",
+        "inline-flex h-7 items-center gap-1.5 rounded-[10px] px-2.5 text-[12.5px] transition-colors",
         on ? "bg-ink text-surface" : "bg-surface text-ink2 shadow-[inset_0_0_0_1px_var(--line)] hover:text-ink",
       )}
     >

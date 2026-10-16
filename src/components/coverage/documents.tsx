@@ -66,7 +66,7 @@ export function Documents() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[320px_minmax(0,1fr)]">
-      <div role="tree" aria-label="Policies and procedures" className="flex flex-col rounded-[4px] bg-surface p-2 shadow-[0_0_0_1px_var(--line)]">
+      <div role="tree" aria-label="Policies and procedures" className="flex flex-col rounded-[14px] bg-surface p-2 shadow-[0_0_0_1px_var(--line)]">
         {tree.map((root) => (
           <TreeNode key={root.id} node={root} depth={0} openIds={openIds} toggle={toggle} selected={selected} onPick={pick} />
         ))}
@@ -91,20 +91,20 @@ export function Documents() {
             {drift.map((d) => (
               <div key={d.id} className="mt-10 max-w-[820px]">
                 <DriftPair drift={d} />
-                <Link href={`/duties/${d.obligation_id}/`} className="mt-3 inline-block text-[14px] underline underline-offset-4">
+                <Link href={`/obligations/${d.obligation_id}/`} className="mt-3 inline-block text-[14px] underline underline-offset-4">
                   Open {d.obligation_id}: {getDuty(d.obligation_id)?.plain}
                 </Link>
               </div>
             ))}
             {links.length ? (
               <section className="mt-10">
-                <MonoLabel>Duties this section covers · {links.length}</MonoLabel>
+                <MonoLabel>Obligations this section covers · {links.length}</MonoLabel>
                 <ul className="mt-2 flex flex-col border-t border-line">
                   {links.map((l) => {
                     const d = getDuty(l.obligation_id)!;
                     return (
                       <li key={l.id} className="grid grid-cols-[110px_1fr_auto] gap-4 border-b border-line py-3">
-                        <Link href={`/duties/${d.id}/`} className="t-data text-[11.5px] text-ink2 hover:underline">
+                        <Link href={`/obligations/${d.id}/`} className="t-data text-[11.5px] text-ink2 hover:underline">
                           {d.id}
                         </Link>
                         <span className="text-[14px] leading-[21px]">
@@ -157,7 +157,7 @@ function TreeNode({
         onClick={() => (isFolder ? toggle(node.id) : onPick(node.id))}
         onKeyDown={onKey}
         className={cn(
-          "flex w-full items-center gap-2 rounded-[2px] py-1.5 pr-2 text-left text-[13.5px] leading-5 hover:bg-surface2",
+          "flex w-full items-center gap-2 rounded-[10px] py-1.5 pr-2 text-left text-[13.5px] leading-5 hover:bg-surface2",
           sel && "bg-accent-soft text-ink",
           depth === 0 && "t-label py-2 text-ink",
         )}

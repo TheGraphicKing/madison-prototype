@@ -115,9 +115,9 @@ export function Inspector({
       footer={
         duty && getDuty(duty.id) ? (
           <div className="flex items-center justify-between gap-4">
-            <span className="t-small text-ink2">The duty room shows its whole lineage and history.</span>
-            <ButtonLink href={`/duties/${duty.id}/`} variant="primary" size={32}>
-              Open the duty room
+            <span className="t-small text-ink2">The obligation page shows what stands behind it and its history.</span>
+            <ButtonLink href={`/obligations/${duty.id}/`} variant="primary" size={32}>
+              Open the obligation
             </ButtonLink>
           </div>
         ) : undefined
@@ -138,7 +138,7 @@ export function Inspector({
         </section>
       ) : null}
       {item.kind === "duty" && !getDuty(item.id) ? (
-        <section className="mb-6 rounded-[2px] bg-risk-soft px-4 py-3">
+        <section className="mb-6 rounded-[10px] bg-risk-soft px-4 py-3">
           <div className="flex items-center gap-2 text-[14px] font-medium text-risk">
             <Mark kind="cross" /> Held back by the reviewer
           </div>
@@ -235,7 +235,7 @@ export function Inspector({
         </Row>
       </div>
       {duty && !getDuty(item.id) && item.parentRef && getDuty(item.parentRef) ? (
-        <Link href={`/duties/${item.parentRef}/`} className="mt-5 inline-block text-[14px] underline underline-offset-4">
+        <Link href={`/obligations/${item.parentRef}/`} className="mt-5 inline-block text-[14px] underline underline-offset-4">
           Open {item.parentRef}
         </Link>
       ) : null}

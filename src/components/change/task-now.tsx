@@ -5,7 +5,6 @@ import type { RuleChange } from "@/data/types";
 import { driftFlags, dutiesFor, getDuty, institution, ruleSections, userById, type PersonaId } from "@/data";
 import { useStore } from "@/lib/store";
 import { demoNowIso, fmtDate } from "@/lib/dates";
-import { Bracket } from "@/components/core/bracket";
 import { Button, ButtonLink } from "@/components/core/button";
 import { MonoLabel } from "@/components/core/labels";
 import { Diff } from "@/components/change/diff";
@@ -50,7 +49,7 @@ export function useTaskNow(c: RuleChange): Task {
       return {
         label: "Your task now",
         title: "Run Madison on this rule",
-        why: "The amended text is in. Madison reads it, finds the duties and checks each one twice. You decide before anything is accepted.",
+        why: "The amended text is in. Madison reads it, finds the obligations and checks each one twice. You decide before anything is accepted.",
         evidence: (
           <div className="flex flex-col gap-4">
             <MonoLabel>What changed · {changedSections.length} sections</MonoLabel>
@@ -88,7 +87,7 @@ export function useTaskNow(c: RuleChange): Task {
       return {
         label: "With Margaret Ellison",
         title: "Waiting for the policy and procedure fix",
-        why: "Margaret Ellison owns POL-DISP-01 and PRC-DISP-06. When both say 5 business days, the duty can be linked and covered.",
+        why: "Margaret Ellison owns POL-DISP-01 and PRC-DISP-06. When both say 5 business days, the obligation can be linked and covered.",
         evidence: <DriftPair drift={dr} stacked />,
         quiet: true,
         secondary: { label: "See it in the record", href: `/record/?change=${c.id}` },
@@ -129,7 +128,7 @@ export function useTaskNow(c: RuleChange): Task {
       ? {
           label: "Needs your decision",
           title: "Close this change",
-          why: "CTL-153 is in force and D-208-M1 has a control behind it. One duty, privileged session logging, is not yet confirmed: CTL-152 has been quiet for 77 days.",
+          why: "CTL-153 is in force and D-208-M1 has a control behind it. One obligation, privileged session logging, is not yet confirmed: CTL-152 has been quiet for 77 days.",
           primary: { label: close, onClick: () => act(close, `Closed ${c.citation}`, () => overrideChange(c.id, { state: "closed", step: "close" })) },
         }
       : {
@@ -157,13 +156,13 @@ export function useTaskNow(c: RuleChange): Task {
 
   if (c.state === "duties") {
     const n = dutiesFor(c.id).length;
-    const label = `Accept ${n} duties`;
-    if (did(label)) return { label: "Done", title: `${n} duties accepted`, why: "Madison is matching them to policies and controls.", quiet: true };
+    const label = `Accept ${n} obligations`;
+    if (did(label)) return { label: "Done", title: `${n} obligations accepted`, why: "Madison is matching them to policies and controls.", quiet: true };
     return {
       label: "Your task now",
-      title: `Accept ${n} Truth in Savings duties`,
+      title: `Accept ${n} Truth in Savings obligations`,
       why: "Proposed by Madison, checked by the quote check and the reviewer. Waiting for review.",
-      primary: { label, onClick: () => act(label, `Accepted ${n} duties for ${c.citation}`, () => overrideChange(c.id, { state: "linked", step: "linked" })) },
+      primary: { label, onClick: () => act(label, `Accepted ${n} obligations for ${c.citation}`, () => overrideChange(c.id, { state: "linked", step: "linked" })) },
     };
   }
 
@@ -186,13 +185,13 @@ export function useTaskNow(c: RuleChange): Task {
 
   if (c.state === "screened_out") return { label: "Doesn't apply", title: "Nothing to do", why: c.screen_reason ?? "Screened out.", quiet: true };
   if (c.state === "closed") return { label: "Closed", title: "This change is closed", why: `Closed by ${userById(c.closed_by ?? "")?.name} on ${fmtDate(c.closed_at)}.`, quiet: true };
-  return { label: "Next", title: "Find the duties", why: `It applies to Northgate. ${userById(c.owner_id)?.name} owns the next step.`, quiet: true };
+  return { label: "Next", title: "Find the obligations", why: `It applies to Northgate. ${userById(c.owner_id)?.name} owns the next step.`, quiet: true };
 }
 
 export function TaskNow({ change }: { change: RuleChange }) {
   const t = useTaskNow(change);
   return (
-    <Bracket arm={14} color={t.quiet ? "var(--lineStrong)" : "var(--ink)"} className="bg-surface">
+    <Frame arm={14} color={t.quiet ? "var(--lineStrong)" : "var(--ink)"} className="bg-surface">
       <div className="grid gap-8 p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] max-md:p-5">
         <div className="flex flex-col">
           <span className="flex items-center gap-2">
@@ -226,7 +225,7 @@ export function TaskNow({ change }: { change: RuleChange }) {
         </div>
         {t.evidence ? <div className="min-w-0 border-l border-line pl-8 max-lg:border-l-0 max-lg:border-t max-lg:pt-6 max-lg:pl-0">{t.evidence}</div> : <OwnerNote change={change} />}
       </div>
-    </Bracket>
+    </Frame>
   );
 }
 
@@ -237,6 +236,18 @@ function OwnerNote({ change }: { change: RuleChange }) {
       <PersonTag id={change.owner_id} showRole />
       <MonoLabel className="mt-3">Summary</MonoLabel>
       <p className="text-[14px] leading-[22px] text-ink2">{change.summary}</p>
+    </div>
+  );
+}
+
+/** A plain rounded surface (the corner brackets are gone in iteration 2). */
+function Frame({ children, className, style, arm: _a, color: _c, as: _as, ...rest }: { children?: React.ReactNode; className?: string; style?: React.CSSProperties; arm?: number; color?: string; as?: React.ElementType } & React.HTMLAttributes<HTMLDivElement>) {
+  void _a;
+  void _c;
+  void _as;
+  return (
+    <div className={className} style={{ borderRadius: 12, boxShadow: "inset 0 0 0 1px var(--line)", ...style }} {...rest}>
+      {children}
     </div>
   );
 }

@@ -87,7 +87,7 @@ export function Tasks() {
 function TaskRow({ t, open, onToggle, mineTask, primary }: { t: Task; open: boolean; onToggle: () => void; mineTask: boolean; primary: boolean }) {
   const done = useStore((s) => s.tasksDone[t.id]);
   const c = t.change_id ? getChange(t.change_id) : undefined;
-  const runId = ACTION_RUN[t.action];
+  const runId = t.action ? ACTION_RUN[t.action] : undefined;
   const inst = usePlayback((s) => (runId ? s.instances[runId] : undefined));
   const ensure = usePlayback((s) => s.ensure);
   const restart = usePlayback((s) => s.restart);
@@ -108,7 +108,7 @@ function TaskRow({ t, open, onToggle, mineTask, primary }: { t: Task; open: bool
   }, [open]);
 
   const overdue = dueBucket(t) === "Overdue";
-  const label = !mineTask ? `Remind ${userById(t.assignee_id)?.name}` : runId ? "Start" : ACTION_LABEL[t.action];
+  const label = !mineTask ? `Remind ${userById(t.assignee_id)?.name}` : runId ? "Start" : t.action ? ACTION_LABEL[t.action] : "Open";
 
   return (
     <li ref={rowRef} className={cn("border-b border-line", open && "bg-surface")}>
@@ -200,7 +200,7 @@ function TaskFlow({ t, mineTask, onDone }: { t: Task; mineTask: boolean; onDone:
     const u = userById(t.assignee_id);
     const label = `Remind ${u?.name}`;
     return (
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-[2px] bg-surface2 px-4 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-[10px] bg-surface2 px-4 py-3">
         <span className="text-[14px] text-ink2">
           {u?.name} owns this. A reminder goes to them with the task and its due date. Nothing else changes.
         </span>
@@ -217,7 +217,7 @@ function TaskFlow({ t, mineTask, onDone }: { t: Task; mineTask: boolean; onDone:
 
   if (t.action === "review_duties" && t.change_id) {
     const ds = dutiesFor(t.change_id);
-    const label = `Accept ${ds.length} duties`;
+    const label = `Accept ${ds.length} obligations`;
     return (
       <div className="flex flex-col gap-4">
         <ul className="flex flex-col">
@@ -233,7 +233,7 @@ function TaskFlow({ t, mineTask, onDone }: { t: Task; mineTask: boolean; onDone:
           ))}
         </ul>
         <div className="flex gap-3">
-          <Button variant="primary" size={40} onClick={() => finish(label, `Accepted ${ds.length} duties for ${getChange(t.change_id!)?.citation}`, () => overrideChange(t.change_id!, { state: "linked", step: "linked" }))}>
+          <Button variant="primary" size={40} onClick={() => finish(label, `Accepted ${ds.length} obligations for ${getChange(t.change_id!)?.citation}`, () => overrideChange(t.change_id!, { state: "linked", step: "linked" }))}>
             {label}
           </Button>
           <ButtonLink href={`/rules/${t.change_id}/?step=duties`} variant="text" size={40}>
@@ -273,7 +273,7 @@ function TaskFlow({ t, mineTask, onDone }: { t: Task; mineTask: boolean; onDone:
         <p className="text-[14px] text-ink2">
           {ctl.id} {ctl.name} is a {ctl.cadence} control. Last evidence {fmtDate(ctl.last_artifact_date)}, {ctl.quiet_days} days ago.
         </p>
-        <label className="flex cursor-pointer flex-col items-start gap-1 rounded-[2px] px-5 py-6 outline-1 outline-line-strong outline-dashed hover:bg-surface2">
+        <label className="flex cursor-pointer flex-col items-start gap-1 rounded-[10px] px-5 py-6 outline-1 outline-line-strong outline-dashed hover:bg-surface2">
           <span className="text-[14px] font-medium">{file ? file : "Choose a file to attach as evidence"}</span>
           <span className="text-[12px] text-ink3">It stays in this browser. The prototype records the file name only.</span>
           <input type="file" className="sr-only" onChange={(e) => setFile(e.target.files?.[0]?.name ?? null)} />
@@ -292,7 +292,7 @@ function TaskFlow({ t, mineTask, onDone }: { t: Task; mineTask: boolean; onDone:
     const d = getDuty(g.obligation_id);
     return (
       <div className="flex flex-col gap-4">
-        <div className="rounded-[2px] bg-info-soft px-4 py-3">
+        <div className="rounded-[10px] bg-info-soft px-4 py-3">
           <div className="text-[14px] font-medium text-info">Known gap {g.id} · expires {fmtDate(g.expiry)}</div>
           <p className="mt-1 text-[14px] leading-[22px]">{g.rationale}</p>
           <p className="mt-1 text-[12px] text-ink2">{d?.plain}</p>

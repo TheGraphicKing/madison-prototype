@@ -3,123 +3,121 @@ export const PALETTES = [
   {
     "id": "graphite",
     "name": "Graphite",
-    "mode": "light",
-    "about": "Default. Black and white, one lime highlight for whatever is live or new.",
-    "swatch": [
-      "#F6F6F5",
-      "#EFEFEE",
-      "#141414",
-      "#141414",
-      "#2E6B4E",
-      "#B3261E"
-    ],
-    "dots": [
-      "#F6F6F5",
-      "#141414",
-      "#2E6B4E",
-      "#B3261E"
-    ]
+    "about": "Black and white with one lime highlight. Calm, precise, editorial.",
+    "swatch": {
+      "light": [
+        "#F6F6F5",
+        "#F0F0EE",
+        "#151515",
+        "#151515",
+        "#4F9A72",
+        "#D65A4F",
+        "#DDF26B"
+      ],
+      "dark": [
+        "#0F1012",
+        "#1C1D21",
+        "#EEEEEC",
+        "#EEEEEC",
+        "#4FB57F",
+        "#E86A5E",
+        "#D6F25E"
+      ]
+    },
+    "dots": {
+      "light": [
+        "#F6F6F5",
+        "#151515",
+        "#4F9A72",
+        "#D65A4F"
+      ],
+      "dark": [
+        "#0F1012",
+        "#EEEEEC",
+        "#4FB57F",
+        "#E86A5E"
+      ]
+    }
   },
   {
-    "id": "refinery",
-    "name": "Refinery",
-    "mode": "light",
-    "about": "Schematic warm grey with a deep green, in the spirit of the TextQL reference.",
-    "swatch": [
-      "#EEEEEB",
-      "#E8E8E4",
-      "#1B1D1C",
-      "#0B5D3B",
-      "#1F6B48",
-      "#B0301E"
-    ],
-    "dots": [
-      "#EEEEEB",
-      "#0B5D3B",
-      "#1F6B48",
-      "#B0301E"
-    ]
+    "id": "harbor",
+    "name": "Harbor",
+    "about": "The US banking blue: white canvas, deep navy, cerulean actions, an amber highlight.",
+    "swatch": {
+      "light": [
+        "#F5F8FC",
+        "#EEF3FA",
+        "#0B1F3A",
+        "#1257D6",
+        "#1E9E6A",
+        "#E0584A",
+        "#FFE3A3"
+      ],
+      "dark": [
+        "#07111F",
+        "#112238",
+        "#E7EEF8",
+        "#5B97FF",
+        "#2DB57A",
+        "#E8695C",
+        "#FFD27A"
+      ]
+    },
+    "dots": {
+      "light": [
+        "#F5F8FC",
+        "#1257D6",
+        "#1E9E6A",
+        "#E0584A"
+      ],
+      "dark": [
+        "#07111F",
+        "#5B97FF",
+        "#2DB57A",
+        "#E8695C"
+      ]
+    }
   },
   {
-    "id": "yukon",
-    "name": "Yukon",
-    "mode": "light",
-    "about": "Paper white, deep indigo lines, a lime highlight, in the spirit of the Yukon reference.",
-    "swatch": [
-      "#FBFBFD",
-      "#F3F3FA",
-      "#14145A",
-      "#2626A6",
-      "#1C6B45",
-      "#B3261E"
-    ],
-    "dots": [
-      "#FBFBFD",
-      "#2626A6",
-      "#1C6B45",
-      "#B3261E"
-    ]
-  },
-  {
-    "id": "lyzr",
-    "name": "Lyzr",
-    "mode": "light",
-    "about": "The Lyzr brand v1.0: off-white, black, orange as the one accent, navy for information.",
-    "swatch": [
-      "#FAFAF9",
-      "#F1F0EE",
-      "#1F2022",
-      "#FE4B1E",
-      "#1F6B48",
-      "#B42318"
-    ],
-    "dots": [
-      "#FAFAF9",
-      "#FE4B1E",
-      "#1F6B48",
-      "#B42318"
-    ]
-  },
-  {
-    "id": "midnight",
-    "name": "Midnight",
-    "mode": "dark",
-    "about": "Dark and calm: deep blue-black, electric periwinkle accent, bright status colours.",
-    "swatch": [
-      "#0B0E14",
-      "#18202E",
-      "#E8EDF5",
-      "#8494FF",
-      "#3DD68C",
-      "#FF7A7A"
-    ],
-    "dots": [
-      "#0B0E14",
-      "#8494FF",
-      "#3DD68C",
-      "#FF7A7A"
-    ]
-  },
-  {
-    "id": "terminal",
-    "name": "Terminal",
-    "mode": "dark",
-    "about": "Warm graphite like a trading desk, with a cool teal accent.",
-    "swatch": [
-      "#121211",
-      "#222220",
-      "#F1EEE8",
-      "#2DD4BF",
-      "#7BD389",
-      "#F28B82"
-    ],
-    "dots": [
-      "#121211",
-      "#2DD4BF",
-      "#7BD389",
-      "#F28B82"
-    ]
+    "id": "mist",
+    "name": "Mist",
+    "about": "Soft pastels on cool paper: periwinkle actions, mint, butter and coral states.",
+    "swatch": {
+      "light": [
+        "#F6F7FB",
+        "#EFF1F8",
+        "#1E2235",
+        "#5552D6",
+        "#86D3A9",
+        "#F29C90",
+        "#FFEFA8"
+      ],
+      "dark": [
+        "#14151D",
+        "#222531",
+        "#ECEDF5",
+        "#A9ABFF",
+        "#7CCB9F",
+        "#EE8D82",
+        "#FFE58A"
+      ]
+    },
+    "dots": {
+      "light": [
+        "#F6F7FB",
+        "#5552D6",
+        "#86D3A9",
+        "#F29C90"
+      ],
+      "dark": [
+        "#14151D",
+        "#A9ABFF",
+        "#7CCB9F",
+        "#EE8D82"
+      ]
+    }
   }
 ] as const;
 
 export type PaletteId = (typeof PALETTES)[number]["id"];
+export type Mode = "light" | "dark";

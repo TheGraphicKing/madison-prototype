@@ -112,9 +112,9 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   return (
-    <div className={cn("w-full max-md:overflow-x-auto", className)}>
+    <div className={cn("w-full overflow-clip rounded-[14px] border border-line bg-surface max-md:overflow-x-auto", className)}>
       <table className="w-full border-collapse text-left" aria-label={ariaLabel}>
-        <thead className="sticky z-[2] bg-ground" style={{ top: stickyTop }}>
+        <thead className="sticky z-[2] bg-surface2" style={{ top: stickyTop }}>
           {table.getHeaderGroups().map((g) => (
             <tr key={g.id}>
               {g.headers.map((h) => {
@@ -183,8 +183,8 @@ export function DataTable<T extends Record<string, any>>({
                   className={cn(
                     "group relative h-11 border-b border-line outline-none transition-colors duration-[120ms]",
                     onRowClick && "cursor-pointer",
-                    "hover:bg-surface focus-visible:bg-surface",
-                    open && "bg-surface",
+                    "hover:bg-surface2 focus-visible:bg-surface2",
+                    open && "bg-surface2",
                     rowClassName?.(row),
                   )}
                 >
@@ -212,7 +212,7 @@ export function DataTable<T extends Record<string, any>>({
                   ))}
                 </tr>
                 {renderExpanded && open ? (
-                  <tr className="border-b border-line bg-surface">
+                  <tr className="border-b border-line bg-surface2/50">
                     <td colSpan={columns.length} className="p-0">
                       {renderExpanded(row)}
                     </td>

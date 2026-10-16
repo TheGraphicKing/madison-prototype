@@ -6,7 +6,6 @@ import type { ItemEvent, Run } from "@/data/types";
 import type { ItemInstance, RunState } from "@/lib/player/derive";
 import { recordEntryCount } from "@/lib/player/derive";
 import { Packet } from "@/components/core/packet";
-import { Bracket } from "@/components/core/bracket";
 import { Mark, Square } from "@/components/core/mark";
 import { AgentTag, Initials, hueFor } from "@/components/core/tags";
 import { MonoLabel } from "@/components/core/labels";
@@ -200,7 +199,7 @@ export const Schematic = memo(function Schematic({
         return (
           <div
             key={s.id}
-            className={cn("absolute flex flex-col justify-center rounded-[2px] bg-surface px-2.5 shadow-[inset_0_0_0_1px_var(--line)]", build && "build-node")}
+            className={cn("absolute flex flex-col justify-center rounded-[10px] bg-surface px-2.5 shadow-[inset_0_0_0_1px_var(--line)]", build && "build-node")}
             style={{ left: b.x, top: b.y, width: b.w, height: b.h, opacity: dim(lit), ...(build ? { animationDelay: `${i * 50}ms` } : {}) }}
           >
             <span className="flex items-center gap-1.5 text-[12px] leading-4 text-ink">
@@ -215,7 +214,7 @@ export const Schematic = memo(function Schematic({
       {/* the record: where the write-back lands */}
       {!compact ? (
         <div
-          className={cn("absolute flex flex-col justify-center rounded-[2px] px-2.5", build && "build-node")}
+          className={cn("absolute flex flex-col justify-center rounded-[10px] px-2.5", build && "build-node")}
           style={{
             left: layout.record.x,
             top: layout.record.y,
@@ -364,7 +363,7 @@ function StageNode({
   const frameColor = isPerson ? "var(--person)" : running || waitingPerson || done ? "var(--ink)" : "var(--lineStrong)";
 
   return (
-    <Bracket
+    <Frame
       as="div"
       className={cn(
         "absolute flex flex-col px-3.5 pt-3 pb-2.5 transition-[opacity,background-color] duration-[240ms]",
@@ -420,7 +419,7 @@ function StageNode({
       <div className="relative mt-auto flex items-end justify-between gap-2">
         <div className="flex min-w-0 flex-col gap-0.5">
           {!isPerson
-            ? stage.agents.slice(0, 2).map((a) => <AgentTag key={a} id={a} short showId={!(holding.length && !isGate)} className="[&>span:nth-child(2)]:text-[11px]" />)
+            ? stage.agents.slice(0, 2).map((a) => <AgentTag key={a} id={a} short showId={false} className="[&>span:nth-child(2)]:text-[11px]" />)
             : <span className="text-[11.5px] leading-4 text-ink2">{userById(personId!)?.name}</span>}
         </div>
         {holding.length && !isGate ? (
@@ -431,7 +430,7 @@ function StageNode({
           </div>
         ) : null}
       </div>
-    </Bracket>
+    </Frame>
   );
 }
 
@@ -515,7 +514,7 @@ function GateBody({ run, state }: { run: Run; state: RunState }) {
   const total = run.events.filter((e) => e.type === "check" && e.gate === "RC-04").length;
   return (
     <div className="relative mt-3 flex flex-col gap-2">
-      <div className="t-label text-[9.5px]">{checking ? <>/ checking {checking}</> : state.stages.checks?.state === "done" ? "/ every duty checked" : "/ quote check, then review"}</div>
+      <div className="t-label text-[9.5px]">{checking ? <>/ checking {checking}</> : state.stages.checks?.state === "done" ? "/ every obligation checked" : "/ quote check, then review"}</div>
       <div className="flex gap-[3px]">
         {Array.from({ length: total }).map((_, i) => {
           const c = rc[i];
@@ -616,7 +615,7 @@ function Tray({
   const reasonFor = (id: string) => state.checks.find((c) => c.item_ref === id && c.result === "block" && c.gate === "RC-04")?.reason;
   return (
     <div
-      className={cn("absolute rounded-[2px] px-3 py-2.5", build && "build-node")}
+      className={cn("absolute rounded-[10px] px-3 py-2.5", build && "build-node")}
       style={{
         left: tray.x,
         top: tray.y,
@@ -658,6 +657,18 @@ function Tray({
           );
         })}
       </div>
+    </div>
+  );
+}
+
+/** A plain rounded surface (the corner brackets are gone in iteration 2). */
+function Frame({ children, className, style, arm: _a, color: _c, as: _as, ...rest }: { children?: React.ReactNode; className?: string; style?: React.CSSProperties; arm?: number; color?: string; as?: React.ElementType } & React.HTMLAttributes<HTMLDivElement>) {
+  void _a;
+  void _c;
+  void _as;
+  return (
+    <div className={className} style={{ borderRadius: 12, boxShadow: "inset 0 0 0 1px var(--line)", ...style }} {...rest}>
+      {children}
     </div>
   );
 }

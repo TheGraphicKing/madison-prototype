@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { PersonaId } from "@/data";
 import type { ChangeCounts, ChangeState, JourneyStep } from "@/data/types";
-import type { PaletteId } from "@/theme/palettes";
+import type { Mode, PaletteId } from "@/theme/palettes";
 
 export interface Decision {
   id: string;
@@ -47,6 +47,7 @@ export interface Toast {
 interface State {
   persona: PersonaId;
   palette: PaletteId;
+  mode: Mode;
   decisions: Decision[];
   record: RecordEntry[];
   /** runs that finished during the demo, with their responses */
@@ -65,6 +66,7 @@ interface State {
 
   setPersona: (p: PersonaId) => void;
   setPalette: (p: PaletteId) => void;
+  setMode: (m: Mode) => void;
   decide: (d: Omit<Decision, "id">) => void;
   addRecord: (r: Omit<RecordEntry, "id">) => void;
   finishRun: (runId: string, by: string, at: string, responses: Record<string, string>) => void;
@@ -82,6 +84,7 @@ interface State {
 const initial = {
   persona: "u-elena" as PersonaId,
   palette: "graphite" as PaletteId,
+  mode: "light" as Mode,
   decisions: [] as Decision[],
   record: [] as RecordEntry[],
   finishedRuns: {},
@@ -103,6 +106,7 @@ export const useStore = create<State>()(
       ...initial,
       setPersona: (persona) => set({ persona }),
       setPalette: (palette) => set({ palette }),
+      setMode: (mode) => set({ mode }),
       decide: (d) =>
         set((s) => ({
           decisions: [{ ...d, id: uid("dec") }, ...s.decisions],
@@ -126,10 +130,10 @@ export const useStore = create<State>()(
       setAskOpen: (askOpen) => set({ askOpen }),
       completeTask: (id, by, at) => set((s) => ({ tasksDone: { ...s.tasksDone, [id]: { by, at } } })),
       answerFact: (key, value, by, at) => set((s) => ({ facts: { ...s.facts, [key]: { value, by, at } } })),
-      reset: () => set((s) => ({ ...initial, palette: s.palette, toasts: [] })),
+      reset: () => set((s) => ({ ...initial, palette: s.palette, mode: s.mode, toasts: [] })),
     }),
     {
-      name: "madison-demo",
+      name: "madison-demo-v2",
       storage: createJSONStorage(() => sessionStorage),
       // rehydrated after mount (AppShell), so the static HTML and first client render match
       skipHydration: true,
@@ -149,3 +153,4 @@ export const useStore = create<State>()(
 );
 
 export const PALETTE_KEY = "mad_palette";
+export const MODE_KEY = "mad_mode";

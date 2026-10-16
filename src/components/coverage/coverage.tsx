@@ -57,7 +57,7 @@ export function Coverage() {
         <div>
           <h1 className="t-page">Coverage</h1>
           <p className="mt-2 text-ink2">
-            {pos.total_applicable.toLocaleString("en-US")} applicable duties across {regulations.length} regulations, as of {fmtDate(pos.as_of)}. {pos.out_of_scope} more are out of scope and {pos.uncertain} are unsure.
+            {pos.total_applicable.toLocaleString("en-US")} applicable obligations across {regulations.length} regulations, as of {fmtDate(pos.as_of)}. {pos.out_of_scope} more are out of scope and {pos.uncertain} are unsure.
           </p>
         </div>
         <Segmented<View> label="Coverage view" value={view} onChange={setView} options={VIEWS} />
@@ -77,7 +77,7 @@ export function Coverage() {
       </div>
 
       <div className="mt-8">
-        {view === "field" && small === null && !sp.get("view") ? <div className="h-[640px] rounded-[4px] bg-surface shadow-[0_0_0_1px_var(--line)]" /> : null}
+        {view === "field" && small === null && !sp.get("view") ? <div className="h-[640px] rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--line)]" /> : null}
         {view === "field" && (small !== null || sp.get("view")) ? webgl ? <FieldView highlight={highlight} /> : <MapView highlight={highlight} note="3D is not available in this browser, so the field is shown as a map." /> : null}
         {view === "map" ? <MapView highlight={highlight} /> : null}
         {view === "rules" ? <ByRule /> : null}
@@ -98,7 +98,7 @@ function FieldView({ highlight }: { highlight: FourState | null }) {
   }, []);
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-      <div className="relative h-[640px] overflow-hidden rounded-[4px] shadow-[0_0_0_1px_var(--line)] max-md:h-[420px]">
+      <div className="relative h-[640px] overflow-hidden rounded-[14px] shadow-[0_0_0_1px_var(--line)] max-md:h-[420px]">
         <CoverageField selected={sel} onSelectPlot={setSel} highlightState={highlight} />
       </div>
       <PlotPanel plot={sel !== null ? plots[sel] : null} onClose={() => setSel(null)} plots={plots} onPick={setSel} />
@@ -111,7 +111,7 @@ function PlotPanel({ plot, onClose, plots, onPick }: { plot: Plot | null; onClos
     return (
       <aside className="flex flex-col gap-3">
         <MonoLabel>Plots · {plots.length} regulations</MonoLabel>
-        <p className="text-[14px] leading-[22px] text-ink2">Each plot is one regulation; each tile is one duty. Known gaps stand a little higher, and duties with nothing behind them sit lower. Click a plot to fly to it.</p>
+        <p className="text-[14px] leading-[22px] text-ink2">Each plot is one regulation; each tile is one obligation. Known gaps stand a little higher, and obligations with nothing behind them sit lower. Click a plot to fly to it.</p>
         <ul className="mt-2 flex max-h-[470px] flex-col overflow-y-auto border-t border-line">
           {plots
             .map((p, i) => ({ p, i }))
@@ -155,7 +155,7 @@ function PlotPanel({ plot, onClose, plots, onPick }: { plot: Plot | null; onClos
       <ul className="flex max-h-[300px] flex-col overflow-y-auto">
         {duties.map((d) => (
           <li key={d.id}>
-            <Link href={`/duties/${d.id}/`} className="block border-b border-line py-2.5 hover:bg-surface">
+            <Link href={`/obligations/${d.id}/`} className="block border-b border-line py-2.5 hover:bg-surface">
               <span className="t-data text-[11px] text-ink3">{d.id}</span>
               <span className="block text-[13.5px] leading-5">{d.plain}</span>
               <StatusChip state={d.coverage_state} size="sm" />
@@ -250,7 +250,7 @@ function MapView({ highlight, note }: { highlight: FourState | null; note?: stri
                 {st.dutyId ? (
                   <>
                     <p className="text-[15px] leading-[23px]">{getDuty(st.dutyId)?.plain}</p>
-                    <Link href={`/duties/${st.dutyId}/`} className="text-[14px] underline underline-offset-4">
+                    <Link href={`/obligations/${st.dutyId}/`} className="text-[14px] underline underline-offset-4">
                       Open the duty room
                     </Link>
                   </>
@@ -315,7 +315,7 @@ function ByRule() {
           cell: (p) =>
             checked[p.regulationId] ? (
               <span className="flex items-center justify-end gap-2 text-[13px] text-ink2">
-                <Mark kind="check" size={12} className="text-ok" /> Checked {checked[p.regulationId]} duties · no change
+                <Mark kind="check" size={12} className="text-ok" /> Checked {checked[p.regulationId]} obligations · no change
               </span>
             ) : (
               <span className="flex justify-end">

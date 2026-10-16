@@ -59,7 +59,7 @@ export function CoverageField({
         <FieldScene tk={tk} selected={selected} onSelectPlot={onSelectPlot} onHover={setHover} highlightState={highlightState} />
       </Canvas>
       {hover ? (
-        <div className="pointer-events-none absolute top-4 left-4 max-w-[320px] rounded-[2px] bg-surface px-3 py-2 shadow-[0_0_0_1px_var(--line)]">
+        <div className="pointer-events-none absolute top-4 left-4 max-w-[320px] rounded-[10px] bg-surface px-3 py-2 shadow-[0_0_0_1px_var(--line)]">
           <div className="t-label">{hover.plot.citation} · tile {hover.k + 1} of {hover.plot.total}</div>
           <div className="mt-1 text-[13px] leading-5">{hover.dutyId ? getDuty(hover.dutyId)?.plain : `A ${hover.plot.short} duty`}</div>
           <div className="mt-1 flex items-center gap-2 text-[12px] text-ink2">
@@ -196,12 +196,12 @@ function FieldScene({
             </mesh>
             <Html position={[q.x - cx, 0.02, q.z - cz - 0.18]} zIndexRange={[5, 0]} style={{ pointerEvents: "none" }}>
               <div className="whitespace-nowrap" style={{ transform: "translate(0, -100%)" }}>
-                <div className={lit ? "rounded-[2px] bg-ink px-1.5 py-0.5 font-mono text-[9.5px] font-medium tracking-[0.12em] text-surface uppercase" : "font-mono text-[9.5px] font-medium tracking-[0.12em] text-ink2 uppercase"}>
+                <div className={lit ? "rounded-[10px] bg-ink px-1.5 py-0.5 font-mono text-[9.5px] font-medium tracking-[0.12em] text-surface uppercase" : "font-mono text-[9.5px] font-medium tracking-[0.12em] text-ink2 uppercase"}>
                   / {p.citation}
                   {lit ? ` · ${p.short}` : ""}
                 </div>
                 {lit ? (
-                  <div className="mt-1 rounded-[2px] bg-surface px-1.5 py-1 font-mono text-[9.5px] leading-[14px] text-ink shadow-[0_0_0_1px_var(--line)]">
+                  <div className="mt-1 rounded-[10px] bg-surface px-1.5 py-1 font-mono text-[9.5px] leading-[14px] text-ink shadow-[0_0_0_1px_var(--line)]">
                     {p.counts.covered} covered · {p.counts.not_yet_confirmed} not yet · {p.counts.nothing_behind} nothing · {p.counts.known_gap} gap
                   </div>
                 ) : null}

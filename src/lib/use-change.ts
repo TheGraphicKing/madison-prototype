@@ -21,7 +21,7 @@ export function useChanges(list: RuleChange[]) {
 export const STEPS = ["applies", "duties", "linked", "covered", "whats_left", "close"] as const;
 export const STEP_LABEL: Record<(typeof STEPS)[number], string> = {
   applies: "Applies",
-  duties: "Duties",
+  duties: "Obligations",
   linked: "Linked",
   covered: "Covered",
   whats_left: "What's left",
@@ -41,7 +41,7 @@ export const STATE_WORD: Record<string, string> = {
   applies: "Applies",
   uncertain: "Unsure if it applies",
   screened_out: "Doesn't apply",
-  duties: "Duties found",
+  duties: "Obligations found",
   linked: "Linked",
   whats_left: "What's left",
   covered: "Covered",

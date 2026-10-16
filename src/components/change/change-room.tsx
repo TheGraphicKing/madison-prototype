@@ -220,7 +220,7 @@ function useStepSummaries(c: RuleChange, revealed: boolean): Record<Step, string
   if (!revealed && c.id === "RC-2026-014") return { applies: "Now", duties: "Not yet", linked: "Not yet", covered: "Not yet", whats_left: "Not yet", close: "Not yet" };
   return {
     applies: s(0, "Applies · Clear"),
-    duties: s(1, `${k?.duties ?? ds.length} duties${c.after_run?.excluded && revealed ? ` · ${c.after_run.excluded} excluded` : ""}`),
+    duties: s(1, `${k?.duties ?? ds.length} obligations${c.after_run?.excluded && revealed ? ` · ${c.after_run.excluded} excluded` : ""}`),
     linked: s(2, `${linkCount} links`),
     covered: s(3, k ? `${k.covered} of ${k.duties} covered` : "Covered"),
     whats_left: s(4, "Nothing left"),
@@ -329,8 +329,8 @@ function AppliesBody({ change, revealed, runId }: { change: RuleChange; revealed
 
 function DutiesBody({ change, revealed, runId }: { change: RuleChange; revealed: boolean; runId?: string }) {
   const all = dutiesFor(change.id);
-  if (change.id === "RC-2026-014" && !revealed) return <NotYet>Not found yet. Run Madison on this rule and the duties appear here, each with the exact sentence it came from.</NotYet>;
-  if (!all.length) return <NotYet>No duties yet.</NotYet>;
+  if (change.id === "RC-2026-014" && !revealed) return <NotYet>Not found yet. Run Madison on this rule and the obligations appear here, each with the exact sentence it came from.</NotYet>;
+  if (!all.length) return <NotYet>No obligations yet.</NotYet>;
   const inScope = all.filter((d) => d.applicability === "in_scope");
   const excluded = all.filter((d) => d.applicability === "excluded");
   const r = runId ? getRun(runId) : undefined;
@@ -389,7 +389,7 @@ function DutyLine({ d }: { d: Duty }) {
   const state = useCoverage(d);
   return (
     <li className="grid grid-cols-[96px_1fr_auto] items-start gap-4 border-b border-line py-3.5 last:border-b-0 max-md:grid-cols-1 max-md:gap-1">
-      <Link href={`/duties/${d.id}/`} className="t-data pt-0.5 text-[11.5px] text-ink2 hover:text-ink hover:underline">
+      <Link href={`/obligations/${d.id}/`} className="t-data pt-0.5 text-[11.5px] text-ink2 hover:text-ink hover:underline">
         {d.id}
       </Link>
       <div className="min-w-0">
@@ -410,7 +410,7 @@ function LinkedBody({ change, revealed }: { change: RuleChange; revealed: boolea
   const decideLink = useStore((s) => s.decideLink);
   const decide = useStore((s) => s.decide);
   const persona = useStore((s) => s.persona);
-  if (change.id === "RC-2026-014" && !revealed) return <NotYet>Links appear after the duties are accepted.</NotYet>;
+  if (change.id === "RC-2026-014" && !revealed) return <NotYet>Links appear after the obligations are accepted.</NotYet>;
   if (!ds.length) return <NotYet>Nothing to link yet.</NotYet>;
   return (
     <ul className="flex flex-col">
@@ -422,7 +422,7 @@ function LinkedBody({ change, revealed }: { change: RuleChange; revealed: boolea
               <span className="t-data text-[11.5px] text-ink3">{d.id}</span>
               <span className="text-[15px]">{d.plain}</span>
             </div>
-            {links.length === 0 ? <p className="mt-2 text-[13px] text-risk">No links. Nothing behind this duty yet.</p> : null}
+            {links.length === 0 ? <p className="mt-2 text-[13px] text-risk">No links. Nothing behind this obligation yet.</p> : null}
             <ul className="mt-2 flex flex-col gap-1.5">
               {links.map((l) => {
                 const dec = decisions[l.id];
@@ -474,7 +474,7 @@ function LinkedBody({ change, revealed }: { change: RuleChange; revealed: boolea
 
 function CoveredBody({ change, revealed }: { change: RuleChange; revealed: boolean }) {
   const k = change.counts;
-  if ((change.id === "RC-2026-014" && !revealed) || !k) return <NotYet>Counts appear once duties are linked.</NotYet>;
+  if ((change.id === "RC-2026-014" && !revealed) || !k) return <NotYet>Counts appear once obligations are linked.</NotYet>;
   return (
     <div>
       <div className="grid grid-cols-4 border-y border-line max-md:grid-cols-2">
@@ -485,7 +485,7 @@ function CoveredBody({ change, revealed }: { change: RuleChange; revealed: boole
         ))}
       </div>
       <p className="mt-3 text-[13px] text-ink2">
-        {k.covered + k.not_yet_confirmed + k.nothing_behind + k.known_gap} of {k.duties} duties counted. The four counts always add up.
+        {k.covered + k.not_yet_confirmed + k.nothing_behind + k.known_gap} of {k.duties} obligations counted. The four counts always add up.
       </p>
     </div>
   );
@@ -524,7 +524,7 @@ function WhatsLeftBody({ change, revealed }: { change: RuleChange; revealed: boo
         </div>
       ) : null}
       {kg.map((g) => (
-        <div key={g.id} className="rounded-[2px] bg-info-soft px-4 py-3">
+        <div key={g.id} className="rounded-[10px] bg-info-soft px-4 py-3">
           <div className="flex items-center gap-2 text-[14px] font-medium text-info">
             <Square size={6} color="var(--info)" /> Known gap {g.id} · expires {fmtDate(g.expiry)}
           </div>
@@ -612,7 +612,7 @@ function TouchSummary({ change, revealed }: { change: RuleChange; revealed: bool
     <MetaList
       className="!normal-case"
       items={[
-        `${t.duties.length} duties`,
+        `${t.duties.length} obligations`,
         `${t.policies.length} policy sections`,
         `${t.procedures.length} procedures`,
         `${t.controls.length} controls`,
@@ -651,10 +651,10 @@ function TouchesOver({ change, open, onOpenChange }: { change: RuleChange; open:
           </li>
         ))}
       </Group>
-      <Group title={`Duties · ${t.duties.length}`}>
+      <Group title={`Obligations · ${t.duties.length}`}>
         {t.duties.map((id) => {
           const d = getDuty(id)!;
-          return <Row key={id} id={id} href={`/duties/${id}/`} text={d.plain} badge={<StatusChip state={d.coverage_state as CoverageState} size="sm" />} />;
+          return <Row key={id} id={id} href={`/obligations/${id}/`} text={d.plain} badge={<StatusChip state={d.coverage_state as CoverageState} size="sm" />} />;
         })}
       </Group>
       <Group title={`Policy sections · ${t.policies.length}`}>

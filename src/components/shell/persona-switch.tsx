@@ -19,7 +19,7 @@ export function PersonaSwitch() {
       value={persona}
       options={[...PERSONA_IDS]}
       width={300}
-      heading={<MonoLabel variant="plain">Viewing as</MonoLabel>}
+      heading={<MonoLabel>Viewing as</MonoLabel>}
       onPick={(id) => {
         if (id !== persona) {
           setPersona(id);
@@ -28,7 +28,7 @@ export function PersonaSwitch() {
       }}
       button={
         <>
-          <span className="t-label max-lg:hidden">Viewing as</span>
+          <span className="text-[12.5px] text-ink3 max-lg:hidden">Viewing as</span>
           <Initials initials={u.initials} size={20} />
           <span className="max-sm:hidden">{u.name}</span>
           <Mark kind="chevron-down" size={12} className="text-ink3" />

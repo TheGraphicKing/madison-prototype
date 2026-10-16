@@ -16,7 +16,7 @@ export function hueFor(agentOrPerson: string) {
 export function AgentTag({
   id,
   className,
-  showId = true,
+  showId = false,
   short,
 }: {
   id: string;

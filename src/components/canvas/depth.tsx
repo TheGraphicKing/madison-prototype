@@ -33,7 +33,7 @@ export function Depth({ run, state, layout }: { run: Run; state: RunState; layou
   const tk = useTokens();
   if (!tk["--ground"]) return <div className="h-full w-full" />;
   return (
-    <div className="absolute inset-0 overflow-hidden rounded-[2px]" style={{ background: tk["--ground"] }}>
+    <div className="absolute inset-0 overflow-hidden rounded-[10px]" style={{ background: tk["--ground"] }}>
       <Canvas shadows dpr={[1, 2]} gl={{ antialias: true }} aria-label="Depth view of the run">
         <Scene run={run} state={state} layout={layout} tk={tk} />
       </Canvas>
@@ -186,7 +186,7 @@ function StageLabel({ title, sub, y }: { title: string; sub?: string; y: number 
   return (
     <Html position={[0, y, 0]} center zIndexRange={[10, 0]}>
       <div className="pointer-events-none flex flex-col items-center whitespace-nowrap">
-        <span className="rounded-[2px] bg-surface px-1.5 py-0.5 text-[11.5px] leading-4 text-ink shadow-[inset_0_0_0_1px_var(--line)]">{title}</span>
+        <span className="rounded-[10px] bg-surface px-1.5 py-0.5 text-[11.5px] leading-4 text-ink shadow-[inset_0_0_0_1px_var(--line)]">{title}</span>
         {sub ? <span className="t-label mt-0.5 text-[8.5px]">/ {sub.replace("_", " ")}</span> : null}
       </div>
     </Html>

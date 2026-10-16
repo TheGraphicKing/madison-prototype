@@ -39,7 +39,7 @@ export function Register() {
   );
 
   const cols: Col<Duty>[] = [
-    { id: "id", header: "Duty", width: "120px", sortValue: (d) => d.id, cell: (d) => <span className="t-data text-ink2">{d.id}</span> },
+    { id: "id", header: "Id", width: "120px", sortValue: (d) => d.id, cell: (d) => <span className="t-data text-ink2">{d.id}</span> },
     {
       id: "plain",
       header: "What it asks",
@@ -59,9 +59,9 @@ export function Register() {
 
   return (
     <Page>
-      <h1 className="t-page">Duties</h1>
+      <h1 className="t-page">Obligations</h1>
       <p className="mt-2 max-w-[64ch] text-ink2">
-        The register of duties Madison has found in the rules that apply to Northgate. This view holds the {duties.length} duties named in the demo; the full register counts 1,894 applicable.
+        The register of obligations Madison has found in the rules that apply to Northgate. This view holds the {duties.length} obligations named in the demo; the full register counts 1,894 applicable.
       </p>
       <div className="mt-8 flex flex-col gap-3">
         <FilterRow label="Coverage" value={state} onChange={setState} options={states.map((s) => ({ value: s, label: STATE_LABEL[s] }))} />
@@ -71,7 +71,7 @@ export function Register() {
         {control ? (
           <div className="flex items-center gap-3 text-[13px] text-ink2">
             Linked to {control}
-            <button className="underline underline-offset-4" onClick={() => router.replace("/duties/")}>
+            <button className="underline underline-offset-4" onClick={() => router.replace("/obligations/")}>
               Clear
             </button>
           </div>
@@ -80,11 +80,11 @@ export function Register() {
       <Section className="mt-8">
         <div className="t-label mb-2">{filtered.length} of {rows.length}</div>
         <DataTable<Duty>
-          ariaLabel="Duty register"
+          ariaLabel="Obligation register"
           data={filtered}
           columns={cols}
           getRowId={(d) => d.id}
-          onRowClick={(d) => router.push(`/duties/${d.id}/`)}
+          onRowClick={(d) => router.push(`/obligations/${d.id}/`)}
           empty="No duties match these filters. Filters combine."
           stickyTop={64}
         />
@@ -103,7 +103,7 @@ function FilterRow({ label, value, onChange, options }: { label: string; value: 
           aria-pressed={value === o.value}
           onClick={() => onChange(value === o.value ? null : o.value)}
           className={cn(
-            "inline-flex h-7 items-center gap-1.5 rounded-[2px] px-2.5 text-[12.5px] capitalize-first transition-colors",
+            "inline-flex h-7 items-center gap-1.5 rounded-[10px] px-2.5 text-[12.5px] capitalize-first transition-colors",
             value === o.value ? "bg-ink text-surface" : "bg-surface text-ink2 shadow-[inset_0_0_0_1px_var(--line)] hover:text-ink",
           )}
         >

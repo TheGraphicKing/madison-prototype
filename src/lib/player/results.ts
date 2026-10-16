@@ -42,7 +42,7 @@ export function applyRunResults(inst: Instance) {
 
   if (r.id === "run-rule-1005") {
     s.completeTask("T-301", by, at);
-    s.toast(`6 duties accepted for ${change?.citation}. One gap and one drift to fix.`, `/rules/${r.change_id}/?step=whats_left`);
+    s.toast(`6 obligations accepted for ${change?.citation}. One gap and one drift to fix.`, `/rules/${r.change_id}/?step=whats_left`);
   } else if (r.id === "run-design-mfa") {
     s.completeTask("T-298", by, at);
     s.toast("CTL-153 is in force. Three vendors and Assurance have their handoffs.", `/rules/${r.change_id}/`);

@@ -39,7 +39,7 @@ export const AgentsColumn = forwardRef<HTMLDivElement, { run: Run; state: RunSta
                 onMouseEnter={() => onTrace?.(stage?.key ?? null)}
                 onMouseLeave={() => onTrace?.(null)}
                 className={cn(
-                  "relative flex h-[46px] items-center gap-2.5 rounded-[2px] px-2.5 transition-[background-color,box-shadow] duration-[180ms]",
+                  "relative flex h-[46px] items-center gap-2.5 rounded-[10px] px-2.5 transition-[background-color,box-shadow] duration-[180ms]",
                   active ? "bg-highlight text-highlight-ink shadow-[inset_0_0_0_1px_var(--ink)]" : "bg-surface shadow-[inset_0_0_0_1px_var(--line)]",
                 )}
               >
@@ -47,7 +47,7 @@ export const AgentsColumn = forwardRef<HTMLDivElement, { run: Run; state: RunSta
                 <span className="flex min-w-0 flex-1 flex-col">
                   <span className={cn("truncate text-[13px] leading-[17px] font-medium", active ? "text-highlight-ink" : "text-ink")}>{isPerson ? u?.name : a?.name}</span>
                   <span className={cn("t-data truncate text-[10px] leading-[13px]", active ? "text-highlight-ink" : "text-ink3")}>
-                    {isPerson ? u?.role : `${id} · ${a?.kind === "code" ? "code" : "agent"}`}
+                    {isPerson ? u?.role : a?.kind === "code" ? "Automated check" : "Agent"}
                   </span>
                 </span>
                 <span aria-label={`${n} events`} className="flex h-3 items-end gap-[2px]">
@@ -102,7 +102,7 @@ export function OutputsColumn({
           onFocus={() => onTrace?.(relatedFor(run, o.t))}
           onBlur={() => onTrace?.(null)}
           onClick={() => onSelectOutput?.(o.card.label)}
-          className="block w-full rounded-[2px] bg-surface px-3.5 py-2.5 text-left shadow-[inset_0_0_0_1px_var(--line)] hover:shadow-[inset_0_0_0_1px_var(--lineStrong)]"
+          className="block w-full rounded-[10px] bg-surface px-3.5 py-2.5 text-left shadow-[inset_0_0_0_1px_var(--line)] hover:shadow-[inset_0_0_0_1px_var(--lineStrong)]"
         >
           <MonoLabel className="block text-[9.5px]">{o.card.label}</MonoLabel>
           <Typed text={o.card.value} elapsed={clockRunning ? o.elapsed : undefined} cps={60} caret="while" className="mt-1 block text-[14px] leading-5 text-ink" />
@@ -110,7 +110,7 @@ export function OutputsColumn({
           {o.card.certainty && (o.elapsed > 600 || !clockRunning) ? <CertaintyWord value={o.card.certainty} className="mt-1.5" quiet /> : null}
         </button>
       ))}
-      <div className="mt-3 rounded-[2px] bg-surface px-3.5 pt-3 pb-2 shadow-[inset_0_0_0_1px_var(--line)]">
+      <div className="mt-3 rounded-[10px] bg-surface px-3.5 pt-3 pb-2 shadow-[inset_0_0_0_1px_var(--line)]">
         <div className="flex items-baseline justify-between">
           <span className="text-[13px] font-medium">Covered in this change</span>
           <span className="t-data text-[11px] text-ink2">
@@ -156,7 +156,7 @@ export function BottomStrip({ run, state, compact, clockRunning = true }: { run:
   const metrics: [string, string][] = [];
   if (m.sections !== undefined || run.id === "run-rule-1005") metrics.push(["sections", String(m.sections ?? 0)]);
   if (run.id === "run-rule-1005") {
-    metrics.push(["duties found", String(m.duties_found ?? 0)]);
+    metrics.push(["obligations found", String(m.duties_found ?? 0)]);
     metrics.push(["held back", String(m.held_back ?? 0)]);
     metrics.push(["links", String(m.links ?? 0)]);
   } else {

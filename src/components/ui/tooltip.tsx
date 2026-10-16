@@ -49,7 +49,7 @@ function TooltipContent({
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
           className={cn(
-            "z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-[2px] bg-ink px-2 py-1 font-mono text-[11px] leading-4 text-surface transition-opacity duration-100 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
+            "z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-[10px] bg-ink px-2 py-1 font-mono text-[11px] leading-4 text-surface transition-opacity duration-100 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
             className
           )}
           {...props}

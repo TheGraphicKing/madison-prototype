@@ -28,6 +28,11 @@
   --color-person: var(--person);
   --color-highlight: var(--highlight);
   --color-highlight-ink: var(--highlightInk);
+  --color-viz-ok: var(--vizOk);
+  --color-viz-warn: var(--vizWarn);
+  --color-viz-risk: var(--vizRisk);
+  --color-viz-info: var(--vizInfo);
+  --color-viz-muted: var(--vizMuted);
   --color-agent-1: var(--agent-1);
   --color-agent-2: var(--agent-2);
   --color-agent-3: var(--agent-3);
@@ -38,8 +43,9 @@
   --font-sans: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jbm), ui-monospace, monospace;
 
-  --radius-panel: 4px;
-  --radius-chip: 2px;
+  --radius-panel: 14px;
+  --radius-card: 12px;
+  --radius-control: 10px;
 
   --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -55,6 +61,14 @@
 }
 
 :root {
+  /* agent hues are quiet in v2: they only appear behind "Show how Madison did this" */
+  --agent-1: var(--ink);
+  --agent-2: var(--vizInfo);
+  --agent-3: var(--vizOk);
+  --agent-4: var(--vizWarn);
+  --agent-5: var(--info);
+  --agent-6: var(--ink2);
+  --shadow-rest: 0 1px 2px rgb(0 0 0 / 0.04);
   --d-1: 120ms;
   --d-2: 180ms;
   --d-3: 240ms;
@@ -62,7 +76,7 @@
   --d-hop: 700ms;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: 40px;
-  --overlay-shadow: 0 16px 40px -16px rgb(0 0 0 / 0.22);
+  --overlay-shadow: 0 12px 32px -12px color-mix(in oklab, var(--ink) 25%, transparent);
 }
 
 @media (max-width: 767px) {

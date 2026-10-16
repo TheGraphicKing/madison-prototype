@@ -46,27 +46,38 @@ import type {
   User,
   Vendor,
 } from "./types";
+import { obligationWords } from "@/lib/words";
 
-export const institution = institutionJson as Institution;
-export const users = usersJson as User[];
-export const agents = agentsJson as Agent[];
-export const regulations = regulationsJson as Regulation[];
-export const ruleChanges = ruleChangesJson as RuleChange[];
-export const ruleSections = ruleSectionsJson as RuleSection[];
-export const duties = dutiesJson as Duty[];
-export const policySections = policyJson as PolicySection[];
-export const procedureSections = procedureJson as ProcedureSection[];
-export const controls = controlsJson as Control[];
-export const coverageLinks = linksJson as CoverageLink[];
-export const knownGaps = gapsJson as KnownGap[];
-export const driftFlags = driftJson as DriftFlag[];
-export const vendors = vendorsJson as Vendor[];
-export const impacts = impactsJson as Impact[];
-export const tasks = tasksJson as Task[];
-export const reports = reportsJson as Reports;
-export const auditTrail = auditJson as AuditEntry[];
-export const askMadison = askJson as AskItem[];
-export const runs = [runRule1005, runCoverage1026, runDesignMfa] as unknown as Run[];
+/** Visible words only: every string value is mapped to bank wording; ids and keys are unchanged. */
+const KEY_FIELDS = new Set(["id", "key", "stage", "to", "from", "gate", "item_ref", "parent_ref", "kind", "type", "state", "status", "series", "result", "step", "context", "agents", "action", "process_tags", "coverage_state", "applicability", "link_type", "strength", "confidence"]);
+function words<T>(v: T, field = ""): T {
+  if (KEY_FIELDS.has(field) || field.endsWith("_id") || field.endsWith("_ids")) return v;
+  if (typeof v === "string") return obligationWords(v) as T;
+  if (Array.isArray(v)) return v.map((x) => words(x, field === "items" ? "items" : "")) as T;
+  if (v && typeof v === "object") return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, words(x, k)])) as T;
+  return v;
+}
+
+export const institution = words(institutionJson) as Institution;
+export const users = words(usersJson) as User[];
+export const agents = words(agentsJson) as Agent[];
+export const regulations = words(regulationsJson) as Regulation[];
+export const ruleChanges = words(ruleChangesJson) as RuleChange[];
+export const ruleSections = words(ruleSectionsJson) as RuleSection[];
+export const duties = words(dutiesJson) as Duty[];
+export const policySections = words(policyJson) as PolicySection[];
+export const procedureSections = words(procedureJson) as ProcedureSection[];
+export const controls = words(controlsJson) as Control[];
+export const coverageLinks = words(linksJson) as CoverageLink[];
+export const knownGaps = words(gapsJson) as KnownGap[];
+export const driftFlags = words(driftJson) as DriftFlag[];
+export const vendors = words(vendorsJson) as Vendor[];
+export const impacts = words(impactsJson) as Impact[];
+export const tasks = words(tasksJson) as Task[];
+export const reports = words(reportsJson) as Reports;
+export const auditTrail = words(auditJson) as AuditEntry[];
+export const askMadison = (words(askJson) as AskItem[]).map((a) => ({ ...a, trail: a.trail.map((t) => ({ ...t, step: obligationWords(t.step) })) }));
+export const runs = words([runRule1005, runCoverage1026, runDesignMfa]) as unknown as Run[];
 
 const byId = <T extends { id: string }>(list: T[]) => new Map(list.map((x) => [x.id, x]));
 const changeMap = byId(ruleChanges);
@@ -117,7 +128,8 @@ export function tasksFor(userId: string) {
     .sort((a, b) => a.priority - b.priority || a.due.localeCompare(b.due));
 }
 
-export const position = () => positionJson as Position;
+const positionData = words(positionJson) as Position;
+export const position = () => positionData;
 export const run = (id: string) => runMap.get(id);
 export const runForChange = (changeId: string) => runs.find((r) => r.change_id === changeId);
 
@@ -134,13 +146,13 @@ export const personaRole: Record<PersonaId, string> = {
 /** Resolve any id used in citations to a label and a link. */
 export function resolveRef(ref: string): { label: string; detail?: string; href: string } | undefined {
   const duty = getDuty(ref);
-  if (duty) return { label: duty.plain, detail: duty.id, href: `/duties/${duty.id}/` };
+  if (duty) return { label: duty.plain, detail: duty.id, href: `/obligations/${duty.id}/` };
   const pol = policyById(ref);
   if (pol) return { label: `${pol.document_code} ${pol.section_number} ${pol.heading}`, detail: pol.document_title, href: `/coverage/?view=documents&doc=${pol.id}` };
   const prc = procedureById(ref);
   if (prc) return { label: `${prc.document_code} ${prc.section_number.toLowerCase()} ${prc.heading}`, detail: prc.document_title, href: `/coverage/?view=documents&doc=${prc.id}` };
   const ctl = controlById(ref);
-  if (ctl) return { label: `${ctl.id} ${ctl.name}`, href: `/duties/?control=${ctl.id}` };
+  if (ctl) return { label: `${ctl.id} ${ctl.name}`, href: `/obligations/?control=${ctl.id}` };
   const ven = vendorById(ref);
   if (ven) return { label: ven.name, detail: ven.services.map((s) => s.name).join(", "), href: `/rules/RC-2026-014/?touches=1` };
   const chg = getChange(ref);

@@ -38,7 +38,7 @@ export function Today() {
   // Anthony's sign-off on the Reg E impact appears once the run has produced it
   const extra: Task[] =
     persona === "u-anthony" && finished["run-rule-1005"] && !decisions.some((d) => d.label === "Sign off the impact")
-      ? [{ id: "T-IMPACT", title: "Sign off the impact of 12 CFR 1005.11(c)", why: "6 duties, 3 vendors and one gap. Produced by Madison's run today.", change_id: "RC-2026-014", assignee_id: "u-anthony", due: "2026-10-23", state: "open", action: "sign_off", priority: 0 }]
+      ? [{ id: "T-IMPACT", title: "Sign off the impact of 12 CFR 1005.11(c)", why: "6 obligations, 3 vendors and one gap. Produced by Madison's run today.", change_id: "RC-2026-014", assignee_id: "u-anthony", due: "2026-10-23", state: "open", action: "sign_off", priority: 0 }]
       : [];
   const mine = [...extra, ...tasksFor(persona)].filter((t) => !done[t.id]);
   const thisWeek = mine.filter((t) => dueBucket(t) !== "Later");
@@ -50,7 +50,7 @@ export function Today() {
   if (persona === "u-anthony" && signOffs.length) facts.push({ text: `${signOffs.length} sign-off${signOffs.length > 1 ? "s" : ""} need${signOffs.length > 1 ? "" : "s"} you`, href: taskHref(signOffs[0]) });
   else facts.push({ text: `${thisWeek.length} task${thisWeek.length === 1 ? "" : "s"} need${thisWeek.length === 1 ? "s" : ""} you this week`, href: "/tasks/" });
   if (next) facts.push({ text: `Next deadline: ${taskShortName(next)}, ${relDays(next.due)}`, href: taskHref(next) });
-  if (gap) facts.push({ text: gap.text, href: `/duties/${gap.gap.obligation_id}/` });
+  if (gap) facts.push({ text: gap.text, href: `/obligations/${gap.gap.obligation_id}/` });
 
   const pos = position();
   const feed = useMemo(
@@ -108,7 +108,7 @@ export function Today() {
       </Section>
 
       <Section>
-        <SectionHead title="Where Northgate stands" subtitle={`${pos.total_applicable.toLocaleString("en-US")} applicable duties · as of ${fmtDate(pos.as_of)}`} actions={<Link href="/coverage/" className="text-[14px] underline underline-offset-4">Open coverage</Link>} />
+        <SectionHead title="Where Northgate stands" subtitle={`${pos.total_applicable.toLocaleString("en-US")} applicable obligations · as of ${fmtDate(pos.as_of)}`} actions={<Link href="/coverage/" className="text-[14px] underline underline-offset-4">Open coverage</Link>} />
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="grid grid-cols-2 content-start border-t border-line lg:col-span-5">
             {FOUR_STATES.map((s, i) => (
@@ -123,13 +123,13 @@ export function Today() {
           </div>
           <div className="lg:col-span-7">
             <div className="flex items-baseline justify-between">
-              <span className="text-[14px] font-medium">Covered duties, last 12 months</span>
+              <span className="text-[14px] font-medium">Covered obligations, last 12 months</span>
               <span className="t-data text-[11.5px] text-ink2">
                 {pos.history[0].covered.toLocaleString("en-US")} to {pos.history[pos.history.length - 1].covered.toLocaleString("en-US")}
               </span>
             </div>
             <StepChart
-              ariaLabel="Covered duties over the last 12 months"
+              ariaLabel="Covered obligations over the last 12 months"
               points={pos.history.map((h) => ({ x: monthShort(h.month), y: h.covered }))}
               yMin={1350}
               yMax={1750}
@@ -171,7 +171,7 @@ function NeedsRow({ t, rank, primary }: { t: Task; rank: number; primary: boolea
       </div>
       <span className="t-data truncate text-[11.5px] text-ink2 max-lg:hidden">{c?.citation ?? t.control_id ?? ""}</span>
       <ButtonLink href={taskHref(t)} variant={primary ? "primary" : "quiet"} size={32} className="max-lg:col-start-2 max-lg:justify-self-start">
-        {t.action === "run_rule" ? "Open the change room" : ACTION_LABEL[t.action]}
+        {t.action === "run_rule" ? "Open the change room" : t.action ? ACTION_LABEL[t.action] : "Open"}
       </ButtonLink>
     </li>
   );

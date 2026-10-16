@@ -19,7 +19,7 @@ export function Toasts() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-auto flex max-w-[min(560px,calc(100vw-40px))] items-center gap-3 rounded-[2px] bg-ink px-4 py-2.5 text-[13px] leading-5 text-surface shadow-(--overlay-shadow)"
+            className="pointer-events-auto flex max-w-[min(560px,calc(100vw-40px))] items-center gap-3 rounded-[10px] bg-ink px-4 py-2.5 text-[13px] leading-5 text-surface shadow-(--overlay-shadow)"
           >
             <Square size={6} color="var(--highlight)" />
             <span className="flex-1">{t.text}</span>

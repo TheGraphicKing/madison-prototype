@@ -23,7 +23,7 @@ function useEvents(): Ev[] {
     const out: Ev[] = [];
     for (const c of ruleChanges) out.push({ date: c.effective_date, kind: "effective", label: `${c.citation} in force`, href: `/rules/${c.id}/` });
     for (const t of tasks) out.push({ date: t.due, kind: "due", label: t.title, href: t.change_id ? `/rules/${t.change_id}/` : `/tasks/?open=${t.id}` });
-    for (const g of knownGaps) out.push({ date: g.expiry, kind: "expiry", label: `${g.id} ${getDuty(g.obligation_id)?.object ?? ""}`.trim(), href: `/duties/${g.obligation_id}/` });
+    for (const g of knownGaps) out.push({ date: g.expiry, kind: "expiry", label: `${g.id} ${getDuty(g.obligation_id)?.object ?? ""}`.trim(), href: `/obligations/${g.obligation_id}/` });
     const seen = new Set<string>();
     for (const p of policySections) {
       if (seen.has(p.document_code)) continue;
@@ -118,7 +118,7 @@ function Month({ y, m, events, compact }: { y: number; m: number; events: Ev[]; 
                       <Square size={6} color={KIND[e.kind].color} />
                     </Link>
                   ) : (
-                    <Link key={k} href={e.href} className="flex items-start gap-1.5 rounded-[2px] px-1 py-0.5 text-[11.5px] leading-[15px] hover:bg-surface2" title={`${KIND[e.kind].label} · ${fmtDate(e.date)}`}>
+                    <Link key={k} href={e.href} className="flex items-start gap-1.5 rounded-[10px] px-1 py-0.5 text-[11.5px] leading-[15px] hover:bg-surface2" title={`${KIND[e.kind].label} · ${fmtDate(e.date)}`}>
                       <Square size={5} color={KIND[e.kind].color} className="mt-[5px]" />
                       <span className="line-clamp-2">{e.label}</span>
                     </Link>

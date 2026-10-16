@@ -11,7 +11,7 @@ const browser = await chromium.launch();
 const errors = [];
 for (const w of widths) {
   const ctx = await browser.newContext({ viewport: { width: w, height: w > 800 ? 900 : 844 }, deviceScaleFactor: w > 800 ? 1 : 2 });
-  await ctx.addInitScript((p) => { try { localStorage.setItem("mad_palette", p); } catch {} }, palette);
+  await ctx.addInitScript((p) => { try { const [a, b] = p.split("-"); localStorage.setItem("mad_palette", a); localStorage.setItem("mad_mode", b || "light"); } catch {} }, palette);
   const page = await ctx.newPage();
   page.on("console", (m) => { if (m.type() === "error") errors.push(`${m.text()}`); });
   page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));

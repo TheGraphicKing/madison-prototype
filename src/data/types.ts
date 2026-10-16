@@ -251,6 +251,7 @@ export type TaskAction =
   | "design_control"
   | "check_coverage"
   | "review_duties"
+  | "review_obligations"
   | "answer_fact"
   | "upload_evidence"
   | "sign_off";
@@ -264,8 +265,11 @@ export interface Task {
   control_id?: string;
   assignee_id: string;
   due: Iso;
-  state: "open" | "overdue" | "done";
-  action: TaskAction;
+  state: "open" | "overdue" | "done" | "blocked" | "waiting_on_other";
+  action?: TaskAction;
+  kind?: "decide" | "review" | "answer" | "sign_off" | "upload_evidence" | "fix" | "vendor_review" | "follow_up" | "control_run" | "approve_report" | "test_plan";
+  requested_by_id?: string;
+  handoff_id?: string;
   priority: number;
 }
 

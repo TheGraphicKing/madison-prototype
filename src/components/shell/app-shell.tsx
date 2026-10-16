@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useStore } from "@/lib/store";
-import { Rail } from "./rail";
+import { cn } from "@/lib/utils";
+import { Rail, RAIL_KEY } from "./rail";
 import { Header } from "./header";
 import { Toasts } from "./toasts";
 import { PlaybackEngine } from "@/lib/player/engine";
@@ -18,8 +19,31 @@ export function AppShell({ children, ask }: { children: React.ReactNode; ask?: R
     useStore.persist.rehydrate();
   }, []);
   useEffect(() => {
-    if (window.matchMedia("(max-width: 1100px)").matches) setCollapsed(true);
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(RAIL_KEY);
+    } catch {}
+    setCollapsed(saved ? saved === "collapsed" : window.matchMedia("(max-width: 1100px)").matches);
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      if (e.key !== "[" || e.metaKey || e.ctrlKey || t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable) return;
+      setCollapsed((c) => {
+        try {
+          localStorage.setItem(RAIL_KEY, c ? "open" : "collapsed");
+        } catch {}
+        return !c;
+      });
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
+  const toggle = () =>
+    setCollapsed((c) => {
+      try {
+        localStorage.setItem(RAIL_KEY, c ? "open" : "collapsed");
+      } catch {}
+      return !c;
+    });
 
   // The agent canvas is full-screen: no rail, its own header.
   if (pathname.startsWith("/runs/")) {
@@ -42,8 +66,8 @@ export function AppShell({ children, ask }: { children: React.ReactNode; ask?: R
       >
         Skip to content
       </a>
-      <Rail collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
-      <div className="flex min-w-0 flex-1 flex-col">
+      <Rail collapsed={collapsed} onToggle={toggle} />
+      <div className={cn("flex min-w-0 flex-1 flex-col transition-[padding] duration-[240ms] ease-(--ease)", collapsed ? "md:pl-[92px]" : "md:pl-[264px]")}>
         <Header />
         <main id="main" className="min-w-0 flex-1">
           {children}

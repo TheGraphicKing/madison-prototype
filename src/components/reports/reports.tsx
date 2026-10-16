@@ -155,7 +155,7 @@ export function BoardPack() {
           <MonoLabel>Board pack · as of {fmtDate(BP.as_of)}</MonoLabel>
           <h1 className="mt-3 text-[44px] leading-[50px] font-medium tracking-[-0.02em]">{BP.title}</h1>
           <p className="mt-4 max-w-[52ch] text-[16px] leading-[26px] text-ink2">
-            Prepared by the compliance team from Madison&apos;s record. Every number traces to a duty, a link and a named decision.
+            Prepared by the compliance team from Madison&apos;s record. Every number traces to an obligation, a link and a named decision.
           </p>
           <p className="mt-6 text-[13px] text-ink3">
             Owner {userById("u-anthony")?.name}, {userById("u-anthony")?.role}
@@ -179,9 +179,9 @@ export function BoardPack() {
                     </div>
                   ))}
                 </div>
-                <p className="mt-3 text-[13px] text-ink2">{h.total.toLocaleString("en-US")} applicable duties. The four counts add up; there are no percentages in this pack.</p>
+                <p className="mt-3 text-[13px] text-ink2">{h.total.toLocaleString("en-US")} applicable obligations. The four counts add up; there are no percentages in this pack.</p>
                 <div className="mt-6">
-                  <StepChart ariaLabel="Covered duties, last 11 months" points={pos.history.filter((x) => x.month <= h.month).map((x) => ({ x: monthShort(x.month), y: x.covered }))} yMin={1350} yMax={1750} height={200} formatY={(v) => v.toLocaleString("en-US")} latestLabel="As of 30 Sep" />
+                  <StepChart ariaLabel="Covered obligations, last 11 months" points={pos.history.filter((x) => x.month <= h.month).map((x) => ({ x: monthShort(x.month), y: x.covered }))} yMin={1350} yMax={1750} height={200} formatY={(v) => v.toLocaleString("en-US")} latestLabel="As of 30 Sep" />
                 </div>
               </>
             ) : null}
@@ -234,7 +234,7 @@ export function BoardPack() {
               </ul>
             ) : null}
             {s.kind === "asks" ? (
-              <div className="rounded-[2px] p-5 shadow-[inset_0_0_0_1px_var(--ink)]">
+              <div className="rounded-[10px] p-5 shadow-[inset_0_0_0_1px_var(--ink)]">
                 <MonoLabel tone="ink">For decision</MonoLabel>
                 <p className="mt-2 text-[16px] leading-[26px]">{getChange("RC-2026-011")?.summary}</p>
                 <p className="mt-2 text-[14px] text-ink2">
@@ -266,7 +266,7 @@ export function ExamReadiness() {
         {EX.proven} of {EX.in_scope} areas proven
       </h1>
       <p className="mt-3 text-[16px] text-ink2">
-        The exam starts {fmtDate(EX.starts)}, {relDays(EX.starts)}. An area is proven when every duty in it has a confirmed link and fresh evidence.
+        The exam starts {fmtDate(EX.starts)}, {relDays(EX.starts)}. An area is proven when every obligation in it has a confirmed link and fresh evidence.
       </p>
 
       <section className="mt-12 grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -305,7 +305,7 @@ export function ExamReadiness() {
               <MonoLabel>{proven(pick) ? "Proven" : "Not yet proven"}</MonoLabel>
               <h2 className="text-[22px] leading-[28px] font-medium">{pick}</h2>
               <p className="text-[15px] leading-[24px] text-ink2">
-                {proven(pick) ? "Every duty in this area has a confirmed link and evidence inside its cadence." : "At least one duty here has nothing behind it, a quiet control, or an open change."}
+                {proven(pick) ? "Every obligation in this area has a confirmed link and evidence inside its cadence." : "At least one obligation here has nothing behind it, a quiet control, or an open change."}
               </p>
               {change ? (
                 <Link href={`/rules/${change.id}/`} className="no-print text-[14px] underline underline-offset-4">

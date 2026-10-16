@@ -13,7 +13,6 @@ import { AgentTag } from "@/components/core/tags";
 import { CertaintyWord } from "@/components/core/status";
 import { Typed, useReducedMotion } from "@/components/core/typed";
 import { Button } from "@/components/core/button";
-import { Bracket } from "@/components/core/bracket";
 
 type Turn = { id: number; q: string; item?: AskItem };
 
@@ -71,16 +70,16 @@ export function AskMadison() {
         className={cn("no-print fixed right-6 bottom-6 z-30 max-md:right-5 max-md:bottom-5", path.startsWith("/runs/") && "bottom-[112px] max-md:bottom-5")}
         aria-label="Ask Madison"
       >
-        <Bracket arm={8} color="var(--ink)" className="flex h-10 items-center gap-3 bg-surface px-4 shadow-[0_0_0_1px_var(--line)] transition-colors hover:bg-surface2">
+        <span className="flex h-11 items-center gap-3 rounded-full bg-surface px-5 shadow-(--overlay-shadow) ring-1 ring-line transition-colors hover:bg-surface2">
           <span className="text-[14px] font-medium">Ask Madison</span>
           <span className="t-label max-md:hidden">⌘J</span>
-        </Bracket>
+        </span>
       </button>
       <SlideOver open={open} onOpenChange={setOpen} title="Ask Madison" subtitle="Answers from Northgate's record, with citations" width={440}>
         <div className="flex min-h-full flex-col">
           <div role="log" aria-live="polite" className="flex flex-1 flex-col gap-8">
             {turns.length === 0 ? (
-              <p className="text-[14px] leading-[22px] text-ink2">Ask about duties, coverage, vendors or the exam. Madison reads the record and shows what it read.</p>
+              <p className="text-[14px] leading-[22px] text-ink2">Ask about obligations, coverage, vendors or the exam. Madison reads the record and shows what it read.</p>
             ) : null}
             {turns.map((t) => (
               <Exchange key={t.id} turn={t} onPick={ask} suggestions={suggestions} onNavigate={() => setOpen(false)} />
@@ -91,7 +90,7 @@ export function AskMadison() {
             <ul className="mt-2 flex flex-col gap-1.5">
               {suggestions.map((s) => (
                 <li key={s.q}>
-                  <button onClick={() => ask(s.q)} className="w-full rounded-[2px] px-3 py-2 text-left text-[13.5px] leading-5 shadow-[inset_0_0_0_1px_var(--line)] hover:bg-surface2">
+                  <button onClick={() => ask(s.q)} className="w-full rounded-[10px] px-3 py-2 text-left text-[13.5px] leading-5 shadow-[inset_0_0_0_1px_var(--line)] hover:bg-surface2">
                     {s.q}
                   </button>
                 </li>
@@ -112,7 +111,7 @@ export function AskMadison() {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Ask a question"
-                className="h-10 min-w-0 flex-1 rounded-[2px] bg-surface px-3 text-[14px] shadow-[inset_0_0_0_1px_var(--lineStrong)] outline-none placeholder:text-ink3 focus:shadow-[inset_0_0_0_1px_var(--ink)]"
+                className="h-10 min-w-0 flex-1 rounded-[10px] bg-surface px-3 text-[14px] shadow-[inset_0_0_0_1px_var(--lineStrong)] outline-none placeholder:text-ink3 focus:shadow-[inset_0_0_0_1px_var(--ink)]"
               />
               <Button type="submit" variant="primary" size={40} disabled={!text.trim()}>
                 Ask
@@ -149,7 +148,7 @@ function Exchange({ turn, onPick, suggestions, onNavigate }: { turn: Turn; onPic
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="self-end rounded-[2px] bg-surface2 px-3.5 py-2 text-[14px] leading-[21px]">{turn.q}</div>
+      <div className="self-end rounded-[10px] bg-surface2 px-3.5 py-2 text-[14px] leading-[21px]">{turn.q}</div>
       {!item ? (
         <div className="flex flex-col gap-3">
           <p className="text-[14px] leading-[22px]">In this prototype, Madison answers a few scripted questions. Try one of these:</p>
@@ -225,7 +224,7 @@ function Exchange({ turn, onPick, suggestions, onNavigate }: { turn: Turn; onPic
                 </ul>
               </div>
               {item.suggested_action ? (
-                <div className="flex items-center justify-between gap-3 rounded-[2px] bg-surface2 px-3 py-2.5">
+                <div className="flex items-center justify-between gap-3 rounded-[10px] bg-surface2 px-3 py-2.5">
                   <span className="text-[12.5px] text-ink2">Madison suggests this. Nothing happens until you press it.</span>
                   <Button
                     variant="quiet"

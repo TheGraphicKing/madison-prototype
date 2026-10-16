@@ -6,7 +6,7 @@ import { dirname } from "node:path";
 const sc = JSON.parse(readFileSync(process.argv[2], "utf8"));
 const b = await chromium.launch();
 const ctx = await b.newContext({ viewport: { width: sc.width ?? 1440, height: sc.height ?? 900 }, deviceScaleFactor: sc.dpr ?? 1, reducedMotion: sc.reduced ? "reduce" : "no-preference" });
-await ctx.addInitScript((p) => { try { localStorage.setItem("mad_palette", p); } catch {} }, sc.palette ?? "graphite");
+await ctx.addInitScript((p) => { try { const [a, b] = p.split("-"); localStorage.setItem("mad_palette", a); localStorage.setItem("mad_mode", b || "light"); } catch {} }, sc.palette ?? "graphite");
 const page = await ctx.newPage();
 const errors = [];
 page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });

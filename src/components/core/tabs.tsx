@@ -93,7 +93,7 @@ export function Segmented<T extends string>({
     <div
       role="radiogroup"
       aria-label={label}
-      className={cn("inline-flex max-w-full items-stretch overflow-x-auto rounded-[2px] bg-surface2 p-[2px] shadow-[inset_0_0_0_1px_var(--line)]", className)}
+      className={cn("inline-flex max-w-full items-stretch overflow-x-auto rounded-[10px] bg-surface2 p-[3px]", className)}
     >
       {options.map((o, i) => {
         const on = o.value === value;
@@ -110,10 +110,10 @@ export function Segmented<T extends string>({
             onClick={() => onChange(o.value)}
             onKeyDown={(e) => onKeyDown(e, i)}
             className={cn(
-              "flex items-center gap-2 rounded-[1px] px-3 whitespace-nowrap transition-[background-color,color,box-shadow] duration-[120ms]",
+              "flex items-center gap-2 rounded-[8px] px-3 whitespace-nowrap transition-[background-color,color,box-shadow] duration-[120ms]",
               size === 28 ? "h-6" : "h-7",
               mono ? "t-data text-[12px]" : "text-[13px]",
-              on ? "bg-surface text-ink shadow-[0_0_0_1px_var(--lineStrong)]" : "text-ink2 hover:text-ink",
+              on ? "bg-surface text-ink shadow-[0_1px_3px_rgb(0_0_0/0.12)]" : "text-ink2 hover:text-ink",
               "disabled:opacity-40",
             )}
           >

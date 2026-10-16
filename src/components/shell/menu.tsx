@@ -82,7 +82,7 @@ export function MenuButton<T extends string>({
           }
         }}
         className={cn(
-          "flex h-9 items-center gap-2.5 rounded-[2px] px-3 text-[13px] text-ink transition-colors duration-[120ms]",
+          "flex h-9 items-center gap-2.5 rounded-[10px] px-3 text-[13px] text-ink transition-colors duration-[120ms]",
           "shadow-[inset_0_0_0_1px_var(--line)] hover:bg-surface2",
           open && "bg-surface2",
         )}
@@ -94,7 +94,7 @@ export function MenuButton<T extends string>({
           role="menu"
           aria-label={label}
           className={cn(
-            "absolute top-[calc(100%+8px)] z-50 rounded-[4px] border border-line bg-surface p-1.5 shadow-(--overlay-shadow)",
+            "absolute top-[calc(100%+8px)] z-50 rounded-[14px] border border-line bg-surface p-1.5 shadow-(--overlay-shadow)",
             align === "right" ? "right-0" : "left-0",
           )}
           style={{ width }}
@@ -117,7 +117,7 @@ export function MenuButton<T extends string>({
                   btn.current?.focus();
                 }}
                 className={cn(
-                  "flex w-full items-center gap-3 rounded-[2px] px-3 py-2.5 text-left outline-none transition-colors duration-[120ms]",
+                  "flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left outline-none transition-colors duration-[120ms]",
                   "hover:bg-surface2 focus-visible:bg-surface2 focus-visible:outline-2 focus-visible:outline-offset-[-2px]",
                   sel && "bg-accent-soft",
                 )}

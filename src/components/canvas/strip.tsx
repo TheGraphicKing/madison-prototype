@@ -46,7 +46,7 @@ export function RunStrip({
     return 1;
   };
   return (
-    <div className={cn("flex min-h-[96px] flex-col justify-between gap-2 rounded-[4px] bg-surface px-5 py-3.5 shadow-[inset_0_0_0_1px_var(--line)]", className)}>
+    <div className={cn("flex min-h-[96px] flex-col justify-between gap-2 rounded-[14px] bg-surface px-5 py-3.5 shadow-[inset_0_0_0_1px_var(--line)]", className)}>
       <div className="relative">
         <div className="absolute top-[11px] right-0 left-0 h-px bg-line" aria-hidden />
         <ol className="relative grid" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
@@ -129,7 +129,7 @@ export function RunCard({ runId, href, label }: { runId: string; href: string; l
     <Tilt rotationFactor={3} className="block">
       <Link
         href={href}
-        className="group relative block overflow-hidden rounded-[4px] bg-surface shadow-[inset_0_0_0_1px_var(--line)] transition-shadow hover:shadow-[inset_0_0_0_1px_var(--ink)]"
+        className="group relative block overflow-hidden rounded-[14px] bg-surface shadow-[inset_0_0_0_1px_var(--line)] transition-shadow hover:shadow-[inset_0_0_0_1px_var(--ink)]"
         aria-label={`${run.title}. Open the run.`}
       >
         <div className="flex items-center justify-between gap-4 px-6 pt-5">

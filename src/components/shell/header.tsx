@@ -13,25 +13,22 @@ export function Header() {
   const pathname = usePathname();
   const { crumbs, title } = crumbsFor(pathname);
   return (
-    <header className="no-print sticky top-0 z-30 flex h-16 items-center justify-between gap-6 border-b border-line bg-ground gutter-x max-md:h-14">
+    <header className="no-print sticky top-0 z-30 flex h-16 items-center justify-between gap-6 bg-ground/95 gutter-x max-md:h-14">
       <div className="flex min-w-0 flex-col justify-center gap-[3px]">
         <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 max-md:hidden">
-          <span className="t-label" aria-hidden>
-            /
-          </span>
           {crumbs.map((c, i) => (
             <Fragment key={i}>
               {i > 0 ? (
-                <span className="t-label" aria-hidden>
-                  /
+                <span className="text-[12px] text-ink3" aria-hidden>
+                  ›
                 </span>
               ) : null}
               {c.href ? (
-                <Link href={c.href} className="t-label truncate hover:text-ink">
+                <Link href={c.href} className="truncate text-[12px] text-ink3 hover:text-ink">
                   {c.label}
                 </Link>
               ) : (
-                <span className="t-label truncate">{c.label}</span>
+                <span className="truncate text-[12px] text-ink3">{c.label}</span>
               )}
             </Fragment>
           ))}
@@ -67,7 +64,7 @@ function MobileMenu() {
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex h-9 items-center rounded-[2px] px-3 text-[13px] shadow-[inset_0_0_0_1px_var(--line)]"
+        className="flex h-9 items-center rounded-[10px] px-3 text-[13px] shadow-[inset_0_0_0_1px_var(--line)]"
       >
         {open ? "Close" : "Menu"}
       </button>

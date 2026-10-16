@@ -5,9 +5,9 @@ import type { CoverageState } from "@/data/types";
 import { STATE_COLOR, STATE_LABEL } from "./status";
 
 /**
- * The mono label vocabulary.
- * slash: "/ LABEL" for a section or node subtitle, or "/ A · B · C" for real metadata.
- * mode:  "[ LIVE ]", once per page.
+ * Labels, v2. Section and block labels are small sentence-case sans in ink3; there is no
+ * slash prefix and no capitals. "mono" keeps the small capital mono style for table headers,
+ * ids and tiny metadata only. "mode" is a soft pill ("Live", "Replay").
  */
 export function MonoLabel({
   children,
@@ -17,7 +17,7 @@ export function MonoLabel({
   tone,
 }: {
   children: React.ReactNode;
-  variant?: "slash" | "mode" | "plain";
+  variant?: "slash" | "mode" | "plain" | "mono";
   className?: string;
   as?: React.ElementType;
   tone?: "ink" | "ink2" | "ink3" | "accent";
@@ -25,14 +25,20 @@ export function MonoLabel({
   const color = tone ? { color: `var(--${tone})` } : undefined;
   if (variant === "mode") {
     return (
-      <Tag className={cn("t-label whitespace-nowrap", className)} style={color}>
-        [&nbsp;&nbsp;{children}&nbsp;&nbsp;]
+      <Tag className={cn("inline-flex h-6 items-center gap-1.5 rounded-full bg-surface2 px-2.5 text-[12px] font-medium whitespace-nowrap text-ink", className)} style={color}>
+        {children}
+      </Tag>
+    );
+  }
+  if (variant === "mono") {
+    return (
+      <Tag className={cn("t-label", className)} style={color}>
+        {children}
       </Tag>
     );
   }
   return (
-    <Tag className={cn("t-label", className)} style={color}>
-      {variant === "slash" ? <span aria-hidden>/&nbsp;</span> : null}
+    <Tag className={cn("text-[12.5px] leading-[18px] font-medium text-ink3", className)} style={color}>
       {children}
     </Tag>
   );

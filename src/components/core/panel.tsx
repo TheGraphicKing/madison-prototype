@@ -25,7 +25,7 @@ export function Panel({
 }) {
   const hasHeader = title || subtitle || actions;
   return (
-    <Tag id={id} className={cn("rounded-[4px] border border-line bg-surface", className)}>
+    <Tag id={id} className={cn("rounded-[14px] border border-line bg-surface shadow-(--shadow-rest)", className)}>
       {hasHeader ? (
         <header className="flex min-h-[56px] items-center justify-between gap-6 border-b border-line px-6 py-3">
           <div className="flex min-w-0 flex-col gap-1">

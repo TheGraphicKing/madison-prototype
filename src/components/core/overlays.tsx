@@ -37,7 +37,7 @@ export function SlideOver({
               <D.Title className="t-section">{title}</D.Title>
             </div>
             <D.Close
-              className="-mr-2 inline-flex size-8 items-center justify-center rounded-[2px] text-ink2 hover:bg-surface2 hover:text-ink"
+              className="-mr-2 inline-flex size-8 items-center justify-center rounded-[10px] text-ink2 hover:bg-surface2 hover:text-ink"
               aria-label="Close"
             >
               <Mark kind="close" />
@@ -73,13 +73,13 @@ export function Dialog({
         <D.Backdrop className="fixed inset-0 z-40 bg-[rgb(20_20_20/0.14)] transition-opacity duration-[180ms] data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <D.Popup
           className={cn(
-            "fixed top-1/2 left-1/2 z-50 w-[min(480px,calc(100vw-40px))] -translate-x-1/2 -translate-y-1/2 rounded-[4px] border border-line bg-surface shadow-(--overlay-shadow) outline-none transition-[opacity,transform] duration-[180ms] ease-(--ease) data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 data-[starting-style]:translate-y-[calc(-50%+6px)]",
+            "fixed top-1/2 left-1/2 z-50 w-[min(480px,calc(100vw-40px))] -translate-x-1/2 -translate-y-1/2 rounded-[14px] border border-line bg-surface shadow-(--overlay-shadow) outline-none transition-[opacity,transform] duration-[180ms] ease-(--ease) data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 data-[starting-style]:translate-y-[calc(-50%+6px)]",
             className,
           )}
         >
           <div className="flex items-start justify-between gap-6 px-6 pt-5">
             <D.Title className="t-section">{title}</D.Title>
-            <D.Close className="-mr-2 inline-flex size-8 items-center justify-center rounded-[2px] text-ink2 hover:bg-surface2" aria-label="Close">
+            <D.Close className="-mr-2 inline-flex size-8 items-center justify-center rounded-[10px] text-ink2 hover:bg-surface2" aria-label="Close">
               <Mark kind="close" />
             </D.Close>
           </div>

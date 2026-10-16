@@ -1,12 +1,7 @@
-import { Suspense } from "react";
-import { Register } from "@/components/duties/register";
+import { Redirect } from "@/components/shell/redirect";
 
-export const metadata = { title: "Duties" };
+export const metadata = { title: "Obligations" };
 
-export default function DutiesPage() {
-  return (
-    <Suspense>
-      <Register />
-    </Suspense>
-  );
+export default function OldRegister() {
+  return <Redirect to="/obligations/" />;
 }

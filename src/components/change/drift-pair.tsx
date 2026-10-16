@@ -33,7 +33,7 @@ export function DriftPair({ drift, stacked }: { drift: DriftFlag; stacked?: bool
         <MonoLabel>Drift {drift.id} · policy and procedure disagree</MonoLabel>
         <span className="t-data shrink-0 text-[11.5px] text-ink">rule: {drift.duty_limit}</span>
       </div>
-      <div className={`grid gap-px overflow-hidden rounded-[2px] bg-line shadow-[0_0_0_1px_var(--line)] ${stacked ? "grid-cols-1" : "grid-cols-2 max-sm:grid-cols-1"}`}>
+      <div className={`grid gap-px overflow-hidden rounded-[10px] bg-line shadow-[0_0_0_1px_var(--line)] ${stacked ? "grid-cols-1" : "grid-cols-2 max-sm:grid-cols-1"}`}>
         {[
           { label: `${pol?.document_code} ${pol?.section_number}`, title: pol?.heading, quote: pol?.text ?? drift.policy_quote, values: drift.policy_values, ok: drift.inside_policy },
           { label: `${prc?.document_code} ${prc?.section_number.toLowerCase()}`, title: prc?.heading, quote: prc?.text ?? drift.procedure_quote, values: drift.procedure_values, ok: drift.inside_procedure },

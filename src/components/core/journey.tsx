@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { STEPS, STEP_LABEL } from "@/lib/use-change";
 
-/** The journey as six small squares: Applies, Duties, Linked, Covered, What's left, Close. */
+/** The journey as six small squares: Applies, Obligations, Linked, Covered, What's left, Close. */
 export function JourneyTrack({ done, current, className, label }: { done: number; current?: boolean; className?: string; label?: string }) {
   return (
     <span

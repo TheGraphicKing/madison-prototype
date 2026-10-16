@@ -1,4 +1,5 @@
 import { getChange, getDuty, run } from "@/data";
+import { obligationTitle } from "@/lib/words";
 
 export type Crumb = { label: string; href?: string };
 
@@ -6,12 +7,12 @@ const NAV: Record<string, string> = {
   "": "Today",
   rules: "Rule changes",
   coverage: "Coverage",
-  duties: "Duties",
+  obligations: "Obligations",
   tasks: "My tasks",
   reports: "Reports",
   record: "The record",
   gallery: "Design system",
-  runs: "Agent runs",
+  runs: "How Madison worked",
 };
 
 /** Breadcrumb and title for the header, from the path. */
@@ -27,13 +28,13 @@ export function crumbsFor(pathname: string): { crumbs: Crumb[]; title: string } 
     const c = getChange(id);
     return { crumbs: [{ label: "Rule changes", href: "/rules/" }, { label: c?.citation ?? id }], title: c?.title ?? id };
   }
-  if (top === "duties") {
+  if (top === "obligations") {
     const d = getDuty(id);
-    return { crumbs: [{ label: "Duties", href: "/duties/" }, { label: id }], title: d?.plain ?? id };
+    return { crumbs: [{ label: "Obligations", href: "/obligations/" }, { label: id }], title: d ? obligationTitle(d.plain) : id };
   }
   if (top === "runs") {
     const r = run(id);
-    return { crumbs: [{ label: "Agent runs" }, { label: id }], title: r?.title ?? id };
+    return { crumbs: [{ label: "How Madison worked" }, { label: id }], title: r?.title ?? id };
   }
   if (top === "reports") {
     const t = id === "board-pack" ? "Board pack" : id === "exam" ? "Exam readiness" : id;
@@ -46,7 +47,7 @@ export const NAV_ITEMS: { href: string; label: string; match: string }[] = [
   { href: "/", label: "Today", match: "" },
   { href: "/rules/", label: "Rule changes", match: "rules" },
   { href: "/coverage/", label: "Coverage", match: "coverage" },
-  { href: "/duties/", label: "Duties", match: "duties" },
+  { href: "/obligations/", label: "Obligations", match: "obligations" },
   { href: "/tasks/", label: "My tasks", match: "tasks" },
   { href: "/reports/", label: "Reports", match: "reports" },
   { href: "/record/", label: "The record", match: "record" },

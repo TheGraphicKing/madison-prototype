@@ -30,7 +30,6 @@ import { MonoLabel } from "@/components/core/labels";
 import { AgentTag, PersonTag } from "@/components/core/tags";
 import { CertaintyWord, certaintyFrom, STATE_COLOR, StatusChip } from "@/components/core/status";
 import { Square } from "@/components/core/mark";
-import { Bracket } from "@/components/core/bracket";
 import { Quoted } from "@/components/canvas/inspector";
 import { ButtonLink } from "@/components/core/button";
 import { DriftPair } from "@/components/change/drift-pair";
@@ -39,7 +38,7 @@ type LNode = { kind: string; title: string; sub?: string; href?: string; tone?: 
 
 function LineageNode({ data, id }: NodeProps<Node<LNode & { lit: boolean; dim: boolean }>>) {
   return (
-    <Bracket
+    <Frame
       color={data.lit ? "var(--ink)" : "var(--lineStrong)"}
       className="w-[178px] bg-surface px-3 py-2.5 transition-opacity duration-[120ms]"
       style={{ opacity: data.dim ? 0.25 : 1 }}
@@ -53,7 +52,7 @@ function LineageNode({ data, id }: NodeProps<Node<LNode & { lit: boolean; dim: b
       <div className="mt-1 line-clamp-3 text-[13px] leading-[18px] text-ink">{data.title}</div>
       {data.sub ? <div className="t-data mt-1 truncate text-[10.5px] text-ink3">{data.sub}</div> : null}
       <Handle type="source" position={Position.Right} className="!size-[6px] !min-h-0 !min-w-0 !rounded-none !border !border-ink !bg-ink" />
-    </Bracket>
+    </Frame>
   );
 }
 
@@ -83,7 +82,7 @@ function useLineage(dutyId: string) {
     const sec = d.rule_section_id ? ruleSections.find((s) => s.id === d.rule_section_id) : undefined;
     nodes.push({ id: "rule", col: 0, data: { kind: "Rule section", title: sec ? `${sec.section_number} ${sec.heading}` : d.citation, sub: getChange(d.change_id)?.citation, href: `/rules/${d.change_id}/` } });
     nodes.push({ id: "words", col: 1, data: { kind: "The rule's words", title: `“${d.source_text}”`, sub: d.citation } });
-    nodes.push({ id: "duty", col: 2, data: { kind: "Duty", title: d.plain, sub: d.id, tone: STATE_COLOR[d.coverage_state] } });
+    nodes.push({ id: "duty", col: 2, data: { kind: "Obligation", title: d.plain, sub: d.id, tone: STATE_COLOR[d.coverage_state] } });
     edges.push({ s: "rule", t: "words" }, { s: "words", t: "duty" });
     const links = linksFor(d.id);
     const drift = driftFor(d.id);
@@ -247,9 +246,9 @@ export function DutyRoom({ id }: { id: string }) {
       <Section className="mt-12">
         <div className="mb-3 flex items-baseline justify-between">
           <h2 className="t-section">Lineage</h2>
-          <MonoLabel>Rule · words · duty · policy · procedure · control · evidence · owner · vendors · hover to trace</MonoLabel>
+          <MonoLabel>Rule · words · obligation · policy · procedure · control · evidence · owner · vendors · hover to trace</MonoLabel>
         </div>
-        <div className="h-[440px] rounded-[4px] bg-ground shadow-[0_0_0_1px_var(--line)] [&_.react-flow__attribution]:hidden" onMouseLeave={() => setHover(null)}>
+        <div className="h-[440px] rounded-[14px] bg-ground shadow-[0_0_0_1px_var(--line)] [&_.react-flow__attribution]:hidden" onMouseLeave={() => setHover(null)}>
           <ReactFlow
             nodes={rfNodes}
             edges={rfEdges}
@@ -293,7 +292,7 @@ export function DutyRoom({ id }: { id: string }) {
           <section>
             <h2 className="t-section">Open items</h2>
             <ul className="mt-3 flex flex-col border-t border-line">
-              {state === "nothing_behind" ? <Item tone="risk" text="Nothing behind this duty yet: no policy or control meets it." /> : null}
+              {state === "nothing_behind" ? <Item tone="risk" text="Nothing behind this obligation yet: no policy or control meets it." /> : null}
               {drift.map((dr) => (
                 <Item key={dr.id} tone="risk" text={`Drift ${dr.id}: ${dr.summary}`} />
               ))}
@@ -343,4 +342,16 @@ function Item({ tone, text, href }: { tone: "ok" | "warn" | "risk" | "info"; tex
     </span>
   );
   return <li className="border-b border-line">{href ? <Link href={href}>{body}</Link> : body}</li>;
+}
+
+/** A plain rounded surface (the corner brackets are gone in iteration 2). */
+function Frame({ children, className, style, arm: _a, color: _c, as: _as, ...rest }: { children?: React.ReactNode; className?: string; style?: React.CSSProperties; arm?: number; color?: string; as?: React.ElementType } & React.HTMLAttributes<HTMLDivElement>) {
+  void _a;
+  void _c;
+  void _as;
+  return (
+    <div className={className} style={{ borderRadius: 12, boxShadow: "inset 0 0 0 1px var(--line)", ...style }} {...rest}>
+      {children}
+    </div>
+  );
 }
