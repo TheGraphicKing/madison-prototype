@@ -24,7 +24,7 @@ export function applyRunResults(inst: Instance) {
       at,
       who: stage.agents[0],
       kind: "agent",
-      what: `${stage.title}: ${e.detail}`,
+      what: stage.title.endsWith("?") ? `${stage.title} ${e.detail}` : `${stage.title}: ${e.detail}`,
       runId: r.id,
       changeId: r.change_id,
       live: true,

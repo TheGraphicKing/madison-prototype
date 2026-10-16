@@ -143,7 +143,7 @@ export function RunCard({ runId, href, label }: { runId: string; href: string; l
             ))}
           </span>
         </div>
-        <div ref={box} className="relative mx-6 mt-2" style={{ height: layout.H * scale }}>
+        <div ref={box} className="relative mx-6 mt-2" style={{ aspectRatio: `${W} / ${layout.H}` }}>
           <div style={{ transform: `scale(${scale})`, transformOrigin: "0 0", width: W }} className="pointer-events-none absolute top-0 left-0">
             <Schematic run={run} state={state} layout={layout} trace={null} compact key={instance?.createdAt ?? 0} build />
           </div>

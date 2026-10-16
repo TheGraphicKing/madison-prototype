@@ -66,7 +66,7 @@ export function Today() {
       <section className="grid gap-8 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <MonoLabel>{fmtDate("2026-10-16")} · {me.role}</MonoLabel>
-          <h1 className="t-display mt-3">
+          <h1 className="t-display mt-3 max-md:min-h-[88px]">
             {hello}, {first}
           </h1>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import { Rail } from "./rail";
 import { Header } from "./header";
@@ -12,8 +12,12 @@ export function AppShell({ children, ask }: { children: React.ReactNode; ask?: R
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
-  useEffect(() => {
+  // Rehydrate the demo state before any child's effects run: a child that sets state first
+  // would otherwise overwrite the saved session with defaults.
+  useLayoutEffect(() => {
     useStore.persist.rehydrate();
+  }, []);
+  useEffect(() => {
     if (window.matchMedia("(max-width: 1100px)").matches) setCollapsed(true);
   }, []);
 

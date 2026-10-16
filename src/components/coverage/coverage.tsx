@@ -32,7 +32,10 @@ const VIEWS: { value: View; label: string }[] = [
 export function Coverage() {
   const sp = useSearchParams();
   const router = useRouter();
-  const v = (sp.get("view") as View) ?? "field";
+  // phones open on the 2D map; the 3D field stays one tap away
+  const [small, setSmall] = useState<boolean | null>(null);
+  useEffect(() => setSmall(window.matchMedia("(max-width: 767px)").matches), []);
+  const v = (sp.get("view") as View) ?? (small ? "map" : "field");
   const view: View = VIEWS.some((x) => x.value === v) ? v : "field";
   const highlight = (sp.get("state") as FourState | null) ?? null;
   const pos = position();
@@ -74,7 +77,8 @@ export function Coverage() {
       </div>
 
       <div className="mt-8">
-        {view === "field" ? webgl ? <FieldView highlight={highlight} /> : <MapView highlight={highlight} note="3D is not available in this browser, so the field is shown as a map." /> : null}
+        {view === "field" && small === null && !sp.get("view") ? <div className="h-[640px] rounded-[4px] bg-surface shadow-[0_0_0_1px_var(--line)]" /> : null}
+        {view === "field" && (small !== null || sp.get("view")) ? webgl ? <FieldView highlight={highlight} /> : <MapView highlight={highlight} note="3D is not available in this browser, so the field is shown as a map." /> : null}
         {view === "map" ? <MapView highlight={highlight} /> : null}
         {view === "rules" ? <ByRule /> : null}
         {view === "documents" ? <Documents /> : null}

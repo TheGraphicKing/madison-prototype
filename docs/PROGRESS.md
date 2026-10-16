@@ -49,10 +49,10 @@ If the session is compacted: re-read `docs/PLAN.md` and this file, then continue
 - [x] Checks + commit
 
 ## Phase 5 — Finish
-- [ ] Senior designer pass (docs/review.md)
-- [ ] Quality floor
-- [ ] Demo path end to end, docs/DEMO.md
-- [ ] Checks + commit
+- [x] Senior designer pass (docs/review.md)
+- [x] Quality floor
+- [x] Demo path end to end, docs/DEMO.md
+- [x] Checks + commit
 
 ## Phase 6 — Ship
 - [ ] README, .gitignore, netlify.toml, noindex

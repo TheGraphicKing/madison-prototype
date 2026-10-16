@@ -4,6 +4,7 @@ import { memo, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import type { ItemEvent, Run } from "@/data/types";
 import type { ItemInstance, RunState } from "@/lib/player/derive";
+import { recordEntryCount } from "@/lib/player/derive";
 import { Packet } from "@/components/core/packet";
 import { Bracket } from "@/components/core/bracket";
 import { Mark, Square } from "@/components/core/mark";
@@ -149,7 +150,7 @@ export const Schematic = memo(function Schematic({
         {layout.ownerLine ? <OwnerLine layout={layout} state={state} /> : null}
 
         {/* write-back arc */}
-        {state.done && !compact ? <WriteBack layout={layout} entries={state.checks.length + state.responded.length + Object.values(state.stages).filter((s) => s.state === "done").length} run={run} /> : null}
+        {state.done && !compact ? <WriteBack layout={layout} entries={recordEntryCount(run)} run={run} /> : null}
 
         {/* ports */}
         {[...portPts.values()].map(([x, y], i) => (

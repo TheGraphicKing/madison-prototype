@@ -28,3 +28,26 @@ Other fixes found by looking at the screenshots: the schematic was scaled to 76%
 - TextQL leaves much more empty ground. Our canvas carries trays under three stages; a future pass could fold trays into the expanded view.
 - The depth view is legible and interactive, but its labels are HTML overlays that can overlap at steep angles.
 - Frame rate was checked in headless Chromium only (smooth at 4x). The runs never put more than about a dozen packets in flight at once, so the 50-packet case is untested on a real laptop.
+
+## Phase 5: the senior designer pass
+
+Every screen was screenshotted at 1440 in Graphite (`docs/screens/phase-4/`, `docs/screens/demo/`) and checked against the list in `05_finish_and_deploy.md`.
+
+| Check | Before | After |
+|---|---|---|
+| One bold element | Rule changes used the highlight on every row's current step, so the table competed with itself | Journey squares are ink only; the highlight is kept for live and new things |
+| One accent action per view | My tasks showed a black primary button on every row | Only the first open task is primary; the rest are quiet |
+| Colour without a label | All states carry a square and a word; mini bars carry an accessible label with the four counts | Unchanged |
+| Hairlines, brackets, ports | Ports are drawn at both ends of every path, so they always sit on edges; brackets are 10 px everywhere (14 px on the task panel) | Unchanged |
+| Words | "Overdue, due tomorrow" contradicted itself; stage titles ending in a question read "Applies?: Applies" in the record | "Overdue · deadline tomorrow"; "Does it apply to Northgate? Applies · Clear" |
+| Motion | The canvas builds itself once per mount; the hero card rebuilds each loop; everything else answers a click or a run event | Unchanged |
+| Responsive (390) | Rule changes, By rule, the board pack and the gallery scrolled sideways; Today's task rows squeezed their buttons; the hero schematic was unreadable on phones | Tables and segmented controls scroll in their own box; buttons sit under the text; phones get the strip instead of the card; no page scrolls sideways |
+| Reliability | A full page reload reset the demo: a child set state before the session store rehydrated and overwrote it | The store rehydrates in a layout effect, before any child's effects |
+
+### Quality floor
+
+- **Lighthouse** (mobile preset, served with compression, as on Vercel or Netlify): Today 93, change room 92, canvas 91, duty room 90, record 93, coverage 88 (mobile opens on the 2D map with 1,894 squares; the desktop preset with the 3D field scores 100). Accessibility 100 on every page measured. Without compression (`python -m http.server`) scores drop to 58 to 76, so deploy behind a CDN.
+- **Keyboard:** every control is a real button, link, radio or tab; focus is a 2 px `--focus` ring with a 2 px offset; the canvas takes Space, the arrow keys, Home and Escape; stage nodes and held items are focusable; menus take the arrow keys, Enter and Escape.
+- **Reduced motion:** no packets move (items land instantly), typing is skipped, the build-in is skipped; the narration still reads.
+- **3D:** both 3D views fall back to 2D when WebGL is missing. Smooth in headless Chromium; not measured on a real laptop GPU.
+- **Console:** no errors through the whole demo path (`scripts/scenario.mjs` reports console errors and page errors).
