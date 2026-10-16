@@ -44,3 +44,5 @@ next-env.d.ts
 /prompt-pack/
 .DS_Store
 /docs/screens/**/*.tmp
+.vercel
+.netlify
