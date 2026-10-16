@@ -25,8 +25,8 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F18 | Compact obligation filters | [x] | Done (G) · obligations/register.tsx: one row under 56 px with search, State, Regulation, Owner and Process popovers with checkboxes, Saved views and the count; table columns obligation, citation, certainty, owner, state, last change · phase-g/obligations-* |
 | F19 | Obligation page with lineage and history tabs | [x] | Done (G) · obligations/obligation-room.tsx: header with the rule words, state, owner, certainty; tabs What stands behind it (3D stack of six layers on the scene kit with a drift break and dashed missing layers, a Chain toggle, the selected layer on the right), History and Open items; React Flow removed from the code and package.json · phase-g/obligations_D-* |
 | F20 | 20 tasks, legible | [x] | Done (B, polished in H) · `src/data/tasks.json` v2; `phase-b/tasks-elena-*`, `phase-b/tasks-anthony-*` (glyph, title, from, why, due, state chip, one action); 20 tasks across 8 assignees (data has 8, not 9) |
-| F21 | Reports clear and deep | [ ] | |
-| F22 | Record chain and list | [ ] | |
+| F21 | Reports clear and deep | [x] | Done (H) · reports/reports.tsx on reports_v2: list cards with status and two-line conclusions; board pack with an 8-section navigator, conclusions, data-built sections, How this report was built, approval for the CCO, comments, and Add to this report (pending until the approver accepts, then written to the record); exam pack areas open their proof or the reason · phase-h/reports_* |
+| F22 | Record chain and list | [x] | Done (H, F38) · record/chain-3d.tsx on the scene kit: rounded cube for a person, flat tile for an agent, prev links, Signed on hover, run clusters labelled, scroll and a time slider move along the chain, click opens the entry with refs and Replay this run; List with person, agent, rule change and type filters; record_v2 run entries appear once the run is played · phase-h/record-* |
 | F23 | Floating glyph rail | [x] | Done (A) · `phase-a/rail-collapsed-tooltip-graphite-light-1440.png`, `phase-a/rail-hover-expands-graphite-light-1440.png` |
 | F24 | First principles, no technical detail | [ ] | |
 | F25 | Everything clickable, 0 dead clicks | [ ] | |
@@ -53,7 +53,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 - [x] E Today and Rule changes
 - [x] F Coverage 3D v2
 - [x] G Obligations
-- [ ] H Tasks, Reports, Record
+- [x] H Tasks, Reports, Record
 - [ ] I Subtract, polish, ship (click-crawl, demo loops, DEMO.md, deploy)
 
 ## Subtraction list
