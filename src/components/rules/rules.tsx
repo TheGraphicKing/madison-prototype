@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Regulation, RuleChange } from "@/data/types";
-import { regulations, ruleChanges, sectionsFor, tasks } from "@/data";
+import { dutiesFor, regulations, ruleChanges, sectionsFor, tasks } from "@/data";
 import { useChanges, stepsDone, STATE_WORD } from "@/lib/use-change";
 import { useStore } from "@/lib/store";
 import { daysFrom, fmtDate, fmtTime, relDays } from "@/lib/dates";
@@ -17,12 +17,14 @@ import { PersonTag } from "@/components/core/tags";
 import { Mark, Square } from "@/components/core/mark";
 import { ButtonLink } from "@/components/core/button";
 import { Diff } from "@/components/change/diff";
+import { appliesVerdict, AppliesChip } from "@/components/change/battle-cards";
 
-type Filter = "all" | "new" | "decision" | "progress" | "closed" | "out";
+type Filter = "all" | "new" | "newapplies" | "decision" | "progress" | "closed" | "out";
 
 const FILTERS: { value: Filter; label: string; test: (c: RuleChange, open: Set<string>) => boolean }[] = [
   { value: "all", label: "All", test: () => true },
   { value: "new", label: "New this week", test: (c) => daysFrom(c.published_at) >= -21 || c.state === "new" },
+  { value: "newapplies", label: "New, applies", test: (c) => (daysFrom(c.published_at) >= -21 || c.state === "new") && !["screened_out", "uncertain"].includes(c.state) },
   { value: "decision", label: "Needs a decision", test: (c, open) => open.has(c.id) || ["new", "uncertain", "duties"].includes(c.state) },
   { value: "progress", label: "In progress", test: (c) => ["applies", "duties", "linked", "whats_left"].includes(c.state) },
   { value: "closed", label: "Closed", test: (c) => ["closed", "covered"].includes(c.state) },
@@ -64,7 +66,7 @@ export function Rules() {
       {
         id: "citation",
         header: "Citation",
-        width: "190px",
+        width: "170px",
         sortValue: (c) => c.citation,
         cell: (c) => (
           <Link href={`/rules/${c.id}/`} onClick={(e) => e.stopPropagation()} className="t-data text-ink hover:underline">
@@ -79,6 +81,11 @@ export function Rules() {
         cell: (c) => (
           <div className="min-w-0 py-1">
             <div className="text-[14px] leading-5 text-ink">{c.title}</div>
+            {c.counts ? (
+              <div className="mt-0.5 text-[12.5px] leading-[18px] text-ink2">
+                {countWords(c)}
+              </div>
+            ) : null}
             {c.screen_reason ? (
               <div className="mt-0.5 flex items-center gap-1.5 text-[12.5px] leading-[18px] text-ink2">
                 <Square size={5} color={c.state === "uncertain" ? "var(--warn)" : "var(--ink3)"} />
@@ -88,7 +95,13 @@ export function Rules() {
           </div>
         ),
       },
-      { id: "agency", header: "Agency", width: "130px", sortValue: (c) => c.agency, hideOnMobile: true, cell: (c) => <span className="text-[13px] text-ink2">{c.agency}</span> },
+      {
+        id: "applies",
+        header: "Applies",
+        width: "140px",
+        sortValue: (c) => appliesVerdict(c),
+        cell: (c) => <AppliesChip verdict={appliesVerdict(c, useStore.getState().facts.flood_zone_lending?.value)} />,
+      },
       {
         id: "effective",
         header: "Effective",
@@ -105,7 +118,7 @@ export function Rules() {
       {
         id: "journey",
         header: "Where it stands",
-        width: "200px",
+        width: "170px",
         sortValue: (c) => stepsDone(c),
         cell: (c) => (
           <span className="flex flex-col gap-1">
@@ -280,4 +293,12 @@ function Expanded({ c, onlyChanges, setOnlyChanges }: { c: RuleChange; onlyChang
       </div>
     </div>
   );
+}
+
+/** "4 obligations · 1 gap", from the change's own counts. */
+function countWords(c: RuleChange) {
+  const k = c.counts!;
+  const n = dutiesFor(c.id).filter((d) => d.applicability === "in_scope").length || k.covered + k.not_yet_confirmed + k.nothing_behind + k.known_gap;
+  const g = k.nothing_behind + k.known_gap;
+  return `${n} obligation${n === 1 ? "" : "s"} · ${g === 0 ? "no gaps" : `${g} gap${g === 1 ? "" : "s"}`}`;
 }

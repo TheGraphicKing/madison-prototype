@@ -7,9 +7,9 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | # | Item | Status | Evidence |
 |---|---|---|---|
 | F01 | Three palettes, light and dark | [x] | Done (A) · `scripts/contrast.mjs` passes all six themes · `phase-a/gallery-*` · Color popover rows + Light/Dark (`components/shell/color-button.tsx`) |
-| F02 | No workflow hero on Today | [ ] | |
-| F03 | Counts with deltas, small trend | [ ] | |
-| F04 | Today sections made clearer | [ ] | |
+| F02 | No workflow hero on Today | [x] | Done (E) · today.tsx rewritten without the flow hero · phase-e/today-* |
+| F03 | Counts with deltas, small trend | [x] | Done (E) · four counts with this month's change and a 40 px sparkline, beside the mini 3D field; old 12-month chart removed · phase-e/today-* |
+| F04 | Today sections made clearer | [x] | Done (E) · tiles, Needs you, Waiting on others, standing, What changed with Applies chips, overnight line; Rule changes Applies column, counts, New-applies filter · phase-e/* |
 | F06 | Duty renamed obligation everywhere | [x] | Done (A) · `scripts/scan-text.mjs` reports no duty/duties on 24 routes · `/duties` redirects to `/obligations` (`app/duties/**`) |
 | F07 | Run view: one step flow, at most 2 regions | [x] | Done (C) · `components/run/run-view.tsx`: two regions (flow 60%, detail 40%) · `phase-c/run-reg-running-*`, `phase-c/run-reg-checkpoint-*` |
 | F08 | Agents hidden behind "Show how Madison did this" | [x] | Done (C) · no agents column; agent names only inside "Show how Madison did this" (`data-how`) in `run/step-detail.tsx` |
@@ -50,7 +50,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 - [x] B Data, tasks and handoffs
 - [x] C Run view v2
 - [x] D Change room
-- [ ] E Today and Rule changes
+- [x] E Today and Rule changes
 - [ ] F Coverage 3D v2
 - [ ] G Obligations
 - [ ] H Tasks, Reports, Record

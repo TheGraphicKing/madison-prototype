@@ -1,22 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
-import { auditTrail, getChange, position, tasksFor, userById } from "@/data";
-import type { Task } from "@/data/types";
+import { agentById, auditTrail, driftFlags, position, regulations, ruleChanges, userById } from "@/data";
+import type { Plot } from "@/lib/coverage-field";
 import { useStore } from "@/lib/store";
-import { daysFrom, fmtDate, fmtStamp, fmtTime, monthShort, relDays } from "@/lib/dates";
-import { ACTION_LABEL, dueBucket, gapLine, nextDeadline, taskHref, taskShortName } from "@/lib/tasks";
+import { fmtDate, fmtTime, relDays } from "@/lib/dates";
+import { useTaskViews, useWaitingOn } from "@/lib/work";
 import { Page, Section } from "@/components/layout/page";
-import { SectionHead } from "@/components/core/panel";
-import { Count, MonoLabel } from "@/components/core/labels";
-import { FOUR_STATES } from "@/components/core/status";
-import { StepChart } from "@/components/core/charts";
-import { ButtonLink } from "@/components/core/button";
-import { AgentTag, PersonTag } from "@/components/core/tags";
-import { Square } from "@/components/core/mark";
-import { AnimatedList } from "@/components/ui/animated-list";
+import { Count } from "@/components/core/labels";
+import { FOUR_STATES, STATE_LABEL } from "@/components/core/status";
+import { useSceneSupport } from "@/components/scene/support";
+import { appliesVerdict, AppliesChip } from "@/components/change/battle-cards";
+import { NoticeRow, TaskRow, WaitingList, bucket } from "@/components/tasks/tasks";
+
+const CoverageField = dynamic(() => import("@/components/coverage/field3d").then((m) => m.CoverageField), { ssr: false, loading: () => <div className="h-full w-full" /> });
+
+const TODAY = "2026-10-16";
 
 function greetingWord() {
   const h = new Date().getHours();
@@ -25,160 +28,231 @@ function greetingWord() {
 
 export function Today() {
   const persona = useStore((s) => s.persona);
-  const done = useStore((s) => s.tasksDone);
+  const openTask = useStore((s) => s.openTask);
+  const notices = useStore((s) => s.notices).filter((n) => n.to === persona && !n.read);
   const record = useStore((s) => s.record);
-  const finished = useStore((s) => s.finishedRuns);
-  const decisions = useStore((s) => s.decisions);
+  const fact = useStore((s) => s.facts.flood_zone_lending);
   const [hello, setHello] = useState("Good morning");
   useEffect(() => setHello(greetingWord()), []);
   const me = userById(persona)!;
-  const first = me.name.split(" ")[0];
+  const views = useTaskViews();
+  const waiting = useWaitingOn(persona);
 
-  // Anthony's sign-off on the Reg E impact appears once the run has produced it
-  const extra: Task[] =
-    persona === "u-anthony" && finished["run-rule-1005"] && !decisions.some((d) => d.label === "Sign off the impact")
-      ? [{ id: "T-IMPACT", title: "Sign off the impact of 12 CFR 1005.11(c)", why: "6 obligations, 3 vendors and one gap. Produced by Madison's run today.", change_id: "RC-2026-014", assignee_id: "u-anthony", due: "2026-10-23", state: "open", action: "sign_off", priority: 0 }]
-      : [];
-  const mine = [...extra, ...tasksFor(persona)].filter((t) => !done[t.id]);
-  const thisWeek = mine.filter((t) => dueBucket(t) !== "Later");
-  const next = nextDeadline(done);
-  const gap = gapLine();
-  const signOffs = mine.filter((t) => t.action === "sign_off");
-
-  const facts: { text: string; href: string }[] = [];
-  if (persona === "u-anthony" && signOffs.length) facts.push({ text: `${signOffs.length} sign-off${signOffs.length > 1 ? "s" : ""} need${signOffs.length > 1 ? "" : "s"} you`, href: taskHref(signOffs[0]) });
-  else facts.push({ text: `${thisWeek.length} task${thisWeek.length === 1 ? "" : "s"} need${thisWeek.length === 1 ? "s" : ""} you this week`, href: "/tasks/" });
-  if (next) facts.push({ text: `Next deadline: ${taskShortName(next)}, ${relDays(next.due)}`, href: taskHref(next) });
-  if (gap) facts.push({ text: gap.text, href: `/obligations/${gap.gap.obligation_id}/` });
-
-  const pos = position();
-  const feed = useMemo(
-    () => [
-      ...record.slice(0, 6).map((r) => ({ key: r.id, at: r.at, who: r.who, kind: r.kind, what: r.what, live: true })),
-      ...auditTrail.map((a, i) => ({ key: `a${i}`, at: a.at, who: a.who, kind: a.kind, what: a.what, live: false })),
-    ],
-    [record],
-  );
+  const mine = views
+    .filter((v) => v.task.assignee_id === persona && v.state !== "done")
+    .sort((a, b) => a.task.priority - b.task.priority || a.task.due.localeCompare(b.task.due));
+  const needs = mine.filter((v) => v.state !== "waiting_on_other" && v.state !== "blocked");
+  const thisWeek = mine.filter((v) => bucket(v) !== "Later");
+  const next = [...mine].sort((a, b) => a.task.due.localeCompare(b.task.due))[0];
+  const firstOpen = needs[0]?.task.id;
 
   return (
     <Page>
-      <section className="grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <MonoLabel>{fmtDate("2026-10-16")} · {me.role}</MonoLabel>
-          <h1 className="t-display mt-3 max-md:min-h-[88px]">
-            {hello}, {first}
-          </h1>
-        </div>
-        <ul className="flex flex-col gap-1.5 self-end lg:col-span-5">
-          {facts.map((f) => (
-            <li key={f.text}>
-              <Link href={f.href} className="group flex items-center gap-3 text-[15px] leading-6 text-ink">
-                <Square size={5} color="var(--ink3)" />
-                <span className="underline decoration-line-strong decoration-1 underline-offset-4 group-hover:decoration-ink">{f.text}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <header>
+        <p className="text-[14px] text-ink2">
+          {fmtDate(TODAY)} · {me.role}
+        </p>
+        <h1 className="t-display mt-2">
+          {hello}, {me.name.split(" ")[0]}
+        </h1>
+      </header>
 
+      {/* three tiles: the one bold thing is Needs you */}
+      <div className="mt-8 grid gap-3 md:grid-cols-3">
+        <Tile href="#needs-you" label="Needs you" value={needs.length + notices.length} sub={next ? `Next due: ${next.task.title}, ${relDays(next.task.due)}` : "Nothing due"} bold />
+        <Tile href="/tasks/" label="Due this week" value={thisWeek.length} sub={`${mine.filter((v) => v.state === "overdue").length} overdue`} />
+        <Tile href="/tasks/?filter=waiting" label="Waiting on others" value={waiting.length} sub={waiting[0] ? `Longest: ${waiting[0].who}` : "No one"} />
+      </div>
 
-      <Section>
-        <SectionHead
-          title={persona === "u-anthony" ? "Needs your sign-off" : "Needs you"}
-          subtitle={`${mine.length} open · ranked by priority and due date`}
-          actions={
-            <Link href="/tasks/" className="text-[14px] underline underline-offset-4">
-              All my tasks
-            </Link>
-          }
-        />
-        <ol className="border-t border-line">
-          {(persona === "u-anthony" ? [...signOffs, ...mine.filter((t) => t.action !== "sign_off")] : mine).slice(0, 5).map((t, i) => (
-            <NeedsRow key={t.id} t={t} rank={i + 1} primary={i === 0} />
-          ))}
-          {mine.length === 0 ? <li className="py-6 text-ink3">Nothing needs you right now.</li> : null}
-        </ol>
-      </Section>
-
-      <Section>
-        <SectionHead title="Where Northgate stands" subtitle={`${pos.total_applicable.toLocaleString("en-US")} applicable obligations · as of ${fmtDate(pos.as_of)}`} actions={<Link href="/coverage/" className="text-[14px] underline underline-offset-4">Open coverage</Link>} />
-        <div className="grid gap-10 lg:grid-cols-12">
-          <div className="grid grid-cols-2 content-start border-t border-line lg:col-span-5">
-            {FOUR_STATES.map((s, i) => (
-              <Link
-                key={s}
-                href={`/coverage/?view=map&state=${s}`}
-                className={cn("border-b border-line py-6 hover:bg-surface", i % 2 === 1 && "border-l pl-6")}
-              >
-                <Count value={pos[s as "covered"]} state={s} />
-              </Link>
+      <Section id="needs-you" className="mt-12">
+        <SectionTitle title="Needs you" count={needs.length + notices.length} action={{ href: "/tasks/", label: "All my tasks" }} />
+        {notices.length ? (
+          <ul className="mb-3 flex flex-col gap-2">
+            {notices.map((n) => (
+              <NoticeRow key={n.id} n={n} />
             ))}
-          </div>
-          <div className="lg:col-span-7">
-            <div className="flex items-baseline justify-between">
-              <span className="text-[14px] font-medium">Covered obligations, last 12 months</span>
-              <span className="t-data text-[11.5px] text-ink2">
-                {pos.history[0].covered.toLocaleString("en-US")} to {pos.history[pos.history.length - 1].covered.toLocaleString("en-US")}
-              </span>
-            </div>
-            <StepChart
-              ariaLabel="Covered obligations over the last 12 months"
-              points={pos.history.map((h) => ({ x: monthShort(h.month), y: h.covered }))}
-              yMin={1350}
-              yMax={1750}
-              height={240}
-              formatY={(v) => v.toLocaleString("en-US")}
-            />
-          </div>
-        </div>
+          </ul>
+        ) : null}
+        <ul className="flex flex-col overflow-clip rounded-[14px] border border-line bg-surface">
+          {needs.slice(0, 5).map((v) => (
+            <TaskRow key={v.task.id} v={v} primary={v.task.id === firstOpen} onOpen={() => openTask(v.task.id)} />
+          ))}
+          {needs.length === 0 ? <li className="px-5 py-5 text-[14px] text-ink3">Nothing needs you right now.</li> : null}
+        </ul>
       </Section>
 
-      <Section>
-        <SectionHead title="Madison overnight" subtitle="Agent work and decisions, newest first" actions={<Link href="/record/" className="text-[14px] underline underline-offset-4">Open the record</Link>} />
-        <AnimatedList delay={420} className="border-t border-line">
-          {[...feed].reverse().map((f) => (
-            <FeedRow key={f.key} at={f.at} who={f.who} kind={f.kind} what={f.what} live={f.live} />
-          ))}
-        </AnimatedList>
+      <Section className="mt-12">
+        <SectionTitle title="Waiting on others" count={waiting.length} action={{ href: "/tasks/?filter=waiting", label: "See all" }} />
+        <WaitingList items={waiting} limit={4} />
       </Section>
+
+      <Section className="mt-12">
+        <SectionTitle title="Where Northgate stands" action={{ href: "/coverage/", label: "Explore coverage" }} />
+        <Standing />
+      </Section>
+
+      <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+        <Section className="mt-0">
+          <SectionTitle title="What changed this week" action={{ href: "/rules/", label: "All rule changes" }} />
+          <ul className="flex flex-col overflow-clip rounded-[14px] border border-line bg-surface">
+            {[...ruleChanges]
+              .filter((c) => c.state !== "closed")
+              .sort((a, b) => b.published_at.localeCompare(a.published_at))
+              .slice(0, 5)
+              .map((c) => (
+                <li key={c.id} className="border-b border-line last:border-b-0">
+                  <Link href={`/rules/${c.id}/`} className="flex items-center gap-4 px-5 py-3.5 hover:bg-surface2">
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[14.5px] leading-[21px] font-medium">{c.title}</span>
+                      <span className="block text-[12.5px] text-ink2">
+                        <span className="t-data text-[11.5px]">{c.citation}</span> · effective {fmtDate(c.effective_date)}
+                      </span>
+                    </span>
+                    <AppliesChip verdict={appliesVerdict(c, fact?.value)} />
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        </Section>
+        <Section className="mt-0">
+          <SectionTitle title="Madison overnight" action={{ href: "/record/", label: "The record" }} />
+          <Overnight live={record.slice(0, 3).map((r) => ({ at: r.at, who: r.who, what: r.what }))} />
+        </Section>
+      </div>
     </Page>
   );
 }
 
-function NeedsRow({ t, rank, primary }: { t: Task; rank: number; primary: boolean }) {
-  const c = t.change_id ? getChange(t.change_id) : undefined;
-  const d = daysFrom(t.due);
-  const overdue = t.state === "overdue" || d < 0;
+function SectionTitle({ title, count, action }: { title: string; count?: number; action?: { href: string; label: string } }) {
   return (
-    <li className="group relative grid grid-cols-[28px_minmax(0,1fr)_150px_170px_auto] items-center gap-6 border-b border-line py-4 max-lg:grid-cols-[28px_minmax(0,1fr)] max-lg:gap-y-2">
-      <span className="t-data text-[11px] text-ink3">{String(rank).padStart(2, "0")}</span>
-      <div className="min-w-0">
-        <Link href={taskHref(t)} className="text-[16px] leading-6 font-medium hover:underline hover:underline-offset-4">
-          {t.title}
+    <div className="mb-3 flex items-baseline justify-between gap-4">
+      <h2 className="t-section">
+        {title}
+        {count !== undefined ? <span className="t-data ml-2 text-[12px] text-ink3">{count}</span> : null}
+      </h2>
+      {action ? (
+        <Link href={action.href} className="text-[14px] underline underline-offset-4">
+          {action.label}
         </Link>
-        <p className="mt-0.5 text-[14px] leading-[21px] text-ink2">{t.why}</p>
-      </div>
-      <div className="text-[14px] max-lg:col-start-2 max-lg:row-start-2">
-        <span className={overdue ? "text-risk" : "text-ink"}>{overdue && d > 0 ? "Overdue, " : ""}{relDays(t.due)}</span>
-        <span className="block text-[12px] text-ink3">{fmtDate(t.due)}</span>
-      </div>
-      <span className="t-data truncate text-[11.5px] text-ink2 max-lg:hidden">{c?.citation ?? t.control_id ?? ""}</span>
-      <ButtonLink href={taskHref(t)} variant={primary ? "primary" : "quiet"} size={32} className="max-lg:col-start-2 max-lg:justify-self-start">
-        {t.action === "run_rule" ? "Open the change room" : t.action ? ACTION_LABEL[t.action] : "Open"}
-      </ButtonLink>
-    </li>
+      ) : null}
+    </div>
   );
 }
 
-export function FeedRow({ at, who, kind, what, live }: { at: string; who: string; kind: "agent" | "person"; what: string; live?: boolean }) {
+function Tile({ href, label, value, sub, bold }: { href: string; label: string; value: number; sub: string; bold?: boolean }) {
   return (
-    <div className={cn("grid grid-cols-[160px_220px_minmax(0,1fr)] items-baseline gap-6 border-b border-line py-3.5 max-md:grid-cols-1 max-md:gap-1", live && "bg-surface")}>
-      <span className="t-data text-[11.5px] text-ink3">
-        {live ? <span className="mr-2 inline-block size-[6px] bg-highlight shadow-[0_0_0_1px_var(--ink)]" /> : null}
-        {live ? `Today ${fmtTime(at)}` : fmtStamp(at).replace(", ", " · ")}
-      </span>
-      <span className="min-w-0">{kind === "agent" ? <AgentTag id={who} /> : <PersonTag id={who} />}</span>
-      <span className="text-[14px] leading-[21px] text-ink">{what}</span>
+    <Link href={href} className={cn("block rounded-[14px] px-5 py-4 transition-colors", bold ? "bg-accent-soft hover:brightness-[0.98]" : "border border-line bg-surface hover:bg-surface2")}>
+      <div className="text-[13.5px] font-medium text-ink2">{label}</div>
+      <div className="mt-1 text-[34px] leading-[40px] font-medium tracking-[-0.02em] tabular-nums">{value}</div>
+      <div className="mt-1 text-[13px] leading-5 text-ink2">{sub}</div>
+    </Link>
+  );
+}
+
+/** The four counts with this month's change and a small trend, beside a compact 3D field. */
+function Standing() {
+  const pos = position();
+  const router = useRouter();
+  const support = useSceneSupport();
+  const [hover, setHover] = useState<Plot | null>(null);
+  const h = pos.history;
+  const last = h[h.length - 1];
+  const prev = h[h.length - 2];
+  return (
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-2 overflow-clip rounded-[14px] border border-line bg-surface">
+        {FOUR_STATES.map((s, i) => {
+          const key = s as "covered" | "not_yet_confirmed" | "nothing_behind" | "known_gap";
+          const delta = last[key] - prev[key];
+          const good = key === "covered" ? delta >= 0 : delta <= 0;
+          return (
+            <Link key={s} href={`/coverage/?view=map&state=${s}`} className={cn("flex flex-col gap-2 px-5 py-4 hover:bg-surface2", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line")}>
+              <Count value={pos[key]} state={s} size="medium" animate={false} />
+              <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+                <span className={cn("text-[12.5px] font-medium", delta === 0 ? "text-ink3" : good ? "text-ok" : "text-risk")}>
+                  {delta > 0 ? "+" : delta < 0 ? "−" : "±"}
+                  {Math.abs(delta)} this month
+                </span>
+                <Spark values={h.map((x) => x[key])} label={`${STATE_LABEL[s]}, last 12 months`} color={`var(--viz${key === "covered" ? "Ok" : key === "not_yet_confirmed" ? "Warn" : key === "nothing_behind" ? "Risk" : "Info"})`} />
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+      <div className="relative h-[260px] overflow-hidden rounded-[14px] border border-line">
+        {support === "3d" ? (
+          <CoverageField mini selected={null} onSelectPlot={(i) => i !== null && router.push("/coverage/?view=field")} onHoverPlot={setHover} />
+        ) : (
+          <Link href="/coverage/" className="grid h-full place-items-center bg-surface text-[14px] text-ink2 underline underline-offset-4">
+            Open the coverage map
+          </Link>
+        )}
+        <div className="pointer-events-none absolute top-3 left-3 rounded-[10px] bg-surface/95 px-3 py-2 text-[12.5px] shadow-[0_0_0_1px_var(--line)]">
+          {hover ? (
+            <>
+              <div className="font-medium">
+                {hover.short} · {hover.citation}
+              </div>
+              <div className="text-ink2">
+                {hover.counts.covered} covered · {hover.counts.not_yet_confirmed} not yet confirmed · {hover.counts.nothing_behind} nothing behind it · {hover.counts.known_gap} known gaps
+              </div>
+            </>
+          ) : (
+            <span className="text-ink2">{regulations.length} regulations · hover a plot, click to open Coverage</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** A 12-point trend, 40 px tall, scaled to its own range so small changes still show. */
+function Spark({ values, color, label }: { values: number[]; color: string; label: string }) {
+  const w = 96;
+  const ht = 40;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const pts = values.map((v, i) => `${(i / (values.length - 1)) * w},${ht - 4 - ((v - min) / span) * (ht - 8)}`).join(" ");
+  const lastY = ht - 4 - ((values[values.length - 1] - min) / span) * (ht - 8);
+  return (
+    <svg width={w} height={ht} role="img" aria-label={`${label}: from ${values[0]} to ${values[values.length - 1]}`} className="shrink-0 overflow-visible">
+      <polyline points={pts} fill="none" stroke={color} strokeWidth={1.5} strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx={w} cy={lastY} r={2.5} fill={color} />
+    </svg>
+  );
+}
+
+function Overnight({ live }: { live: { at: string; who: string; what: string }[] }) {
+  const [open, setOpen] = useState(false);
+  const night = useMemo(() => auditTrail.filter((a) => a.at >= "2026-10-14"), []);
+  const drift = driftFlags.filter((d) => d.status !== "resolved").length;
+  const held = auditTrail.filter((a) => /held back/i.test(a.what)).length;
+  const changed = ruleChanges.filter((c) => c.state !== "closed").length;
+  const items = [...live, ...night].slice(0, 6);
+  return (
+    <div className="rounded-[14px] border border-line bg-surface px-5 py-4">
+      <p className="text-[14.5px] leading-[22px]">
+        Read {regulations.length} regulations · {changed} with changes open · {drift} drift found · {held} obligation held back
+      </p>
+      <button onClick={() => setOpen((o) => !o)} aria-expanded={open} className="mt-2 text-[13px] font-medium text-ink2 underline underline-offset-4 hover:text-ink">
+        {open ? "Hide what happened" : "What happened"}
+      </button>
+      {open ? (
+        <ul className="mt-3 flex flex-col border-t border-line">
+          {items.map((a, i) => (
+            <li key={i} className="flex gap-3 border-b border-line py-2.5 text-[13.5px] leading-5 last:border-b-0">
+              <span className="t-data w-[86px] shrink-0 text-[11.5px] text-ink3">
+                {fmtDate(a.at.slice(0, 10))} {fmtTime(a.at)}
+              </span>
+              <span className="min-w-0">
+                {a.what}
+                <span className="block text-[12px] text-ink3">{a.who.startsWith("u-") ? userById(a.who)?.name : (agentById(a.who)?.name ?? "Madison")}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </div>
   );
 }

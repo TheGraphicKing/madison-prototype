@@ -66,6 +66,8 @@ export function Tasks() {
   useEffect(() => {
     const o = sp.get("open");
     if (o) openTask(o);
+    const f = sp.get("filter") as Filter | null;
+    if (f && ["mine", "waiting", "blocked", "done"].includes(f)) setTimeout(() => setFilter(f), 0);
   }, [sp, openTask]);
 
   const mine = views.filter((v) => v.task.assignee_id === persona);
@@ -234,7 +236,7 @@ export function WaitingList({ items, limit }: { items: ReturnType<typeof useWait
             )}
             <button className="min-w-0 flex-1 text-left" onClick={() => t && openTask(t.id)} disabled={!t}>
               <div className="text-[14.5px] font-medium">Waiting on {w.who}</div>
-              <div className="truncate text-[13px] text-ink2">
+              <div className="text-[13px] text-ink2">
                 {w.what} · since {fmtDate(w.since)}
                 {w.blocked ? " · waiting on an earlier answer" : ""}
               </div>

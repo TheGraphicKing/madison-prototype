@@ -1,6 +1,6 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { coverageField, plotLayout, type Plot, type Tile } from "@/lib/coverage-field";
@@ -84,6 +84,7 @@ function FieldScene({
 }) {
   const { plots, tiles } = useMemo(() => coverageField(), []);
   const lay = useMemo(() => plotLayout(plots), [plots]);
+  const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const cx = lay.width / 2;
   const cz = lay.depth / 2;
   const [hoverPlot, setHoverPlot] = useState<number | null>(null);
@@ -133,7 +134,7 @@ function FieldScene({
 
   return (
     <>
-      <CameraRig overview={overview} focus={focus} resetKey={reset} drift={!mini} padding={mini ? -0.3 : -0.2} zoom={!mini} />
+      <CameraRig overview={overview} focus={focus} resetKey={reset} drift={!mini} padding={mini ? (aspect > 1.6 ? -0.48 : -0.22) : -0.2} zoom={!mini} />
 
       {plots.map((p, i) => {
         const q = lay.pos[i];
