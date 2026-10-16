@@ -22,6 +22,9 @@ Open http://localhost:3000. Other scripts:
 
 ## Deploy
 
+Live: https://madison-prototype-2.vercel.app (Vercel project `madison-prototype-2`).
+
+
 **Vercel:** `npx vercel --prod` (the framework is detected; the static export works), or import the repository at vercel.com/new.
 
 **Netlify:** `netlify.toml` is included (`npm run build`, publish `out`). Run `npx netlify-cli deploy --prod --dir=out`, or connect the repository.

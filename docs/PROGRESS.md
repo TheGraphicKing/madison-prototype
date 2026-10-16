@@ -55,6 +55,10 @@ If the session is compacted: re-read `docs/PLAN.md` and this file, then continue
 - [x] Checks + commit
 
 ## Phase 6 — Ship
-- [ ] README, .gitignore, netlify.toml, noindex
-- [ ] GitHub private repo + push
-- [ ] Deploy
+- [x] README, .gitignore, netlify.toml, noindex
+- [x] GitHub private repo + push
+- [x] Deploy
+
+## Delivery notes
+- Repository: https://github.com/navaneethakrishnan-star/madison-prototype-2 (private). The name `madison-prototype` was already taken on this account by a separate, complete build of the same brief from another session (last pushed 16 Oct 2026, 10:03 UTC); it was left untouched.
+- Deploy: https://madison-prototype-2.vercel.app (Vercel project `madison-prototype-2`). Pages are `noindex`; the URL is reachable by anyone who has it.

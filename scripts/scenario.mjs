@@ -12,7 +12,7 @@ const errors = [];
 page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
 page.on("pageerror", (e) => errors.push("pageerror: " + e.message));
 for (const s of sc.steps) {
-  if (s.go) await page.goto("http://localhost:4321" + s.go, { waitUntil: "networkidle" });
+  if (s.go) await page.goto((process.env.BASE ?? "http://localhost:4321") + s.go, { waitUntil: "networkidle" });
   if (s.wait) await page.waitForTimeout(s.wait);
   if (s.click) await page.getByRole(s.role ?? "button", { name: s.click, exact: s.exact ?? false }).first().click();
   if (s.clickText) await page.getByText(s.clickText, { exact: s.exact ?? false }).first().click();
