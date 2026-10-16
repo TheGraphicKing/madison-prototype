@@ -1,0 +1,48 @@
+{
+ "board_pack": {
+  "as_of": "2026-09-30",
+  "title": "Compliance position, Q3 2026",
+  "sections": [
+   {
+    "title": "Where we stand",
+    "summary": "1,704 of 1,892 applicable duties are covered. 45 have nothing behind them, down from 55 in June.",
+    "kind": "counts"
+   },
+   {
+    "title": "What changed this quarter",
+    "summary": "14 rule changes read; 9 applied to Northgate; 6 closed.",
+    "kind": "changes"
+   },
+   {
+    "title": "Known gaps the CCO has accepted",
+    "summary": "9 open, each with an owner and an expiry date. The wire release gap expires 31 December.",
+    "kind": "gaps"
+   },
+   {
+    "title": "What needs the board",
+    "summary": "Phishing-resistant MFA for vendors with privileged access: due 1 December, fix in design.",
+    "kind": "asks"
+   }
+  ]
+ },
+ "exam_readiness": {
+  "exam": "Federal Reserve consumer compliance exam",
+  "starts": "2027-02-08",
+  "proven": 8,
+  "in_scope": 12,
+  "items": [
+   "Regulation E error resolution",
+   "Flood insurance",
+   "Truth in Savings",
+   "Fair lending",
+   "BSA customer identification",
+   "Information security program",
+   "Wire transfers",
+   "Brokered deposits",
+   "Overdraft programs",
+   "UDAP complaints",
+   "Privacy notices",
+   "Vendor management"
+  ]
+ }
+}

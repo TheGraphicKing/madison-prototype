@@ -1,0 +1,44 @@
+[
+ {
+  "id": "DR-031",
+  "obligation_id": "D-1005-E2",
+  "policy_section_id": "POL-DISP-01-4.2",
+  "procedure_section_id": "PRC-DISP-06-4",
+  "parameter_type": "days",
+  "policy_quote": "within 10 business days of the notice",
+  "procedure_quote": "On day 7 after the notice",
+  "policy_values": [
+   "10 business days"
+  ],
+  "procedure_values": [
+   "7 days"
+  ],
+  "duty_limit": "5 business days",
+  "inside_policy": false,
+  "inside_procedure": false,
+  "summary": "The policy says 10 business days and the procedure says day 7. Both are later than the new 5 business day limit.",
+  "status": "open",
+  "detected_at": "2026-10-16T05:12:00Z"
+ },
+ {
+  "id": "DR-029",
+  "obligation_id": "D-1026-L2",
+  "policy_section_id": "POL-MTG-02-3.1",
+  "procedure_section_id": "PRC-MTG-03-2",
+  "parameter_type": "days",
+  "policy_quote": "a revised estimate within 3 business days",
+  "procedure_quote": "within 5 business days of a documented changed circumstance",
+  "policy_values": [
+   "3 business days"
+  ],
+  "procedure_values": [
+   "5 business days"
+  ],
+  "duty_limit": "3 business days",
+  "inside_policy": true,
+  "inside_procedure": false,
+  "summary": "The policy matches the rule (3 business days) but the procedure allows 5.",
+  "status": "open",
+  "detected_at": "2026-10-09T05:12:00Z"
+ }
+]

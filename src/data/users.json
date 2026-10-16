@@ -1,0 +1,66 @@
+[
+ {
+  "id": "u-elena",
+  "name": "Elena Petrova",
+  "initials": "EP",
+  "role": "Compliance analyst",
+  "team": "Compliance",
+  "is_current_user": true
+ },
+ {
+  "id": "u-anthony",
+  "name": "Anthony Marsh",
+  "initials": "AM",
+  "role": "Chief Compliance Officer",
+  "team": "Compliance"
+ },
+ {
+  "id": "u-margaret",
+  "name": "Margaret Ellison",
+  "initials": "ME",
+  "role": "Head of Payment Operations",
+  "team": "Operations"
+ },
+ {
+  "id": "u-priya",
+  "name": "Priya Raman",
+  "initials": "PR",
+  "role": "Chief Information Security Officer",
+  "team": "Security"
+ },
+ {
+  "id": "u-ravi",
+  "name": "Ravi Sethuraman",
+  "initials": "RS",
+  "role": "Head of Assurance",
+  "team": "Assurance"
+ },
+ {
+  "id": "u-nadia",
+  "name": "Nadia Brennan",
+  "initials": "NB",
+  "role": "Third Party Risk Manager",
+  "team": "Third party risk"
+ },
+ {
+  "id": "u-daniel",
+  "name": "Daniel Okafor",
+  "initials": "DO",
+  "role": "Treasurer",
+  "team": "Treasury"
+ },
+ {
+  "id": "u-grace",
+  "name": "Grace Liu",
+  "initials": "GL",
+  "role": "Mortgage Operations Manager",
+  "team": "Lending"
+ },
+ {
+  "id": "u-tom",
+  "name": "Tom Reed",
+  "initials": "TR",
+  "role": "BSA Officer",
+  "team": "Financial crime"
+ }
+]

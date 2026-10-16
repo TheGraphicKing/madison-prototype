@@ -1,0 +1,93 @@
+[
+ {
+  "q": "Which Regulation E duties have nothing behind them?",
+  "context": "home",
+  "trail": [
+   {
+    "agent_id": "AM-1",
+    "step": "Read the question",
+    "ms": 500
+   },
+   {
+    "agent_id": "AM-1",
+    "step": "Searched duties for 12 CFR 1005",
+    "found": "7 duties",
+    "ms": 1100
+   },
+   {
+    "agent_id": "RC-13",
+    "step": "Counted coverage state",
+    "found": "1 with nothing behind it",
+    "ms": 800
+   },
+   {
+    "agent_id": "AM-1",
+    "step": "Wrote the answer",
+    "ms": 900
+   }
+  ],
+  "answer": "One: provisional credit within 5 business days for card and ACH errors (D-1005-E2). The policy still says 10 business days and the procedure says day 7, so neither meets the new limit.",
+  "certainty": "Clear",
+  "citations": [
+   "D-1005-E2",
+   "POL-DISP-01-4.2",
+   "PRC-DISP-06-4",
+   "DR-031"
+  ],
+  "suggested_action": {
+   "label": "Open the change room",
+   "href": "/changes/RC-2026-014"
+  }
+ },
+ {
+  "q": "Which vendors does the Reg E change touch?",
+  "context": "change",
+  "trail": [
+   {
+    "agent_id": "RC-14",
+    "step": "Matched process tags card_disputes and ach_disputes",
+    "found": "2 vendors",
+    "ms": 900
+   },
+   {
+    "agent_id": "RC-14",
+    "step": "Checked controls that run on vendor systems",
+    "found": "1 vendor",
+    "ms": 700
+   }
+  ],
+  "answer": "Three: Marlow Card Services and Corvane Payments do the dispute processing, and Vantrel's system runs CTL-131, the daily dispute aging report.",
+  "certainty": "Clear",
+  "citations": [
+   "V-MARLOW",
+   "V-CORVANE",
+   "V-VANTREL",
+   "CTL-131"
+  ]
+ },
+ {
+  "q": "What is due before the exam?",
+  "context": "reports",
+  "trail": [
+   {
+    "agent_id": "AM-1",
+    "step": "Read exam scope",
+    "found": "12 areas",
+    "ms": 700
+   },
+   {
+    "agent_id": "RC-13",
+    "step": "Checked proof per area",
+    "found": "8 proven",
+    "ms": 900
+   }
+  ],
+  "answer": "Four areas are not yet proven: Regulation E error resolution, flood insurance, information security and vendor management. The Reg E and MFA changes are the two with deadlines before 8 February.",
+  "certainty": "Likely",
+  "citations": [
+   "RC-2026-014",
+   "RC-2026-011",
+   "RC-2026-019"
+  ]
+ }
+]

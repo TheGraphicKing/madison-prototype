@@ -1,0 +1,31 @@
+{
+ "id": "inst-northgate",
+ "name": "Northgate Community Bank",
+ "charter_type": "state_member_bank",
+ "regulator": "Federal Reserve Bank of Boston",
+ "fdic_cert_id": "58123",
+ "total_assets_usd": 4200000000,
+ "total_deposits_usd": 3550000000,
+ "states": [
+  "CT",
+  "NY",
+  "MA"
+ ],
+ "city": "Hartford, CT",
+ "offices": 23,
+ "established_on": "1921-04-11",
+ "product_flags": {
+  "consumer_deposits": true,
+  "consumer_eft": true,
+  "debit_cards": true,
+  "prepaid_cards": false,
+  "mortgage_origination": true,
+  "flood_zone_lending": null,
+  "wires": true,
+  "brokered_deposits": true,
+  "commercial_lending": true,
+  "crypto_custody": false
+ },
+ "profile_retrieved_at": "2026-10-01T09:00:00Z",
+ "as_of": "2026-10-16"
+}

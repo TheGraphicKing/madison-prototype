@@ -1,0 +1,100 @@
+[
+ {
+  "id": "RC-01",
+  "name": "Rule feed monitor",
+  "job": "Watches eCFR and regulator sites, pulls the official text",
+  "kind": "code",
+  "hue": 1
+ },
+ {
+  "id": "RC-02",
+  "name": "Section splitter",
+  "job": "Splits a rule into numbered sections and checks the official outline",
+  "kind": "agent",
+  "hue": 1
+ },
+ {
+  "id": "RC-17",
+  "name": "Scope checker",
+  "job": "Decides whether a rule applies to this bank, from the bank's facts",
+  "kind": "agent",
+  "hue": 2
+ },
+ {
+  "id": "RC-03",
+  "name": "Duty finder",
+  "job": "Proposes each duty with the exact sentence it came from",
+  "kind": "agent",
+  "hue": 3
+ },
+ {
+  "id": "QC-01",
+  "name": "Quote check",
+  "job": "Confirms the quoted sentence and clause exist in the source",
+  "kind": "code",
+  "hue": 0
+ },
+ {
+  "id": "RC-04",
+  "name": "Duty reviewer",
+  "job": "Second opinion on every proposed duty; can hold one back",
+  "kind": "agent",
+  "hue": 4
+ },
+ {
+  "id": "RC-06",
+  "name": "Duty finaliser",
+  "job": "Sets each accepted duty's deadline and merges duplicates",
+  "kind": "agent",
+  "hue": 3
+ },
+ {
+  "id": "RC-11",
+  "name": "Coverage mapper",
+  "job": "Matches each duty to policy sections, procedure steps and controls",
+  "kind": "agent",
+  "hue": 5
+ },
+ {
+  "id": "RC-12",
+  "name": "Drift detector",
+  "job": "Finds where a policy and its procedure disagree on a number",
+  "kind": "code",
+  "hue": 6
+ },
+ {
+  "id": "RC-13",
+  "name": "Position calculator",
+  "job": "Counts covered, not yet confirmed, nothing behind it, known gaps",
+  "kind": "code",
+  "hue": 0
+ },
+ {
+  "id": "RC-14",
+  "name": "Impact assessor",
+  "job": "Walks everything a rule change touches, including vendors",
+  "kind": "agent",
+  "hue": 2
+ },
+ {
+  "id": "CD-1",
+  "name": "Control designer",
+  "job": "Suggests the smallest fix and drafts the control and policy words",
+  "kind": "agent",
+  "hue": 4
+ },
+ {
+  "id": "CD-2",
+  "name": "Design checker",
+  "job": "Tests a draft control against the seven design checks",
+  "kind": "agent",
+  "hue": 5
+ },
+ {
+  "id": "AM-1",
+  "name": "Ask Madison",
+  "job": "Answers questions from the bank's record, with citations",
+  "kind": "agent",
+  "hue": 2
+ }
+]

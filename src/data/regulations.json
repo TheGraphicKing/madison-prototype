@@ -1,0 +1,354 @@
+[
+ {
+  "id": "reg-01",
+  "citation": "12 CFR 1005",
+  "title": "Electronic Fund Transfers (Regulation E)",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "amended",
+  "last_amended_at": "2026-09-30",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "changed",
+   "checked_at": "2026-10-16T05:00:00Z"
+  },
+  "duties_on_record": 100
+ },
+ {
+  "id": "reg-02",
+  "citation": "12 CFR 1026",
+  "title": "Truth in Lending (Regulation Z)",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "amended",
+  "last_amended_at": "2026-08-14",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "changed",
+   "checked_at": "2026-10-16T05:01:00Z"
+  },
+  "duties_on_record": 56
+ },
+ {
+  "id": "reg-03",
+  "citation": "12 CFR 1030",
+  "title": "Truth in Savings (Regulation DD)",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "amended",
+  "last_amended_at": "2026-09-02",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "changed",
+   "checked_at": "2026-10-16T05:02:00Z"
+  },
+  "duties_on_record": 119
+ },
+ {
+  "id": "reg-04",
+  "citation": "12 CFR 208",
+  "title": "Membership of State Banking Institutions (Regulation H)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "amended",
+  "last_amended_at": "2026-09-18",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "changed",
+   "checked_at": "2026-10-16T05:03:00Z"
+  },
+  "duties_on_record": 30
+ },
+ {
+  "id": "reg-05",
+  "citation": "12 CFR 337",
+  "title": "Unsafe and Unsound Banking Practices",
+  "agency": "FDIC",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "amended",
+  "last_amended_at": "2026-06-10",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "changed",
+   "checked_at": "2026-10-16T05:04:00Z"
+  },
+  "duties_on_record": 36
+ },
+ {
+  "id": "reg-06",
+  "citation": "31 CFR 1020",
+  "title": "Rules for Banks (BSA)",
+  "agency": "FinCEN",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "amended",
+  "last_amended_at": "2026-09-25",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "changed",
+   "checked_at": "2026-10-16T05:05:00Z"
+  },
+  "duties_on_record": 155
+ },
+ {
+  "id": "reg-07",
+  "citation": "12 CFR 339",
+  "title": "Loans in Areas Having Special Flood Hazards",
+  "agency": "FDIC",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-07-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:06:00Z"
+  },
+  "duties_on_record": 42
+ },
+ {
+  "id": "reg-08",
+  "citation": "12 CFR 1002",
+  "title": "Equal Credit Opportunity (Regulation B)",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-08-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "rate_limited",
+   "checked_at": "2026-10-16T05:07:00Z"
+  },
+  "duties_on_record": 111
+ },
+ {
+  "id": "reg-09",
+  "citation": "12 CFR 1024",
+  "title": "Real Estate Settlement Procedures (Regulation X)",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-09-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:08:00Z"
+  },
+  "duties_on_record": 32
+ },
+ {
+  "id": "reg-10",
+  "citation": "12 CFR 229",
+  "title": "Availability of Funds and Collection of Checks (Regulation CC)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-10-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:09:00Z"
+  },
+  "duties_on_record": 147
+ },
+ {
+  "id": "reg-11",
+  "citation": "12 CFR 1016",
+  "title": "Privacy of Consumer Financial Information (Regulation P)",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-11-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:00:00Z"
+  },
+  "duties_on_record": 72
+ },
+ {
+  "id": "reg-12",
+  "citation": "12 CFR 225",
+  "title": "Bank Holding Companies (Regulation Y)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-12-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:01:00Z"
+  },
+  "duties_on_record": 27
+ },
+ {
+  "id": "reg-13",
+  "citation": "12 CFR 215",
+  "title": "Loans to Insiders (Regulation O)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-01-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:02:00Z"
+  },
+  "duties_on_record": 40
+ },
+ {
+  "id": "reg-14",
+  "citation": "12 CFR 204",
+  "title": "Reserve Requirements (Regulation D)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-02-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:03:00Z"
+  },
+  "duties_on_record": 129
+ },
+ {
+  "id": "reg-15",
+  "citation": "12 CFR 228",
+  "title": "Community Reinvestment (Regulation BB)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-03-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "rate_limited",
+   "checked_at": "2026-10-16T05:04:00Z"
+  },
+  "duties_on_record": 125
+ },
+ {
+  "id": "reg-16",
+  "citation": "31 CFR 501",
+  "title": "Reporting, Procedures and Penalties (OFAC)",
+  "agency": "Treasury",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-04-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:05:00Z"
+  },
+  "duties_on_record": 35
+ },
+ {
+  "id": "reg-17",
+  "citation": "12 CFR 1005 Subpart B",
+  "title": "Remittance Transfers",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-05-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:06:00Z"
+  },
+  "duties_on_record": 79
+ },
+ {
+  "id": "reg-18",
+  "citation": "12 CFR 222",
+  "title": "Fair Credit Reporting (Regulation V)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-06-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:07:00Z"
+  },
+  "duties_on_record": 41
+ },
+ {
+  "id": "reg-19",
+  "citation": "12 CFR 1022",
+  "title": "Fair Credit Reporting (CFPB)",
+  "agency": "CFPB",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-07-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:08:00Z"
+  },
+  "duties_on_record": 159
+ },
+ {
+  "id": "reg-20",
+  "citation": "12 CFR 230",
+  "title": "Truth in Savings (Fed)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-08-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:09:00Z"
+  },
+  "duties_on_record": 126
+ },
+ {
+  "id": "reg-21",
+  "citation": "12 CFR 248",
+  "title": "Proprietary Trading (Regulation VV)",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-09-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "unchanged",
+   "checked_at": "2026-10-16T05:00:00Z"
+  },
+  "duties_on_record": 33
+ },
+ {
+  "id": "reg-22",
+  "citation": "12 CFR 252",
+  "title": "Enhanced Prudential Standards",
+  "agency": "Federal Reserve",
+  "jurisdiction": "US federal",
+  "source": "eCFR",
+  "status": "active",
+  "last_amended_at": "2025-10-15",
+  "retrieved_at": "2026-10-16T05:00:00Z",
+  "last_check": {
+   "status": "rate_limited",
+   "checked_at": "2026-10-16T05:01:00Z"
+  },
+  "duties_on_record": 49
+ }
+]

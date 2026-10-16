@@ -1,0 +1,74 @@
+[
+ {
+  "id": "V-MARLOW",
+  "name": "Marlow Card Services",
+  "services": [
+   {
+    "name": "Card dispute processing",
+    "process_tag": "card_disputes"
+   }
+  ],
+  "relationship_owner_id": "u-nadia",
+  "criticality": "high"
+ },
+ {
+  "id": "V-CORVANE",
+  "name": "Corvane Payments",
+  "services": [
+   {
+    "name": "ACH dispute processing",
+    "process_tag": "ach_disputes"
+   }
+  ],
+  "relationship_owner_id": "u-nadia",
+  "criticality": "high"
+ },
+ {
+  "id": "V-VANTREL",
+  "name": "Vantrel Payment Systems",
+  "services": [
+   {
+    "name": "Card dispute case system",
+    "process_tag": "card_dispute_system"
+   }
+  ],
+  "relationship_owner_id": "u-nadia",
+  "criticality": "medium"
+ },
+ {
+  "id": "V-HELVARA",
+  "name": "Helvara Support",
+  "services": [
+   {
+    "name": "IT helpdesk with privileged access",
+    "process_tag": "privileged_access"
+   }
+  ],
+  "relationship_owner_id": "u-nadia",
+  "criticality": "high"
+ },
+ {
+  "id": "V-FENNICK",
+  "name": "Fennick Hosting",
+  "services": [
+   {
+    "name": "Core data hosting",
+    "process_tag": "data_hosting"
+   }
+  ],
+  "relationship_owner_id": "u-nadia",
+  "criticality": "critical"
+ },
+ {
+  "id": "V-BRIGHTWELL",
+  "name": "Brightwell Onboarding",
+  "services": [
+   {
+    "name": "Digital account opening",
+    "process_tag": "consumer_deposits"
+   }
+  ],
+  "relationship_owner_id": "u-nadia",
+  "criticality": "medium"
+ }
+]

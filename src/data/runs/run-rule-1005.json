@@ -1,0 +1,1186 @@
+{
+ "id": "run-rule-1005",
+ "title": "Madison reads 12 CFR 1005.11(c)",
+ "change_id": "RC-2026-014",
+ "trigger": {
+  "by": "u-elena",
+  "label": "Run Madison on this rule"
+ },
+ "stages": [
+  {
+   "key": "text",
+   "title": "Get the official text",
+   "agents": [
+    "RC-01"
+   ],
+   "kind": "code"
+  },
+  {
+   "key": "sections",
+   "title": "Split into sections",
+   "agents": [
+    "RC-02"
+   ],
+   "kind": "agent"
+  },
+  {
+   "key": "scope",
+   "title": "Does it apply to Northgate?",
+   "agents": [
+    "RC-17"
+   ],
+   "kind": "agent"
+  },
+  {
+   "key": "duties",
+   "title": "Find the duties",
+   "agents": [
+    "RC-03"
+   ],
+   "kind": "agent"
+  },
+  {
+   "key": "checks",
+   "title": "Check every duty",
+   "agents": [
+    "QC-01",
+    "RC-04"
+   ],
+   "kind": "gate"
+  },
+  {
+   "key": "decide",
+   "title": "You decide",
+   "agents": [
+    "person:u-elena"
+   ],
+   "kind": "person"
+  },
+  {
+   "key": "coverage",
+   "title": "Match to policies and controls",
+   "agents": [
+    "RC-11",
+    "RC-12"
+   ],
+   "kind": "agent"
+  },
+  {
+   "key": "touches",
+   "title": "What it touches",
+   "agents": [
+    "RC-14",
+    "RC-13"
+   ],
+   "kind": "agent"
+  }
+ ],
+ "sources": [
+  {
+   "id": "src-ecfr",
+   "label": "eCFR",
+   "detail": "Title 12 · Part 1005"
+  },
+  {
+   "id": "src-fr",
+   "label": "Federal Register",
+   "detail": "2026-21877"
+  },
+  {
+   "id": "src-profile",
+   "label": "Bank profile",
+   "detail": "Northgate · 47 facts"
+  },
+  {
+   "id": "src-policies",
+   "label": "Policies",
+   "detail": "38 documents"
+  },
+  {
+   "id": "src-controls",
+   "label": "Controls",
+   "detail": "212 in inventory"
+  }
+ ],
+ "events": [
+  {
+   "type": "narrate",
+   "text": "Fetching the amended text of 12 CFR 1005.11 from eCFR",
+   "t": 0
+  },
+  {
+   "type": "stage",
+   "stage": "text",
+   "state": "running",
+   "t": 0
+  },
+  {
+   "type": "item",
+   "id": "doc-1005",
+   "kind": "document",
+   "label": "12 CFR 1005.11 · amended 30 Sep 2026",
+   "to": "text",
+   "agent_id": "RC-01",
+   "t": 900,
+   "from": "src-ecfr"
+  },
+  {
+   "type": "stage",
+   "stage": "text",
+   "state": "done",
+   "detail": "1 document · 14 sections · text matches the Federal Register",
+   "t": 2100
+  },
+  {
+   "type": "metric",
+   "key": "cost_usd",
+   "value": 0.0,
+   "t": 2100
+  },
+  {
+   "type": "stage",
+   "stage": "sections",
+   "state": "running",
+   "t": 2400
+  },
+  {
+   "type": "narrate",
+   "text": "Splitting the rule into numbered sections",
+   "t": 2400
+  },
+  {
+   "type": "item",
+   "id": "sec-0",
+   "kind": "section",
+   "label": "1005.11(a)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 2560,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-1",
+   "kind": "section",
+   "label": "1005.11(b)(1)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 2720,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-2",
+   "kind": "section",
+   "label": "1005.11(b)(2)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 2880,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-3",
+   "kind": "section",
+   "label": "1005.11(b)(3)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 3040,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-4",
+   "kind": "section",
+   "label": "1005.11(c)(1)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 3200,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-5",
+   "kind": "section",
+   "label": "1005.11(c)(2)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": true,
+   "t": 3360,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-6",
+   "kind": "section",
+   "label": "1005.11(c)(2)(iv)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": true,
+   "t": 3520,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-7",
+   "kind": "section",
+   "label": "1005.11(c)(3)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 3680,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-8",
+   "kind": "section",
+   "label": "1005.11(c)(4)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 3840,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-9",
+   "kind": "section",
+   "label": "1005.11(d)(1)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 4000,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-10",
+   "kind": "section",
+   "label": "1005.11(d)(2)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 4160,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-11",
+   "kind": "section",
+   "label": "1005.11(e)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 4320,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-12",
+   "kind": "section",
+   "label": "1005.11(f)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 4480,
+   "from": "text"
+  },
+  {
+   "type": "item",
+   "id": "sec-13",
+   "kind": "section",
+   "label": "1005.11(g)",
+   "to": "sections",
+   "agent_id": "RC-02",
+   "changed": false,
+   "t": 4640,
+   "from": "text"
+  },
+  {
+   "type": "stage",
+   "stage": "sections",
+   "state": "done",
+   "detail": "14 sections · outline matches the official table of contents · 2 changed",
+   "t": 5140
+  },
+  {
+   "type": "metric",
+   "key": "sections",
+   "value": 14,
+   "t": 5140
+  },
+  {
+   "type": "metric",
+   "key": "cost_usd",
+   "value": 0.04,
+   "t": 5140
+  },
+  {
+   "type": "stage",
+   "stage": "scope",
+   "state": "running",
+   "t": 5440
+  },
+  {
+   "type": "narrate",
+   "text": "Checking the rule against Northgate's bank profile",
+   "t": 5440
+  },
+  {
+   "type": "check",
+   "gate": "RC-17",
+   "item_ref": "doc-1005",
+   "result": "pass",
+   "reason": "Northgate offers consumer EFT and debit cards (profile: consumer_eft = yes, debit_cards = yes)",
+   "certainty": "Clear",
+   "t": 6840
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "Applies to Northgate",
+    "value": "Yes · consumer EFT and debit cards",
+    "certainty": "Clear"
+   },
+   "t": 6840
+  },
+  {
+   "type": "stage",
+   "stage": "scope",
+   "state": "done",
+   "detail": "Applies · Clear",
+   "t": 7240
+  },
+  {
+   "type": "stage",
+   "stage": "duties",
+   "state": "running",
+   "t": 7540
+  },
+  {
+   "type": "narrate",
+   "text": "Reading 14 sections for duties, 4 at a time",
+   "t": 7540
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E1",
+   "kind": "duty",
+   "label": "Decide within 10 business days",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-4",
+   "t": 8240,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 1,
+   "t": 8240
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E2",
+   "kind": "duty",
+   "label": "Provisional credit within 5 business days",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-5",
+   "t": 8940,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 2,
+   "t": 8940
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E3",
+   "kind": "duty",
+   "label": "Tell the customer within 2 business days",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-6",
+   "t": 9640,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 3,
+   "t": 9640
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E4",
+   "kind": "duty",
+   "label": "New accounts: 20 business days and 90 days",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-7",
+   "t": 10340,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 4,
+   "t": 10340
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E5",
+   "kind": "duty",
+   "label": "Report results within 3 business days",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-9",
+   "t": 11040,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 5,
+   "t": 11040
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E6",
+   "kind": "duty",
+   "label": "Correct the error within 1 business day",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-11",
+   "t": 11740,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 6,
+   "t": 11740
+  },
+  {
+   "type": "item",
+   "id": "D-1005-X1",
+   "kind": "duty",
+   "label": "Prepaid: unregistered accounts",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-5",
+   "t": 12440,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 7,
+   "t": 12440
+  },
+  {
+   "type": "item",
+   "id": "D-1005-Z9",
+   "kind": "duty",
+   "label": "Notify within 1 business day of extension",
+   "to": "duties",
+   "agent_id": "RC-03",
+   "parent_ref": "sec-8",
+   "t": 13140,
+   "from": "sections"
+  },
+  {
+   "type": "metric",
+   "key": "duties_found",
+   "value": 8,
+   "t": 13140
+  },
+  {
+   "type": "metric",
+   "key": "cost_usd",
+   "value": 0.31,
+   "t": 13140
+  },
+  {
+   "type": "stage",
+   "stage": "duties",
+   "state": "done",
+   "detail": "8 proposed from 9 sections · 5 sections had none",
+   "t": 13540
+  },
+  {
+   "type": "stage",
+   "stage": "checks",
+   "state": "running",
+   "t": 13740
+  },
+  {
+   "type": "narrate",
+   "text": "Checking every quote against the source, then a second agent reviews each duty",
+   "t": 13740
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-E1",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-4",
+   "t": 14160
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-E1",
+   "result": "pass",
+   "reason": "Actor, action and deadline all supported by the quote",
+   "certainty": "Clear",
+   "t": 14540
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E1",
+   "kind": "duty",
+   "label": "Decide within 10 business days",
+   "to": "decide",
+   "t": 14540,
+   "from": "checks"
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-E2",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-5",
+   "t": 14960
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-E2",
+   "result": "pass",
+   "reason": "Actor, action and deadline all supported by the quote",
+   "certainty": "Clear",
+   "t": 15340
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E2",
+   "kind": "duty",
+   "label": "Provisional credit within 5 business days",
+   "to": "decide",
+   "t": 15340,
+   "from": "checks"
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-E3",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-6",
+   "t": 15760
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-E3",
+   "result": "pass",
+   "reason": "Actor, action and deadline all supported by the quote",
+   "certainty": "Clear",
+   "t": 16140
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E3",
+   "kind": "duty",
+   "label": "Tell the customer within 2 business days",
+   "to": "decide",
+   "t": 16140,
+   "from": "checks"
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-E4",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-7",
+   "t": 16560
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-E4",
+   "result": "pass",
+   "reason": "Actor, action and deadline all supported by the quote",
+   "certainty": "Likely",
+   "t": 16940
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E4",
+   "kind": "duty",
+   "label": "New accounts: 20 business days and 90 days",
+   "to": "decide",
+   "t": 16940,
+   "from": "checks"
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-E5",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-9",
+   "t": 17360
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-E5",
+   "result": "pass",
+   "reason": "Actor, action and deadline all supported by the quote",
+   "certainty": "Clear",
+   "t": 17740
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E5",
+   "kind": "duty",
+   "label": "Report results within 3 business days",
+   "to": "decide",
+   "t": 17740,
+   "from": "checks"
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-E6",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-11",
+   "t": 18160
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-E6",
+   "result": "pass",
+   "reason": "Actor, action and deadline all supported by the quote",
+   "certainty": "Clear",
+   "t": 18540
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E6",
+   "kind": "duty",
+   "label": "Correct the error within 1 business day",
+   "to": "decide",
+   "t": 18540,
+   "from": "checks"
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-X1",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-5",
+   "t": 18960
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-X1",
+   "result": "pass",
+   "reason": "Actor, action and deadline all supported by the quote",
+   "certainty": "Clear",
+   "t": 19340
+  },
+  {
+   "type": "item",
+   "id": "D-1005-X1",
+   "kind": "duty",
+   "label": "Prepaid: unregistered accounts",
+   "to": "decide",
+   "t": 19340,
+   "from": "checks"
+  },
+  {
+   "type": "check",
+   "gate": "QC-01",
+   "item_ref": "D-1005-Z9",
+   "result": "pass",
+   "reason": "Quote found verbatim in sec-8",
+   "t": 19760
+  },
+  {
+   "type": "check",
+   "gate": "RC-04",
+   "item_ref": "D-1005-Z9",
+   "result": "block",
+   "reason": "The quoted sentence describes the consumer's notice, not a bank duty with a 1 day deadline. Held back.",
+   "t": 20140
+  },
+  {
+   "type": "item",
+   "id": "D-1005-Z9",
+   "kind": "duty",
+   "label": "Notify within 1 business day of extension",
+   "to": "held",
+   "state": "held",
+   "t": 20140,
+   "from": "checks"
+  },
+  {
+   "type": "metric",
+   "key": "held_back",
+   "value": 1,
+   "t": 20140
+  },
+  {
+   "type": "metric",
+   "key": "cost_usd",
+   "value": 0.52,
+   "t": 20140
+  },
+  {
+   "type": "stage",
+   "stage": "checks",
+   "state": "done",
+   "detail": "7 passed · 1 held back by the reviewer",
+   "t": 20540
+  },
+  {
+   "type": "stage",
+   "stage": "decide",
+   "state": "waiting_person",
+   "t": 20840
+  },
+  {
+   "type": "narrate",
+   "text": "Waiting for Elena to accept the duties",
+   "t": 20840
+  },
+  {
+   "type": "person",
+   "stage": "decide",
+   "waiting_for": "u-elena",
+   "prompt": "7 duties are ready. One is outside Northgate's scope.",
+   "actions": [
+    {
+     "id": "accept_all",
+     "label": "Accept 6 duties and exclude 1"
+    },
+    {
+     "id": "review",
+     "label": "Review one by one"
+    }
+   ],
+   "items": [
+    "D-1005-E1",
+    "D-1005-E2",
+    "D-1005-E3",
+    "D-1005-E4",
+    "D-1005-E5",
+    "D-1005-E6",
+    "D-1005-X1"
+   ],
+   "t": 20840
+  },
+  {
+   "type": "stage",
+   "stage": "decide",
+   "state": "done",
+   "detail": "6 accepted · 1 excluded · Elena Petrova",
+   "t": 21440
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "Duties accepted",
+    "value": "6 apply · 1 excluded (prepaid)"
+   },
+   "t": 21440
+  },
+  {
+   "type": "stage",
+   "stage": "coverage",
+   "state": "running",
+   "t": 21740
+  },
+  {
+   "type": "narrate",
+   "text": "Matching each duty to policy sections, procedure steps and controls",
+   "t": 21740
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E1>POL-DISP-01-4.5",
+   "kind": "link",
+   "label": "POL-DISP-01-4.5",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E1",
+   "t": 22190,
+   "from": "src-policies"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E1>CTL-131",
+   "kind": "link",
+   "label": "CTL-131",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E1",
+   "t": 22640,
+   "from": "src-controls"
+  },
+  {
+   "type": "chart",
+   "series": "covered",
+   "value": 1,
+   "t": 22640
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E1",
+   "kind": "duty",
+   "label": "D-1005-E1",
+   "to": "covered",
+   "state": "arrived",
+   "coverage_state": "covered",
+   "t": 22640,
+   "from": "coverage"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E2>POL-DISP-01-4.2",
+   "kind": "link",
+   "label": "POL-DISP-01-4.2",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E2",
+   "t": 23090,
+   "from": "src-policies"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E2>CTL-132",
+   "kind": "link",
+   "label": "CTL-132",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E2",
+   "t": 23540,
+   "from": "src-controls"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E2",
+   "kind": "duty",
+   "label": "D-1005-E2",
+   "to": "nothing_behind",
+   "state": "arrived",
+   "coverage_state": "nothing_behind",
+   "t": 23540,
+   "from": "coverage"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E3>POL-DISP-01-4.3",
+   "kind": "link",
+   "label": "POL-DISP-01-4.3",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E3",
+   "t": 23990,
+   "from": "src-policies"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E3>CTL-133",
+   "kind": "link",
+   "label": "CTL-133",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E3",
+   "t": 24440,
+   "from": "src-controls"
+  },
+  {
+   "type": "chart",
+   "series": "covered",
+   "value": 2,
+   "t": 24440
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E3",
+   "kind": "duty",
+   "label": "D-1005-E3",
+   "to": "covered",
+   "state": "arrived",
+   "coverage_state": "covered",
+   "t": 24440,
+   "from": "coverage"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E4>POL-DISP-01-4.5",
+   "kind": "link",
+   "label": "POL-DISP-01-4.5",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E4",
+   "t": 24890,
+   "from": "src-policies"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E4>CTL-134",
+   "kind": "link",
+   "label": "CTL-134",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E4",
+   "t": 25340,
+   "from": "src-controls"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E4",
+   "kind": "duty",
+   "label": "D-1005-E4",
+   "to": "not_yet_confirmed",
+   "state": "arrived",
+   "coverage_state": "not_yet_confirmed",
+   "t": 25340,
+   "from": "coverage"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E5>POL-DISP-01-4.3",
+   "kind": "link",
+   "label": "POL-DISP-01-4.3",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E5",
+   "t": 25790,
+   "from": "src-policies"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E5>CTL-133",
+   "kind": "link",
+   "label": "CTL-133",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E5",
+   "t": 26240,
+   "from": "src-controls"
+  },
+  {
+   "type": "chart",
+   "series": "covered",
+   "value": 3,
+   "t": 26240
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E5",
+   "kind": "duty",
+   "label": "D-1005-E5",
+   "to": "covered",
+   "state": "arrived",
+   "coverage_state": "covered",
+   "t": 26240,
+   "from": "coverage"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E6>POL-DISP-01-5.1",
+   "kind": "link",
+   "label": "POL-DISP-01-5.1",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E6",
+   "t": 26690,
+   "from": "src-policies"
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E6>CTL-136",
+   "kind": "link",
+   "label": "CTL-136",
+   "to": "coverage",
+   "agent_id": "RC-11",
+   "parent_ref": "D-1005-E6",
+   "t": 27140,
+   "from": "src-controls"
+  },
+  {
+   "type": "chart",
+   "series": "covered",
+   "value": 4,
+   "t": 27140
+  },
+  {
+   "type": "item",
+   "id": "D-1005-E6",
+   "kind": "duty",
+   "label": "D-1005-E6",
+   "to": "covered",
+   "state": "arrived",
+   "coverage_state": "covered",
+   "t": 27140,
+   "from": "coverage"
+  },
+  {
+   "type": "check",
+   "gate": "RC-12",
+   "item_ref": "D-1005-E2",
+   "result": "block",
+   "reason": "Policy 4.2 says 10 business days; procedure step 4 says day 7. The rule now says 5.",
+   "kind": "drift",
+   "t": 27640
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "Drift found",
+    "value": "POL-DISP-01 4.2 vs PRC-DISP-06 step 4"
+   },
+   "t": 27640
+  },
+  {
+   "type": "metric",
+   "key": "links",
+   "value": 12,
+   "t": 27640
+  },
+  {
+   "type": "metric",
+   "key": "cost_usd",
+   "value": 0.88,
+   "t": 27640
+  },
+  {
+   "type": "stage",
+   "stage": "coverage",
+   "state": "done",
+   "detail": "4 covered · 1 not yet confirmed (quiet control) · 1 nothing behind it",
+   "t": 28040
+  },
+  {
+   "type": "stage",
+   "stage": "touches",
+   "state": "running",
+   "t": 28340
+  },
+  {
+   "type": "narrate",
+   "text": "Walking everything this change touches, including vendors",
+   "t": 28340
+  },
+  {
+   "type": "item",
+   "id": "touch-POL-DISP-01-4.2",
+   "kind": "impact",
+   "label": "Policy 4.2 Provisional credit",
+   "to": "out",
+   "agent_id": "RC-14",
+   "t": 28720,
+   "from": "touches"
+  },
+  {
+   "type": "item",
+   "id": "touch-PRC-DISP-06-4",
+   "kind": "impact",
+   "label": "Procedure step 4",
+   "to": "out",
+   "agent_id": "RC-14",
+   "t": 29100,
+   "from": "touches"
+  },
+  {
+   "type": "item",
+   "id": "touch-CTL-132",
+   "kind": "impact",
+   "label": "CTL-132 · quiet 49 days",
+   "to": "out",
+   "agent_id": "RC-14",
+   "t": 29480,
+   "from": "touches"
+  },
+  {
+   "type": "item",
+   "id": "touch-V-MARLOW",
+   "kind": "impact",
+   "label": "Marlow Card Services",
+   "to": "out",
+   "agent_id": "RC-14",
+   "t": 29860,
+   "from": "touches"
+  },
+  {
+   "type": "item",
+   "id": "touch-V-CORVANE",
+   "kind": "impact",
+   "label": "Corvane Payments",
+   "to": "out",
+   "agent_id": "RC-14",
+   "t": 30240,
+   "from": "touches"
+  },
+  {
+   "type": "item",
+   "id": "touch-V-VANTREL",
+   "kind": "impact",
+   "label": "Vantrel · runs CTL-131",
+   "to": "out",
+   "agent_id": "RC-14",
+   "t": 30620,
+   "from": "touches"
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "What it touches",
+    "value": "6 duties · 4 policy sections · 2 procedures · 5 controls · 3 vendors"
+   },
+   "t": 30620
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "Where Reg E stands now",
+    "value": "4 covered · 1 not yet confirmed · 1 nothing behind it"
+   },
+   "t": 30620
+  },
+  {
+   "type": "metric",
+   "key": "cost_usd",
+   "value": 1.07,
+   "t": 30620
+  },
+  {
+   "type": "stage",
+   "stage": "touches",
+   "state": "done",
+   "detail": "Impact ready for the CCO",
+   "t": 31020
+  },
+  {
+   "type": "narrate",
+   "text": "Done. One gap to fix: provisional credit within 5 business days.",
+   "t": 31020
+  }
+ ],
+ "duration_ms": 31020
+}

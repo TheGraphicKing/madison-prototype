@@ -1,0 +1,11 @@
+[
+ {
+  "id": "KG-007",
+  "obligation_id": "D-208-W1",
+  "accepted_by_user_id": "u-anthony",
+  "accepted_at": "2026-06-26",
+  "rationale": "CTL-118 enforces dual authorisation in the wire platform, but releases from the branch fallback screen bypass it. Platform fix scheduled with the vendor.",
+  "expiry": "2026-12-31",
+  "status": "open"
+ }
+]

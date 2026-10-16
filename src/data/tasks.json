@@ -1,0 +1,81 @@
+[
+ {
+  "id": "T-301",
+  "title": "Accept the duties found in 12 CFR 1005.11(c)",
+  "why": "Madison found 7 duties; one is outside Northgate's scope",
+  "change_id": "RC-2026-014",
+  "assignee_id": "u-elena",
+  "due": "2026-10-20",
+  "state": "open",
+  "action": "run_rule",
+  "priority": 1
+ },
+ {
+  "id": "T-298",
+  "title": "Choose a fix for the MFA gap",
+  "why": "No control requires phishing-resistant MFA for privileged access, including vendors",
+  "change_id": "RC-2026-011",
+  "obligation_id": "D-208-M1",
+  "assignee_id": "u-elena",
+  "due": "2026-10-22",
+  "state": "open",
+  "action": "design_control",
+  "priority": 1
+ },
+ {
+  "id": "T-296",
+  "title": "Confirm 2 proposed links for revised Loan Estimates",
+  "why": "Policy matches, but the procedure allows 5 business days",
+  "change_id": "RC-2026-016",
+  "obligation_id": "D-1026-L2",
+  "assignee_id": "u-elena",
+  "due": "2026-10-24",
+  "state": "open",
+  "action": "check_coverage",
+  "priority": 2
+ },
+ {
+  "id": "T-294",
+  "title": "Answer one bank fact: flood zone lending",
+  "why": "Scope for 12 CFR 339.3 depends on it",
+  "change_id": "RC-2026-019",
+  "assignee_id": "u-grace",
+  "due": "2026-10-21",
+  "state": "open",
+  "action": "answer_fact",
+  "priority": 2
+ },
+ {
+  "id": "T-291",
+  "title": "Upload evidence for CTL-132",
+  "why": "No evidence for 49 days on a weekly control",
+  "control_id": "CTL-132",
+  "assignee_id": "u-margaret",
+  "due": "2026-10-17",
+  "state": "overdue",
+  "action": "upload_evidence",
+  "priority": 1
+ },
+ {
+  "id": "T-289",
+  "title": "Accept 3 Truth in Savings duties",
+  "why": "Proposed by Madison, waiting for review",
+  "change_id": "RC-2026-013",
+  "assignee_id": "u-elena",
+  "due": "2026-10-28",
+  "state": "open",
+  "action": "review_duties",
+  "priority": 3
+ },
+ {
+  "id": "T-287",
+  "title": "Sign off the known gap on wire releases",
+  "why": "Expires 31 Dec 2026; renew or close",
+  "change_id": "RC-2026-012",
+  "assignee_id": "u-anthony",
+  "due": "2026-12-15",
+  "state": "open",
+  "action": "sign_off",
+  "priority": 3
+ }
+]

@@ -1,0 +1,42 @@
+[
+ {
+  "id": "PRC-DISP-06-4",
+  "document_code": "PRC-DISP-06",
+  "document_title": "Card and ACH Dispute Handling Procedure",
+  "section_number": "Step 4",
+  "heading": "Apply provisional credit",
+  "owner_id": "u-margaret",
+  "doc_version": "3.2",
+  "text": "On day 7 after the notice, if the case is open, the analyst applies provisional credit and logs the case in the aging report."
+ },
+ {
+  "id": "PRC-DISP-06-5",
+  "document_code": "PRC-DISP-06",
+  "document_title": "Card and ACH Dispute Handling Procedure",
+  "section_number": "Step 5",
+  "heading": "Send the provisional credit letter",
+  "owner_id": "u-margaret",
+  "doc_version": "3.2",
+  "text": "Letter template DL-04 is sent within 2 business days of the credit."
+ },
+ {
+  "id": "PRC-MTG-03-2",
+  "document_code": "PRC-MTG-03",
+  "document_title": "Loan Disclosure Procedure",
+  "section_number": "Step 2",
+  "heading": "Changed circumstances",
+  "owner_id": "u-grace",
+  "doc_version": "2.0",
+  "text": "Processors issue a revised Loan Estimate within 5 business days of a documented changed circumstance."
+ },
+ {
+  "id": "PRC-ISP-02-3",
+  "document_code": "PRC-ISP-02",
+  "document_title": "Access Management Procedure",
+  "section_number": "Step 3",
+  "heading": "Grant privileged access",
+  "owner_id": "u-priya",
+  "doc_version": "1.8",
+  "text": "Privileged accounts are enrolled in the bank's authenticator app before activation."
+ }
+]

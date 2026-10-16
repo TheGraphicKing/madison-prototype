@@ -1,0 +1,437 @@
+{
+ "id": "run-design-mfa",
+ "title": "Design a control for phishing-resistant MFA",
+ "change_id": "RC-2026-011",
+ "obligation_id": "D-208-M1",
+ "trigger": {
+  "by": "u-elena",
+  "label": "Choose a fix"
+ },
+ "stages": [
+  {
+   "key": "suggest",
+   "title": "Suggest the smallest fix",
+   "agents": [
+    "CD-1"
+   ],
+   "kind": "agent"
+  },
+  {
+   "key": "draft",
+   "title": "Draft the control",
+   "agents": [
+    "CD-1"
+   ],
+   "kind": "agent"
+  },
+  {
+   "key": "checks",
+   "title": "Seven design checks",
+   "agents": [
+    "CD-2"
+   ],
+   "kind": "gate"
+  },
+  {
+   "key": "owner",
+   "title": "Owner answers",
+   "agents": [
+    "person:u-priya"
+   ],
+   "kind": "person"
+  },
+  {
+   "key": "signoff",
+   "title": "CCO signs off",
+   "agents": [
+    "person:u-anthony"
+   ],
+   "kind": "person"
+  },
+  {
+   "key": "publish",
+   "title": "In force and re-checked",
+   "agents": [
+    "RC-11",
+    "RC-13"
+   ],
+   "kind": "agent"
+  },
+  {
+   "key": "handoff",
+   "title": "Hand off",
+   "agents": [
+    "RC-14"
+   ],
+   "kind": "agent"
+  }
+ ],
+ "sources": [
+  {
+   "id": "src-duty",
+   "label": "Duty D-208-M1",
+   "detail": "phishing-resistant MFA"
+  },
+  {
+   "id": "src-policy",
+   "label": "POL-ISP-01 3.1",
+   "detail": "MFA, any type"
+  },
+  {
+   "id": "src-controls",
+   "label": "Controls",
+   "detail": "CTL-150 · CTL-152"
+  },
+  {
+   "id": "src-profile",
+   "label": "Bank profile",
+   "detail": "privileged users: 61"
+  }
+ ],
+ "events": [
+  {
+   "type": "stage",
+   "stage": "suggest",
+   "state": "running",
+   "t": 0
+  },
+  {
+   "type": "narrate",
+   "text": "Looking for the smallest change that closes the gap",
+   "t": 0
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "Suggested fix",
+    "value": "New control, plus one sentence in POL-ISP-01 3.1",
+    "reason": "No control enforces the authenticator type. Changing policy words alone would leave nothing to test."
+   },
+   "t": 1500
+  },
+  {
+   "type": "stage",
+   "stage": "suggest",
+   "state": "done",
+   "detail": "New control and policy update",
+   "t": 1500
+  },
+  {
+   "type": "stage",
+   "stage": "draft",
+   "state": "running",
+   "t": 1500
+  },
+  {
+   "type": "item",
+   "id": "part-Objective",
+   "kind": "draft_part",
+   "label": "Objective",
+   "to": "draft",
+   "agent_id": "CD-1",
+   "t": 1950,
+   "from": "src-duty"
+  },
+  {
+   "type": "item",
+   "id": "part-Who performs it",
+   "kind": "draft_part",
+   "label": "Who performs it",
+   "to": "draft",
+   "agent_id": "CD-1",
+   "t": 2400,
+   "from": "src-duty"
+  },
+  {
+   "type": "item",
+   "id": "part-What is checked",
+   "kind": "draft_part",
+   "label": "What is checked",
+   "to": "draft",
+   "agent_id": "CD-1",
+   "t": 2850,
+   "from": "src-duty"
+  },
+  {
+   "type": "item",
+   "id": "part-How often",
+   "kind": "draft_part",
+   "label": "How often",
+   "to": "draft",
+   "agent_id": "CD-1",
+   "t": 3300,
+   "from": "src-duty"
+  },
+  {
+   "type": "item",
+   "id": "part-Evidence kept",
+   "kind": "draft_part",
+   "label": "Evidence kept",
+   "to": "draft",
+   "agent_id": "CD-1",
+   "t": 3750,
+   "from": "src-duty"
+  },
+  {
+   "type": "item",
+   "id": "part-Exceptions",
+   "kind": "draft_part",
+   "label": "Exceptions",
+   "to": "draft",
+   "agent_id": "CD-1",
+   "t": 4200,
+   "from": "src-duty"
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "Draft CTL-153",
+    "value": "Phishing-resistant MFA for privileged access, including vendors · checked monthly"
+   },
+   "t": 4200
+  },
+  {
+   "type": "stage",
+   "stage": "draft",
+   "state": "done",
+   "detail": "CTL-153 v1 drafted · policy words drafted",
+   "t": 4500
+  },
+  {
+   "type": "stage",
+   "stage": "checks",
+   "state": "running",
+   "t": 4500
+  },
+  {
+   "type": "narrate",
+   "text": "Testing the draft against the seven design checks",
+   "t": 4500
+  },
+  {
+   "type": "check",
+   "gate": "D1",
+   "item_ref": "CTL-153",
+   "result": "pass",
+   "reason": "Objective is clear · model",
+   "label": "Objective is clear",
+   "how": "model",
+   "t": 5150
+  },
+  {
+   "type": "check",
+   "gate": "D2",
+   "item_ref": "CTL-153",
+   "result": "pass",
+   "reason": "Required by the duty · code",
+   "label": "Required by the duty",
+   "how": "code",
+   "t": 5800
+  },
+  {
+   "type": "check",
+   "gate": "D3",
+   "item_ref": "CTL-153",
+   "result": "pass",
+   "reason": "Specific enough to test · model",
+   "label": "Specific enough to test",
+   "how": "model",
+   "t": 6450
+  },
+  {
+   "type": "check",
+   "gate": "D4",
+   "item_ref": "CTL-153",
+   "result": "pass",
+   "reason": "Roles exist at Northgate · code",
+   "label": "Roles exist at Northgate",
+   "how": "code",
+   "t": 7100
+  },
+  {
+   "type": "check",
+   "gate": "D5",
+   "item_ref": "CTL-153",
+   "result": "pass",
+   "reason": "Evidence is kept · code",
+   "label": "Evidence is kept",
+   "how": "code",
+   "t": 7750
+  },
+  {
+   "type": "check",
+   "gate": "D6",
+   "item_ref": "CTL-153",
+   "result": "cannot_tell",
+   "reason": "Can a break-glass account log in without the security key?",
+   "label": "Cannot be bypassed",
+   "how": "model",
+   "t": 8400
+  },
+  {
+   "type": "check",
+   "gate": "D7",
+   "item_ref": "CTL-153",
+   "result": "pass",
+   "reason": "Threshold is defined · code",
+   "label": "Threshold is defined",
+   "how": "code",
+   "t": 9050
+  },
+  {
+   "type": "stage",
+   "stage": "checks",
+   "state": "done",
+   "detail": "6 pass · 1 needs the owner",
+   "t": 9350
+  },
+  {
+   "type": "stage",
+   "stage": "owner",
+   "state": "waiting_person",
+   "t": 9350
+  },
+  {
+   "type": "person",
+   "stage": "owner",
+   "waiting_for": "u-priya",
+   "prompt": "Priya, can a break-glass account log in without the security key?",
+   "actions": [
+    {
+     "id": "answer",
+     "label": "Answer as Priya: break-glass accounts are vaulted and need two officers"
+    }
+   ],
+   "t": 9350
+  },
+  {
+   "type": "stage",
+   "stage": "owner",
+   "state": "done",
+   "detail": "Answered by Priya Raman",
+   "t": 9850
+  },
+  {
+   "type": "check",
+   "gate": "D6",
+   "item_ref": "CTL-153",
+   "result": "pass",
+   "reason": "Break-glass access is vaulted and needs two officers",
+   "label": "Cannot be bypassed",
+   "how": "model",
+   "t": 10350
+  },
+  {
+   "type": "stage",
+   "stage": "signoff",
+   "state": "waiting_person",
+   "t": 10350
+  },
+  {
+   "type": "person",
+   "stage": "signoff",
+   "waiting_for": "u-anthony",
+   "prompt": "Anthony, sign off CTL-153 and the policy change?",
+   "actions": [
+    {
+     "id": "sign",
+     "label": "Sign off as Anthony Marsh"
+    }
+   ],
+   "t": 10350
+  },
+  {
+   "type": "stage",
+   "stage": "signoff",
+   "state": "done",
+   "detail": "Signed by Anthony Marsh",
+   "t": 10850
+  },
+  {
+   "type": "stage",
+   "stage": "publish",
+   "state": "running",
+   "t": 10850
+  },
+  {
+   "type": "chart",
+   "series": "covered",
+   "value": 3,
+   "t": 11750
+  },
+  {
+   "type": "output",
+   "card": {
+    "label": "Re-check",
+    "value": "D-208-M1 now has a control behind it"
+   },
+   "t": 11750
+  },
+  {
+   "type": "stage",
+   "stage": "publish",
+   "state": "done",
+   "detail": "CTL-153 v1 in force",
+   "t": 12050
+  },
+  {
+   "type": "stage",
+   "stage": "handoff",
+   "state": "running",
+   "t": 12050
+  },
+  {
+   "type": "item",
+   "id": "handoff-V-HELVARA",
+   "kind": "handoff",
+   "label": "V-HELVARA",
+   "to": "tprm",
+   "agent_id": "RC-14",
+   "t": 12450,
+   "from": "handoff"
+  },
+  {
+   "type": "item",
+   "id": "handoff-V-FENNICK",
+   "kind": "handoff",
+   "label": "V-FENNICK",
+   "to": "tprm",
+   "agent_id": "RC-14",
+   "t": 12850,
+   "from": "handoff"
+  },
+  {
+   "type": "item",
+   "id": "handoff-V-BRIGHTWELL",
+   "kind": "handoff",
+   "label": "V-BRIGHTWELL",
+   "to": "tprm",
+   "agent_id": "RC-14",
+   "t": 13250,
+   "from": "handoff"
+  },
+  {
+   "type": "item",
+   "id": "handoff-plan",
+   "kind": "handoff",
+   "label": "Test plan change · Ravi Sethuraman",
+   "to": "assurance",
+   "agent_id": "RC-14",
+   "t": 13550,
+   "from": "handoff"
+  },
+  {
+   "type": "stage",
+   "stage": "handoff",
+   "state": "done",
+   "detail": "3 vendor reviews · 1 test plan change",
+   "t": 13850
+  },
+  {
+   "type": "narrate",
+   "text": "Done. CTL-153 is in force; three vendors are asked to prove it.",
+   "t": 13850
+  }
+ ],
+ "duration_ms": 13850
+}

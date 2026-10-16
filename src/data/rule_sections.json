@@ -1,0 +1,74 @@
+[
+ {
+  "id": "sec-1005-11-c-1",
+  "change_id": "RC-2026-014",
+  "section_number": "1005.11(c)(1)",
+  "heading": "Time limits and extent of investigation",
+  "before": "A financial institution shall investigate promptly and, except as otherwise provided in this paragraph (c), shall determine whether an error occurred within 10 business days of receiving a notice of error.",
+  "after": "A financial institution shall investigate promptly and, except as otherwise provided in this paragraph (c), shall determine whether an error occurred within 10 business days of receiving a notice of error.",
+  "changed": false
+ },
+ {
+  "id": "sec-1005-11-c-2",
+  "change_id": "RC-2026-014",
+  "section_number": "1005.11(c)(2)",
+  "heading": "Provisional credit",
+  "before": "The institution may take up to 45 days if it provisionally credits the consumer's account in the amount of the alleged error within 10 business days of receiving the error notice.",
+  "after": "The institution may take up to 45 days if it provisionally credits the consumer's account in the amount of the alleged error within 5 business days of receiving the error notice, for errors involving debit card or ACH transactions.",
+  "changed": true
+ },
+ {
+  "id": "sec-1005-11-c-2-iv",
+  "change_id": "RC-2026-014",
+  "section_number": "1005.11(c)(2)(iv)",
+  "heading": "Notice of provisional credit",
+  "before": "Informs the consumer, within two business days after the provisional crediting, of the amount and date of the provisional crediting.",
+  "after": "Informs the consumer, within two business days after the provisional crediting, of the amount and date of the provisional crediting, and that the consumer has full use of the funds.",
+  "changed": true
+ },
+ {
+  "id": "sec-1005-11-c-3",
+  "change_id": "RC-2026-014",
+  "section_number": "1005.11(c)(3)",
+  "heading": "Extension of time periods",
+  "before": "The time periods are extended to 20 business days and 90 days for new accounts and point-of-sale transactions.",
+  "after": "The time periods are extended to 20 business days and 90 days for new accounts and point-of-sale transactions.",
+  "changed": false
+ },
+ {
+  "id": "sec-1005-11-d",
+  "change_id": "RC-2026-014",
+  "section_number": "1005.11(d)",
+  "heading": "Procedures after investigation",
+  "before": "The institution shall report the results to the consumer within three business days after completing its investigation.",
+  "after": "The institution shall report the results to the consumer within three business days after completing its investigation.",
+  "changed": false
+ },
+ {
+  "id": "sec-1005-11-e",
+  "change_id": "RC-2026-014",
+  "section_number": "1005.11(e)",
+  "heading": "Correction of error",
+  "before": "If the institution determines that an error occurred, it shall correct the error within one business day after determining that an error occurred.",
+  "after": "If the institution determines that an error occurred, it shall correct the error within one business day after determining that an error occurred.",
+  "changed": false
+ },
+ {
+  "id": "sec-208-d2-iii-c",
+  "change_id": "RC-2026-011",
+  "section_number": "App. D-2 III.C.1(a)",
+  "heading": "Access controls on customer information systems",
+  "before": "Access controls on customer information systems, including controls to authenticate and permit access only to authorized individuals.",
+  "after": "Access controls on customer information systems, including phishing-resistant multi-factor authentication for any individual, including a service provider, with privileged access.",
+  "changed": true
+ },
+ {
+  "id": "sec-1026-19-e-4",
+  "change_id": "RC-2026-016",
+  "section_number": "1026.19(e)(4)(i)",
+  "heading": "Revised Loan Estimate",
+  "before": "The creditor shall provide a revised disclosure within three business days of receiving information sufficient to establish that a reason for the revision applies.",
+  "after": "The creditor shall deliver or place in the mail a revised disclosure within three business days of receiving information sufficient to establish that a changed circumstance applies.",
+  "changed": true
+ }
+]

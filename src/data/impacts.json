@@ -1,0 +1,55 @@
+[
+ {
+  "change_id": "RC-2026-014",
+  "status": "proposed",
+  "duties": [
+   "D-1005-E1",
+   "D-1005-E2",
+   "D-1005-E3",
+   "D-1005-E4",
+   "D-1005-E5",
+   "D-1005-E6"
+  ],
+  "excluded": [
+   "D-1005-X1"
+  ],
+  "policy_sections": [
+   "POL-DISP-01-4.2",
+   "POL-DISP-01-4.3",
+   "POL-DISP-01-4.5",
+   "POL-DISP-01-5.1"
+  ],
+  "procedure_sections": [
+   "PRC-DISP-06-4",
+   "PRC-DISP-06-5"
+  ],
+  "controls": [
+   "CTL-131",
+   "CTL-132",
+   "CTL-133",
+   "CTL-134",
+   "CTL-136"
+  ],
+  "quiet_controls": [
+   "CTL-132",
+   "CTL-134"
+  ],
+  "drift_flags": [
+   "DR-031"
+  ],
+  "vendors": [
+   {
+    "vendor_id": "V-MARLOW",
+    "why": "Does card dispute processing (card_disputes)"
+   },
+   {
+    "vendor_id": "V-CORVANE",
+    "why": "Does ACH dispute processing (ach_disputes)"
+   },
+   {
+    "vendor_id": "V-VANTREL",
+    "why": "Runs CTL-131, the daily dispute aging report"
+   }
+  ]
+ }
+]

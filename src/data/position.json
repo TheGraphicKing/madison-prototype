@@ -1,0 +1,236 @@
+{
+ "as_of": "2026-10-16",
+ "covered": 1721,
+ "not_yet_confirmed": 121,
+ "nothing_behind": 43,
+ "known_gap": 9,
+ "total_applicable": 1894,
+ "out_of_scope": 216,
+ "uncertain": 7,
+ "history": [
+  {
+   "month": "2025-11",
+   "covered": 1402,
+   "not_yet_confirmed": 350,
+   "nothing_behind": 96,
+   "known_gap": 14,
+   "total": 1862
+  },
+  {
+   "month": "2025-12",
+   "covered": 1431,
+   "not_yet_confirmed": 331,
+   "nothing_behind": 90,
+   "known_gap": 13,
+   "total": 1865
+  },
+  {
+   "month": "2026-01",
+   "covered": 1468,
+   "not_yet_confirmed": 303,
+   "nothing_behind": 84,
+   "known_gap": 13,
+   "total": 1868
+  },
+  {
+   "month": "2026-02",
+   "covered": 1490,
+   "not_yet_confirmed": 290,
+   "nothing_behind": 79,
+   "known_gap": 12,
+   "total": 1871
+  },
+  {
+   "month": "2026-03",
+   "covered": 1522,
+   "not_yet_confirmed": 267,
+   "nothing_behind": 73,
+   "known_gap": 12,
+   "total": 1874
+  },
+  {
+   "month": "2026-04",
+   "covered": 1561,
+   "not_yet_confirmed": 239,
+   "nothing_behind": 66,
+   "known_gap": 11,
+   "total": 1877
+  },
+  {
+   "month": "2026-05",
+   "covered": 1590,
+   "not_yet_confirmed": 219,
+   "nothing_behind": 60,
+   "known_gap": 11,
+   "total": 1880
+  },
+  {
+   "month": "2026-06",
+   "covered": 1622,
+   "not_yet_confirmed": 196,
+   "nothing_behind": 55,
+   "known_gap": 10,
+   "total": 1883
+  },
+  {
+   "month": "2026-07",
+   "covered": 1655,
+   "not_yet_confirmed": 170,
+   "nothing_behind": 51,
+   "known_gap": 10,
+   "total": 1886
+  },
+  {
+   "month": "2026-08",
+   "covered": 1680,
+   "not_yet_confirmed": 151,
+   "nothing_behind": 48,
+   "known_gap": 10,
+   "total": 1889
+  },
+  {
+   "month": "2026-09",
+   "covered": 1704,
+   "not_yet_confirmed": 134,
+   "nothing_behind": 45,
+   "known_gap": 9,
+   "total": 1892
+  },
+  {
+   "month": "2026-10",
+   "covered": 1721,
+   "not_yet_confirmed": 121,
+   "nothing_behind": 43,
+   "known_gap": 9,
+   "total": 1894
+  }
+ ],
+ "by_regulation": [
+  {
+   "regulation_id": "reg-01",
+   "citation": "12 CFR 1005",
+   "title": "Electronic Fund Transfers (Regulation E)",
+   "covered": 99,
+   "not_yet_confirmed": 1,
+   "nothing_behind": 0,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-02",
+   "citation": "12 CFR 1026",
+   "title": "Truth in Lending (Regulation Z)",
+   "covered": 52,
+   "not_yet_confirmed": 2,
+   "nothing_behind": 1,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-03",
+   "citation": "12 CFR 1030",
+   "title": "Truth in Savings (Regulation DD)",
+   "covered": 112,
+   "not_yet_confirmed": 3,
+   "nothing_behind": 2,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-04",
+   "citation": "12 CFR 208",
+   "title": "Membership of State Banking Institutions (Regulation H)",
+   "covered": 20,
+   "not_yet_confirmed": 4,
+   "nothing_behind": 0,
+   "known_gap": 1
+  },
+  {
+   "regulation_id": "reg-05",
+   "citation": "12 CFR 337",
+   "title": "Unsafe and Unsound Banking Practices",
+   "covered": 23,
+   "not_yet_confirmed": 5,
+   "nothing_behind": 1,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-06",
+   "citation": "31 CFR 1020",
+   "title": "Rules for Banks (BSA)",
+   "covered": 139,
+   "not_yet_confirmed": 6,
+   "nothing_behind": 2,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-07",
+   "citation": "12 CFR 339",
+   "title": "Loans in Areas Having Special Flood Hazards",
+   "covered": 23,
+   "not_yet_confirmed": 7,
+   "nothing_behind": 0,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-08",
+   "citation": "12 CFR 1002",
+   "title": "Equal Credit Opportunity (Regulation B)",
+   "covered": 89,
+   "not_yet_confirmed": 8,
+   "nothing_behind": 1,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-09",
+   "citation": "12 CFR 1024",
+   "title": "Real Estate Settlement Procedures (Regulation X)",
+   "covered": 7,
+   "not_yet_confirmed": 9,
+   "nothing_behind": 2,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-10",
+   "citation": "12 CFR 229",
+   "title": "Availability of Funds and Collection of Checks (Regulation CC)",
+   "covered": 119,
+   "not_yet_confirmed": 10,
+   "nothing_behind": 0,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-11",
+   "citation": "12 CFR 1016",
+   "title": "Privacy of Consumer Financial Information (Regulation P)",
+   "covered": 41,
+   "not_yet_confirmed": 11,
+   "nothing_behind": 1,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-12",
+   "citation": "12 CFR 225",
+   "title": "Bank Holding Companies (Regulation Y)",
+   "covered": 5,
+   "not_yet_confirmed": 12,
+   "nothing_behind": 2,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-13",
+   "citation": "12 CFR 215",
+   "title": "Loans to Insiders (Regulation O)",
+   "covered": 5,
+   "not_yet_confirmed": 13,
+   "nothing_behind": 0,
+   "known_gap": 0
+  },
+  {
+   "regulation_id": "reg-14",
+   "citation": "12 CFR 204",
+   "title": "Reserve Requirements (Regulation D)",
+   "covered": 89,
+   "not_yet_confirmed": 14,
+   "nothing_behind": 1,
+   "known_gap": 0
+  }
+ ]
+}

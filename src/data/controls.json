@@ -1,0 +1,178 @@
+[
+ {
+  "id": "CTL-118",
+  "name": "Outbound wire dual authorisation",
+  "owner_id": "u-margaret",
+  "cadence": "daily",
+  "last_artifact_date": "2026-10-15",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "preventive",
+  "nature": "automated",
+  "key_control": true,
+  "version": 2,
+  "runs_on_vendors": []
+ },
+ {
+  "id": "CTL-131",
+  "name": "Daily dispute aging report",
+  "owner_id": "u-margaret",
+  "cadence": "daily",
+  "last_artifact_date": "2026-10-15",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "detective",
+  "nature": "automated",
+  "key_control": true,
+  "version": 3,
+  "runs_on_vendors": [
+   "V-VANTREL"
+  ]
+ },
+ {
+  "id": "CTL-132",
+  "name": "Provisional credit timeliness check",
+  "owner_id": "u-margaret",
+  "cadence": "weekly",
+  "last_artifact_date": "2026-08-28",
+  "freshness_status": "quiet",
+  "quiet_days": 49,
+  "control_type": "detective",
+  "nature": "manual",
+  "key_control": true,
+  "version": 1,
+  "runs_on_vendors": []
+ },
+ {
+  "id": "CTL-133",
+  "name": "Customer letter quality review",
+  "owner_id": "u-margaret",
+  "cadence": "weekly",
+  "last_artifact_date": "2026-10-12",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "detective",
+  "nature": "manual",
+  "key_control": false,
+  "version": 2,
+  "runs_on_vendors": []
+ },
+ {
+  "id": "CTL-134",
+  "name": "Investigation deadline tracker",
+  "owner_id": "u-margaret",
+  "cadence": "weekly",
+  "last_artifact_date": "2026-09-03",
+  "freshness_status": "quiet",
+  "quiet_days": 43,
+  "control_type": "detective",
+  "nature": "automated",
+  "key_control": false,
+  "version": 1,
+  "runs_on_vendors": [
+   "V-MARLOW"
+  ]
+ },
+ {
+  "id": "CTL-136",
+  "name": "Error correction reconciliation",
+  "owner_id": "u-margaret",
+  "cadence": "daily",
+  "last_artifact_date": "2026-10-15",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "corrective",
+  "nature": "automated",
+  "key_control": true,
+  "version": 2,
+  "runs_on_vendors": []
+ },
+ {
+  "id": "CTL-140",
+  "name": "Loan Estimate timing check",
+  "owner_id": "u-grace",
+  "cadence": "weekly",
+  "last_artifact_date": "2026-10-09",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "detective",
+  "nature": "automated",
+  "key_control": true,
+  "version": 2,
+  "runs_on_vendors": []
+ },
+ {
+  "id": "CTL-141",
+  "name": "Closing Disclosure receipt check",
+  "owner_id": "u-grace",
+  "cadence": null,
+  "last_artifact_date": null,
+  "freshness_status": "unknown",
+  "quiet_days": null,
+  "control_type": "detective",
+  "nature": "manual",
+  "key_control": false,
+  "version": 1,
+  "runs_on_vendors": []
+ },
+ {
+  "id": "CTL-150",
+  "name": "Quarterly privileged access review",
+  "owner_id": "u-priya",
+  "cadence": "quarterly",
+  "last_artifact_date": "2026-09-30",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "detective",
+  "nature": "manual",
+  "key_control": true,
+  "version": 4,
+  "runs_on_vendors": []
+ },
+ {
+  "id": "CTL-152",
+  "name": "Privileged session logging",
+  "owner_id": "u-priya",
+  "cadence": "monthly",
+  "last_artifact_date": "2026-07-31",
+  "freshness_status": "quiet",
+  "quiet_days": 77,
+  "control_type": "detective",
+  "nature": "automated",
+  "key_control": true,
+  "version": 2,
+  "runs_on_vendors": [
+   "V-FENNICK"
+  ]
+ },
+ {
+  "id": "CTL-155",
+  "name": "Encryption configuration scan",
+  "owner_id": "u-priya",
+  "cadence": "monthly",
+  "last_artifact_date": "2026-09-30",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "detective",
+  "nature": "automated",
+  "key_control": true,
+  "version": 3,
+  "runs_on_vendors": [
+   "V-FENNICK"
+  ]
+ },
+ {
+  "id": "CTL-170",
+  "name": "Weekly national rate cap check",
+  "owner_id": "u-daniel",
+  "cadence": "weekly",
+  "last_artifact_date": "2026-10-13",
+  "freshness_status": "fresh",
+  "quiet_days": 0,
+  "control_type": "preventive",
+  "nature": "manual",
+  "key_control": true,
+  "version": 2,
+  "runs_on_vendors": []
+ }
+]
