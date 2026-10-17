@@ -28,15 +28,15 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 | F21 | Reports clear and deep | [x] | Done (H) · reports/reports.tsx on reports_v2: list cards with status and two-line conclusions; board pack with an 8-section navigator, conclusions, data-built sections, How this report was built, approval for the CCO, comments, and Add to this report (pending until the approver accepts, then written to the record); exam pack areas open their proof or the reason · phase-h/reports_* |
 | F22 | Record chain and list | [x] | Done (H, F38) · record/chain-3d.tsx on the scene kit: rounded cube for a person, flat tile for an agent, prev links, Signed on hover, run clusters labelled, scroll and a time slider move along the chain, click opens the entry with refs and Replay this run; List with person, agent, rule change and type filters; record_v2 run entries appear once the run is played · phase-h/record-* |
 | F23 | Floating glyph rail | [x] | Done (A) · `phase-a/rail-collapsed-tooltip-graphite-light-1440.png`, `phase-a/rail-hover-expands-graphite-light-1440.png` |
-| F24 | First principles, no technical detail | [ ] | |
-| F25 | Everything clickable, 0 dead clicks | [ ] | |
+| F24 | First principles, no technical detail | [x] | Done (I) · every screen passes its intent test: phase-i/INTENT-CHECK.md; scan-text finds no agent ids, model names, costs or tokens on 24 routes; agent detail sits in the Agent view and behind "Show how Madison did this" |
+| F25 | Everything clickable, 0 dead clicks | [x] | Done (I) · scripts/click-crawl.mjs clicks every visible link, button, tab, option, checkbox and select on 24 routes: 414 clicks, 0 dead (controls already in their current state are skipped) · phase-i/click-crawl.txt |
 | F26 | Handed-over tasks arrive | [x] | Done (B) · `lib/work.ts` handoff model; `lib/work.test.ts` loop 1 and loop 2; demo-loop screenshots in phase I |
 | F27 | Blockers explicit in the drawer | [x] | Done (B) · `components/tasks/task-drawer.tsx`: What you've been given / What you need to provide · `phase-b/drawer-priya-H117-*`, `phase-b/drawer-margaret-H115-*` |
 | F28 | Softer components, no brackets | [x] | Done (A) · radii 14/12/10/pill in `globals.css` and core components; `core/bracket.tsx` deleted; `check-forbidden.sh` checks Bracket |
-| F29 | Calm working screens | [ ] | |
+| F29 | Calm working screens | [x] | Done (I) · no decorative motion on Rule changes, Obligations, My tasks or Reports (tilt, animated list, text scramble, border trail and spotlight removed); motion only in the run views, the 3D views and state changes |
 | F30 | Replay disclaimer | [x] | Done (C) · disclaimer footer on every run view · all `phase-c/run-*` shots |
-| F31 | Human input unmistakable | [ ] | |
-| F32 | No new modules, repetition removed | [ ] | |
+| F31 | Human input unmistakable | [x] | Done (I) · every person checkpoint (run checkpoints, task drawer, Your task now) uses the shared Decision panel: what, why, evidence, options and what happens next; the decision platform rises in the 3D view · phase-i/loops/* |
+| F32 | No new modules, repetition removed | [x] | Done (I) · the subtraction list in ITERATION-2-PLAN.md §2, every removal made; no new destinations (the 7 rail items are unchanged) |
 | F33 | All three runs in the new layout | [x] | Done (C) · rule run, coverage check and control design in one layout · `phase-c/run-reg-*`, `phase-c/run-coverage-*`, `phase-c/run-mfa-*` |
 | F34 | Seven personas | [x] | Done (B) · `PERSONA_IDS` has 7 people · persona switch |
 | F35 | Custom glyph set | [x] | Done (A) · `src/components/glyphs/index.tsx` (7 nav, 11 task types, chevron) · gallery `phase-a/gallery-graphite-light-1440.png` · no icon library in package.json |
@@ -54,7 +54,7 @@ If the conversation is compacted: re-read `docs/ITERATION-2-PLAN.md` and this fi
 - [x] F Coverage 3D v2
 - [x] G Obligations
 - [x] H Tasks, Reports, Record
-- [ ] I Subtract, polish, ship (click-crawl, demo loops, DEMO.md, deploy)
+- [x] I Subtract, polish, ship (click-crawl, demo loops, DEMO.md, deploy)
 
 ## Subtraction list
 

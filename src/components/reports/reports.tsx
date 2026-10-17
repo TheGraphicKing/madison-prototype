@@ -114,7 +114,7 @@ export function BoardPack() {
           <ol className="flex flex-col gap-0.5">
             {BP.sections.map((s) => (
               <li key={s.n}>
-                <button onClick={() => go(s.n)} className={cn("flex w-full gap-2.5 rounded-[10px] px-3 py-2 text-left text-[13px] leading-[18px]", active === s.n ? "bg-surface font-medium shadow-[inset_0_0_0_1px_var(--line)]" : "text-ink2 hover:bg-surface2 hover:text-ink")}>
+                <button onClick={() => go(s.n)} aria-current={active === s.n ? "true" : undefined} className={cn("flex w-full gap-2.5 rounded-[10px] px-3 py-2 text-left text-[13px] leading-[18px]", active === s.n ? "bg-surface font-medium shadow-[inset_0_0_0_1px_var(--line)]" : "text-ink2 hover:bg-surface2 hover:text-ink")}>
                   <span className="t-data w-4 shrink-0 text-[11px] text-ink3">{s.n}</span>
                   {s.title}
                 </button>

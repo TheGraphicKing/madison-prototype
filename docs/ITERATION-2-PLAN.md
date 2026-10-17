@@ -70,6 +70,8 @@ The register numbers F01 to F36 skip **F05**: there is no F05 in `20_feedback_re
 | The "Design system" link in the rail | The rail holds the 7 destinations and "Also in Madison"; the gallery stays at `/gallery` |
 | `components/ui/animated-list.tsx`, `motion-primitives/text-scramble.tsx`, `motion-primitives/border-trail.tsx`, `motion-primitives/spotlight.tsx`, `motion-primitives/tilt.tsx` | Their only uses are removed by the items above |
 
+**Status (phase I):** every removal above is made and checked by search. The pass also removed `motion-primitives/text-roll.tsx`, `motion-primitives/transition-panel.tsx` and the whole `motion-primitives` folder (unused), the unused `Dot` helper in the run view, the Agency column on Rule changes (the agency filter row already says it), and the duplicate gate line under Double-check. F37 and F38 replaced the generic card grid of the first Agent view.
+
 ## 3. Order of work and acceptance checks
 
 | Phase | Scope | Acceptance (from the register) |

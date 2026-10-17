@@ -1116,30 +1116,6 @@ function gateCounts(run: Run, st: RunState, agents: string[]) {
 }
 const dutyCount = (run: Run) => dutiesFor(run.change_id).length + 1;
 
-function Dot({ state }: { state: string }) {
-  if (state === "done")
-    return (
-      <span className="grid size-[16px] place-items-center rounded-full bg-ink text-surface">
-        <Mark kind="check" size={9} strokeWidth={1.8} />
-      </span>
-    );
-  if (state === "running")
-    return (
-      <span className="relative grid size-[16px] place-items-center">
-        <span className="absolute inset-0 rounded-full ring-[1.5px] ring-ink" />
-        <span className="breathe absolute inset-[4px] rounded-full bg-ink" />
-      </span>
-    );
-  if (state === "waiting_person")
-    return (
-      <span className="ring-wait relative grid size-[16px] place-items-center rounded-full bg-highlight-ink/15">
-        <span className="block size-[6px] rounded-full bg-highlight-ink" />
-      </span>
-    );
-  return (
-    <span className="block size-[16px] rounded-full shadow-[inset_0_0_0_1.5px_var(--lineStrong)]" />
-  );
-}
 
 /* ---------- right: What Madison found ---------- */
 

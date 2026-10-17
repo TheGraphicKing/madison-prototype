@@ -6,7 +6,6 @@
 import { CameraControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
 
 export interface Frame {
   center: [number, number, number];

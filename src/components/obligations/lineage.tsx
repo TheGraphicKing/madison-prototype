@@ -47,6 +47,11 @@ export function lineageOf(d: Duty, state: CoverageState): { layers: Layer[]; brk
       item: ctl?.last_artifact_date ? { title: `Last evidence ${fmtDate(ctl.last_artifact_date)}`, sub: ctl.freshness_status === "quiet" ? `Quiet for ${ctl.quiet_days} days` : "Fresh", text: `The latest artifact from ${ctl.id} is dated ${fmtDate(ctl.last_artifact_date)}.` } : null,
     },
   ];
+  // CTL-153 exists only once the demo has put it in force
+  if (!ctl && d.id === "D-208-M1" && state === "covered") {
+    layers[4] = { key: "control", kind: "Control", tone: "ok", item: { title: "CTL-153 Phishing-resistant MFA for privileged access", sub: "Monthly · in force today", text: "Phishing-resistant multi-factor authentication for every privileged user, including vendors, checked monthly. Signed off by the CCO today." } };
+    layers[5] = { key: "evidence", kind: "Evidence", tone: "warn", item: { title: "First evidence due at the first monthly check", sub: "Not yet collected", text: "The control is new; its first evidence arrives with the first monthly check." } };
+  }
   const brk = drift ? { policy: drift.policy_values.join(", "), procedure: drift.procedure_values.join(", "), limit: drift.duty_limit } : null;
   return { layers, brk };
 }

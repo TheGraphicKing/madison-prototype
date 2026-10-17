@@ -1,0 +1,26 @@
+/: 57 controls
+/rules/: 54 controls
+/rules/RC-2026-014/: 17 controls
+/rules/RC-2026-011/: 48 controls
+/rules/RC-2026-016/: 42 controls
+/rules/RC-2026-018/: 20 controls
+/rules/RC-2026-019/: 19 controls
+/runs/run-rule-1005/?mode=replay: 45 controls
+/runs/run-coverage-1026/?mode=replay: 28 controls
+/runs/run-design-mfa/?mode=replay&view=simple: 25 controls
+/coverage/: 48 controls
+/coverage/?view=map: 48 controls
+/coverage/?view=rules: 51 controls
+/coverage/?view=documents: 42 controls
+/coverage/?view=calendar: 43 controls
+/obligations/: 27 controls
+/obligations/D-1005-E2/: 28 controls
+/obligations/D-208-W1/?tab=open: 22 controls
+/tasks/: 34 controls
+/reports/: 18 controls
+/reports/board-pack/: 31 controls
+/reports/exam/: 32 controls
+/record/: 17 controls
+/record/?view=list: 18 controls
+
+414 clicks · 0 dead

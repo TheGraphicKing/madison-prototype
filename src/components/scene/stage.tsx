@@ -6,7 +6,6 @@
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment, Html, Lightformer } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
-import * as THREE from "three";
 import type { ReactNode } from "react";
 import type { Tokens } from "./tokens";
 

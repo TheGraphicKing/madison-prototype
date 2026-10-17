@@ -1,15 +1,63 @@
-# The 5-minute demo
+# Madison demo path (iteration 2)
 
-Start on Today in Graphite. If anything was clicked before, use **Reset demo** at the bottom of the rail.
+Live at https://madison-prototype-2.vercel.app. Start with **Reset demo** in the rail. The default persona is the compliance analyst; switch personas with **Viewing as** in the header.
 
-1. **Today, as Elena.** The hero card replays the Reg E run on a loop. Point at "Needs you": four tasks, ranked, each with one action.
-2. **Open "Accept the duties found in 12 CFR 1005.11(c)"** (Open the change room), then press **Run Madison on this rule**. The canvas opens full screen and builds itself. Watch the 14 sections stream in, the duty finder propose 8 duties, and the verifier fill for each one and hold one back with its reason. The flow stops at "You decide": press **Accept 6 duties and exclude 1**. Coverage links flow in from Policies and Controls, the drift is found, the vendors light up in "What it touches", and the write-back arc draws to the record. (Use 2x or 4x to keep time.)
-3. **Hover D-1005-E2** (the square in "Nothing behind it") to trace its lineage: its section, the policy and control links, the drift and the vendors light up, everything else dims. Click it to open the inspector: the rule's own words with the sentence highlighted, the reviewer's verdict, the agent and model, and who decided.
-4. **Back in the change room** (Open what's left): the step track has moved to What's left, which shows the gap and the drift as two quotes side by side. Open **What it touches**: 3 vendors and why each is in scope.
-5. **Switch to Priya** (Viewing as). On Today, open **Choose a fix**, then press **Choose a fix**. Watch the seven design checks: D6 comes back "can't tell" and a line runs to the owner. Answer as Priya. The flow waits for the CCO: press **Continue as Anthony Marsh**, then **Sign off as Anthony Marsh**. CTL-153 goes into force and the handoffs go to TPRM and Assurance.
-6. **Coverage, Field view.** Orbit the 1,894 duties, then click the **12 CFR 1005** plot (or pick it from the list) to fly to Regulation E.
-7. **Ask Madison** (bottom right, or Cmd J): "Which Regulation E duties have nothing behind them?" Watch the retrieval trail, then the answer with its certainty and sources.
-8. **The record:** every decision just made is there with names and times, newest first. Press **Replay** on a run to open the canvas in `[ REPLAY ]`.
-9. **Color:** show Refinery, Yukon, Midnight and Terminal. End on Graphite.
+## The 9 steps
 
-The path was run end to end with `node scripts/scenario.mjs scripts/demo-path.json` against a static server on port 4321 (screenshots of every step in `docs/screens/demo/`).
+1. **Today.**
+   - "Needs you" is the bold tile.
+   - The top task is "Accept the obligations found in 12 CFR 1005.11(c)".
+   - Below it: Waiting on others, the four counts with this month's change and a small trend beside the mini 3D field, What changed this week with Applies chips, and the overnight line.
+
+2. **A rule change.**
+   - Open the top task, or go to Rule changes and open 12 CFR 1005.11(c).
+   - "What we know" shows the summary, the diff, likely touches, and "Last read by Madison: today 05:00". There are no empty cards.
+   - **Run, then decide:** press **Run Madison on this rule** (this opens the Simple view). Switch to **Agent** to watch the live system:
+     - sections travel as sheets;
+     - obligations travel as blocks through the double-check gate, and one is held back in the tray;
+     - the blocks queue on the raised You decide platform, and the Decision panel slides in.
+   - Choose **Accept 6 obligations and exclude 1**. The blocks settle into the Regulation E plot; "What Madison found" answers all five questions.
+
+3. **Battle cards.** Go back to the change room. The cards are Applies, Obligations, Linked, Covered, What's left (with the provisional credit gap and its consequence) and Close. Each card has "See how", which opens the run at that step.
+
+4. **Raise a drift.**
+   - Open 12 CFR 1026.19(e) (Loan Estimate timing) and press **Run the coverage check**.
+   - At the checkpoint choose **Link and raise the drift**.
+   - Today now shows "Waiting on Grace Liu".
+
+5. **As Grace, respond.**
+   - Switch to Grace Liu. Needs you shows "Align the Loan Estimate procedure", from the analyst.
+   - Open it. You see the rule, policy and procedure quotes, and the fields to fill: new wording, an effective date and an optional file.
+   - Fill them and press **Update the procedure**.
+
+6. **Back as Elena.**
+   - Switch back to Elena Petrova. "Grace Liu responded" is at the top of Needs you.
+   - The change room is unblocked, and D-1026-L2 is Covered.
+   - The second loop, if there is time:
+     - as Priya Raman, answer the D6 question;
+     - as Anthony Marsh, approve CTL-153;
+     - CTL-153 goes into force.
+
+7. **Coverage 3D.**
+   - Open Coverage and click the **Regulation E** plot. The camera flies to it.
+   - The panel shows the four counts, what covers it, and what isn't covered, with owners.
+   - It also shows what we're accepting, and what it means: the exam risk as a word and an "Illustrative only" line, never a figure.
+
+8. **An obligation's lineage.**
+   - From the panel, open "Provisionally credit the customer within 5 business days".
+   - **What stands behind it** shows the six-layer stack, from the rule text down to the evidence, with a visible break between policy (10 business days) and procedure (7 days).
+   - Click a layer to read it; switch to Chain for the flat view.
+
+9. **The board pack, then the record chain.**
+   - **Board pack:** open Reports, then the board pack: the 8-section navigator, conclusions, How this report was built, and comments.
+   - **Add to this report:** add a note. It stays pending until Anthony Marsh accepts it; as Anthony, accept it and approve the pack.
+   - **The record:** open The record. The Chain shows people as cubes and agents as tiles, linked to the entry before. Scroll to move through time and click an entry to open it, with "Replay this run".
+
+## If something looks off
+
+- **Reset demo** clears everything the session changed.
+- Without WebGL, or with reduced motion on, every 3D view shows its 2D form:
+  - Coverage shows the Map;
+  - the run shows the schematic;
+  - the lineage shows the Chain;
+  - the record shows the List.
