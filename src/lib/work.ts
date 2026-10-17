@@ -7,6 +7,7 @@ import { getChange, handoffById, handoffs, tasks, userById, vendors } from "@/da
 import type { Handoff, Task } from "@/data/types";
 import { useStore, type HandoffState } from "./store";
 import { demoNowIso } from "./dates";
+import { pastTense } from "./words";
 
 type St = ReturnType<typeof useStore.getState>;
 
@@ -200,7 +201,7 @@ function toastText(h: Handoff, option: string, who: string) {
   const opt = h.options.find((o) => o.id === option);
   if (h.id === "H-116" && option === "approve") return "Approved. CTL-153 is in force.";
   void who;
-  return `${opt?.label ?? "Sent"}. ${userById(h.from_user_id)?.name} has been told.`;
+  return `${pastTense(opt?.label ?? "Send")}. ${userById(h.from_user_id)?.name} has been told.`;
 }
 
 /** What each answer changes elsewhere in the bank's picture. */

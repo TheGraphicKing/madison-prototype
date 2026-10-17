@@ -62,7 +62,7 @@ export function Record() {
   const router = useRouter();
   const support = useSceneSupport();
   const entries = useEntries();
-  const [view, setView] = useState<"chain" | "list">("chain");
+  const [view, setView] = useState<"chain" | "list">(sp.get("view") === "list" ? "list" : "chain");
   // the latest entry is selected by default
   const [selected, setSelected] = useState<string | null>(null);
   const sel0 = selected ?? entries.at(-1)?.id ?? null;
@@ -193,6 +193,7 @@ function ListView({ entries, onOpen, selected, router, sp }: { entries: ChainEnt
   const who = (sp.get("who") as "all" | "person" | "agent" | null) ?? "all";
   const change = sp.get("change");
   const run = sp.get("run");
+  const day = sp.get("day");
   const [type, setType] = useState<string | null>(null);
   const set = (k: string, v: string | null) => {
     const p = new URLSearchParams(sp.toString());
@@ -207,7 +208,9 @@ function ListView({ entries, onOpen, selected, router, sp }: { entries: ChainEnt
     .filter((e) => who === "all" || e.kind === who)
     .filter((e) => !change || e.changeId === change)
     .filter((e) => !run || e.runId === run)
-    .filter((e) => !type || e.type === type);
+    .filter((e) => !type || e.type === type)
+    // ?day=2026-10-16: what happened that day, including this session
+    .filter((e) => !day || e.live || e.at.startsWith(day));
   return (
     <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div>
@@ -232,6 +235,11 @@ function ListView({ entries, onOpen, selected, router, sp }: { entries: ChainEnt
           {run ? (
             <button className="text-[13px] underline underline-offset-4" onClick={() => set("run", null)}>
               Showing one run · show everything
+            </button>
+          ) : null}
+          {day ? (
+            <button className="text-[13px] underline underline-offset-4" onClick={() => set("day", null)}>
+              Showing 16 Oct 2026 · show every day
             </button>
           ) : null}
         </div>

@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { Task } from "@/data/types";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { agentById, areaForChange, auditTrail, datesFor, driftFlags, position, regulations, ruleChanges, userById } from "@/data";
@@ -12,6 +13,7 @@ import type { Plot } from "@/lib/coverage-field";
 import { useStore } from "@/lib/store";
 import { daysFrom, fmtDate, fmtTime, relDays } from "@/lib/dates";
 import { useWaitingOn } from "@/lib/work";
+import { taskHref, useNav } from "@/lib/nav";
 import { useTaskCounts, useCoverageTotals } from "@/lib/counts";
 import { Page, Section } from "@/components/layout/page";
 import { Count } from "@/components/core/labels";
@@ -35,6 +37,15 @@ function greetingWord() {
 export function Today() {
   const persona = useStore((s) => s.persona);
   const openTask = useStore((s) => s.openTask);
+  const router = useRouter();
+  const highlight = useNav((s) => s.highlight);
+  // a task opens the exact place it refers to: its change room with "Your task now", the board pack, or its drawer
+  const openTarget = (t: Task) => {
+    useNav.getState().setHighlight(null);
+    const href = taskHref(t);
+    if (href) router.push(href);
+    else openTask(t.id);
+  };
   const notices = useStore((s) => s.notices).filter((n) => n.to === persona && !n.read);
   const record = useStore((s) => s.record);
   const fact = useStore((s) => s.facts.flood_zone_lending);
@@ -56,6 +67,7 @@ export function Today() {
         <h1 className="t-display mt-2">
           {hello}, {me.name.split(" ")[0]}
         </h1>
+        <SinceYouLooked />
       </header>
 
       {/* three tiles: the one bold thing is Needs you */}
@@ -76,7 +88,7 @@ export function Today() {
         ) : null}
         <ul className="flex flex-col overflow-clip rounded-[14px] border border-line bg-surface">
           {needs.slice(0, 5).map((v) => (
-            <TaskRow key={v.task.id} v={v} primary={v.task.id === firstOpen} onOpen={() => openTask(v.task.id)} />
+            <TaskRow key={v.task.id} v={v} primary={v.task.id === firstOpen} highlight={v.task.id === highlight} onOpen={() => openTarget(v.task)} />
           ))}
           {needs.length === 0 ? <li className="px-5 py-5 text-[14px] text-ink3">Nothing needs you right now.</li> : null}
         </ul>
@@ -151,7 +163,7 @@ function Standing() {
           const delta = last[key] - prev[key];
           const good = key === "covered" ? delta >= 0 : delta <= 0;
           return (
-            <Link key={s} href={`/coverage/?view=map&state=${s}`} className={cn("flex flex-col gap-2 px-5 py-4 hover:bg-surface2", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line")}>
+            <Link key={s} href={`/coverage/?view=field&state=${s}`} className={cn("flex flex-col gap-2 px-5 py-4 hover:bg-surface2", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line")}>
               <Count value={tot[key]} state={s} size="medium" animate={false} />
               <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
                 <span className={cn("text-[12.5px] font-medium", delta === 0 ? "text-ink3" : good ? "text-ok" : "text-risk")}>
@@ -171,7 +183,7 @@ function Standing() {
       </div>
       <div className="relative h-[260px] overflow-hidden rounded-[14px] border border-line">
         {support === "3d" ? (
-          <CoverageField mini lens={lens} selected={null} onSelectPlot={(i) => i !== null && router.push(`/coverage/?view=field${lens !== "state" ? `&lens=${lens}` : ""}`)} onHoverPlot={setHover} />
+          <CoverageField mini lens={lens} selected={null} onSelectPlot={(i) => i !== null && router.push(`/coverage/?view=field&plot=${plots[i].regulationId}${lens !== "state" ? `&lens=${lens}` : ""}`)} onHoverPlot={setHover} />
         ) : (
           <Link href="/coverage/" className="grid h-full place-items-center bg-surface text-[14px] text-ink2 underline underline-offset-4">
             Open the coverage map
@@ -226,9 +238,14 @@ function Overnight({ live }: { live: { at: string; who: string; what: string }[]
       <p className="text-[14.5px] leading-[22px]">
         Read {regulations.length} regulations · {changed} with changes open · {drift} drift found · {held} obligation held back
       </p>
-      <button onClick={() => setOpen((o) => !o)} aria-expanded={open} className="mt-2 text-[13px] font-medium text-ink2 underline underline-offset-4 hover:text-ink">
-        {open ? "Hide what happened" : "What happened"}
-      </button>
+      <span className="mt-2 flex flex-wrap gap-4">
+        <Link href="/record/?view=list&day=2026-10-16" className="text-[13px] font-medium text-ink2 underline underline-offset-4 hover:text-ink">
+          What happened
+        </Link>
+        <button onClick={() => setOpen((o) => !o)} aria-expanded={open} className="text-[13px] text-ink3 hover:text-ink">
+          {open ? "Hide the list" : "Show it here"}
+        </button>
+      </span>
       {open ? (
         <ul className="mt-3 flex flex-col border-t border-line">
           {items.map((a, i) => (
@@ -280,5 +297,26 @@ function ChangesList({ fact }: { fact?: string }) {
         })}
       </ul>
     </>
+  );
+}
+
+/** One line under the greeting: what changed in this demo since the person last looked. */
+function SinceYouLooked() {
+  const finished = useStore((s) => s.finishedRuns);
+  const handoffs = useStore((s) => s.handoffs);
+  const done = useStore((s) => s.tasksDone);
+  const facts = useStore((s) => s.facts);
+  const parts: string[] = [];
+  if (finished["run-rule-1005"]) parts.push("6 obligations accepted", "1 gap found");
+  if (handoffs["H-118"]?.status === "done") parts.push("1 procedure updated");
+  if (handoffs["H-117"]?.status === "done") parts.push("1 design question answered");
+  if (handoffs["H-116"]?.status === "done") parts.push("CTL-153 in force");
+  if (facts.flood_zone_lending) parts.push(`flood lending fact answered (${facts.flood_zone_lending.value})`);
+  if (done["T-280"]) parts.push("board pack approved");
+  return (
+    <p className="mt-2 text-[14px] text-ink2">
+      <span className="text-ink3">Since you last looked · </span>
+      {parts.length ? parts.join(" · ") : "Madison read 22 regulations overnight; nothing else has changed"}
+    </p>
   );
 }

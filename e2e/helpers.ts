@@ -73,3 +73,14 @@ export async function endShot(page: Page, id: string) {
   await page.waitForTimeout(1200);
   await page.screenshot({ path: `docs/iteration-3/flows/${id}-end-${process.env.THEME ?? "graphite-light"}-1440.png` });
 }
+
+/** Click a row on Today's Needs you by its task title. */
+export async function todayTask(page: Page, title: string | RegExp) {
+  const row = page.locator("#needs-you li").filter({ hasText: title }).first();
+  await row.locator('[role="button"]').first().click();
+}
+
+/** The "What's next" card at the end of a story. */
+export function whatsNext(page: Page) {
+  return page.getByRole("region", { name: "What's next" }).first();
+}

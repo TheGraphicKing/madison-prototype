@@ -2,6 +2,8 @@
 
 import { PERSONA_IDS, type PersonaId, userById } from "@/data";
 import { useStore } from "@/lib/store";
+import { usePathname, useRouter } from "next/navigation";
+import { switchPersona } from "@/lib/nav";
 import { MenuButton } from "./menu";
 import { Initials } from "@/components/core/tags";
 import { Mark } from "@/components/core/mark";
@@ -10,7 +12,8 @@ import { MonoLabel } from "@/components/core/labels";
 /** "Viewing as": changes greetings, task lists, and who can act at person checkpoints. */
 export function PersonaSwitch() {
   const persona = useStore((s) => s.persona);
-  const setPersona = useStore((s) => s.setPersona);
+  const pathname = usePathname();
+  const router = useRouter();
   const toast = useStore((s) => s.toast);
   const u = userById(persona)!;
   return (
@@ -23,7 +26,7 @@ export function PersonaSwitch() {
       heading={<MonoLabel>Viewing as</MonoLabel>}
       onPick={(id) => {
         if (id !== persona) {
-          setPersona(id);
+          switchPersona(id, pathname, (h) => router.push(h));
           toast(`Now viewing as ${userById(id)!.name}`);
         }
       }}

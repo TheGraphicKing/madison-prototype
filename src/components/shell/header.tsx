@@ -4,14 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useState } from "react";
 import { cn } from "@/lib/utils";
-import { crumbsFor, NAV_ITEMS } from "./crumbs";
+import { crumbsFor, NAV_ITEMS, type Crumb } from "./crumbs";
+import { useNav } from "@/lib/nav";
 import { PersonaSwitch } from "./persona-switch";
 import { ColorButton } from "./color-button";
 import { useStore } from "@/lib/store";
 
 export function Header() {
   const pathname = usePathname();
-  const { crumbs, title } = crumbsFor(pathname);
+  const base = crumbsFor(pathname);
+  const prev = useNav((s) => s.prev);
+  // the first crumb returns to where the person came from: Today, usually
+  const crumbs = base.crumbs.length > 1 && prev && prev !== pathname ? [cameFrom(prev, base.crumbs[0]), ...base.crumbs.slice(1)] : base.crumbs;
+  const title = base.title;
   return (
     <header className="no-print sticky top-0 z-30 flex h-16 items-center justify-between gap-6 bg-ground/95 gutter-x max-md:h-14">
       <div className="flex min-w-0 flex-col justify-center gap-[3px]">
@@ -94,4 +99,14 @@ function MobileMenu() {
       ) : null}
     </div>
   );
+}
+
+const SECTION: Record<string, string> = { "": "Today", rules: "Rule changes", coverage: "Coverage", obligations: "Obligations", tasks: "My tasks", reports: "Reports", record: "The record" };
+function cameFrom(prev: string, fallback: Crumb): Crumb {
+  const parts = prev.split("/").filter(Boolean);
+  if (parts.length === 0) return { label: "Today", href: "/" };
+  if (parts.length === 1 && SECTION[parts[0]]) return { label: SECTION[parts[0]], href: prev };
+  if (parts[0] === "rules" && parts[1]) return { label: crumbsFor(prev).crumbs.at(-1)?.label ?? "Rule changes", href: prev };
+  if (parts[0] === "obligations" && parts[1]) return { label: "The obligation", href: prev };
+  return fallback;
 }

@@ -7,6 +7,7 @@ import { useStore } from "@/lib/store";
 import { demoNowIso, fmtDate, relDays } from "@/lib/dates";
 import { respondHandoff, useTaskView } from "@/lib/work";
 import { taskSpec } from "@/lib/task-spec";
+import { pastTense } from "@/lib/words";
 import { DecisionPanel } from "@/components/decision/decision-panel";
 import { Field } from "./task-drawer";
 
@@ -49,7 +50,7 @@ export function useTaskAction(taskId: string) {
     }
     store.completeTask(t.id, persona, at);
     if (t.id === "T-289") store.overrideChange("RC-2026-013", { state: "linked", step: "linked" });
-    store.toast(`${o?.label ?? "Done"}.`);
+    store.toast(`${pastTense(o?.label ?? "Done")}.`);
   };
 
   // guide targets: the answer that moves each demo flow on

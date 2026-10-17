@@ -146,13 +146,13 @@ export function Tasks() {
 
 const ROW_DEMO: Record<string, string> = { "T-299": "D2-4", "T-297": "D2-5", "T-295": "D3-3 D3-4", "T-294": "D4-3", "T-280": "D5-4" };
 
-export function TaskRow({ v, primary, onOpen, compact }: { v: TaskView; primary?: boolean; onOpen: () => void; compact?: boolean }) {
+export function TaskRow({ v, primary, onOpen, compact, highlight }: { v: TaskView; primary?: boolean; onOpen: () => void; compact?: boolean; highlight?: boolean }) {
   const t = v.task;
   const c = t.change_id ? getChange(t.change_id) : undefined;
   const from = v.from ? userById(v.from)?.name : "Madison";
   const overdue = v.state === "overdue";
   return (
-    <li className="group border-b border-line last:border-b-0" data-demo={ROW_DEMO[t.id]}>
+    <li className={cn("group border-b border-line last:border-b-0", highlight && "bg-highlight/25 shadow-[inset_3px_0_0_var(--highlight)]")} data-demo={ROW_DEMO[t.id]} data-task={t.id}>
       <div
         role="button"
         tabIndex={0}

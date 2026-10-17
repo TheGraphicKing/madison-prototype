@@ -1,6 +1,7 @@
 "use client";
 
 import { WhoOwns } from "@/components/core/who-owns";
+import { WhatsNext } from "@/components/core/whats-next";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -198,6 +199,7 @@ function DrawerBody({ taskId }: { taskId: string }) {
             form={form}
             done={doneInfo}
           />
+          {done ? <WhatsNext links={t.kind === "approve_report" ? [{ label: "See it in the record", href: "/record/?view=list&day=2026-10-16" }] : t.change_id ? [{ label: "Open the change room", href: `/rules/${t.change_id}/` }] : []} /> : null}
         </>
       ) : (
         <>
@@ -206,8 +208,11 @@ function DrawerBody({ taskId }: { taskId: string }) {
           {form}
           <Block title="Options">
             {done ? (
+              <div>
               <div className="flex items-center gap-3 rounded-[10px] bg-ok-soft px-4 py-3 text-[14px] text-ok">
                 <Mark kind="check" /> Done{local?.by ? ` by ${userById(local.by)?.name}, ${fmtStamp(local.at!)}` : ""}
+              </div>
+                <WhatsNext className="mt-3" text={t.change_id ? undefined : "Done. Nothing else needs you here."} links={t.change_id ? [{ label: "Open the change room", href: `/rules/${t.change_id}/` }] : []} />
               </div>
             ) : (
               <div className="flex flex-col gap-2">

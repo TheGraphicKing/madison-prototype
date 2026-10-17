@@ -23,6 +23,7 @@ import { Button } from "@/components/core/button";
 import { Segmented } from "@/components/core/tabs";
 import { FourDates, daysLeftWord } from "@/components/core/dates4";
 import { WhoOwns } from "@/components/core/who-owns";
+import { WhatsNext, type NextLink } from "@/components/core/whats-next";
 import { Initials } from "@/components/core/tags";
 import { TaskDecision } from "@/components/tasks/task-action";
 import { Checkpoint, decisionText } from "@/components/run/run-view";
@@ -277,7 +278,7 @@ function Room({ id, run }: { id: string; run: RunCtx | null }) {
               />
             </div>
             <aside aria-label="Side panel" className="flex max-h-[600px] min-w-0 flex-col gap-3 overflow-y-auto pr-1 max-lg:max-h-none">
-              <YourTask c={c} run={run} myTask={myTask?.task.id} action={actionReady ? action : undefined} blockedOn={blockedOn} />
+              <YourTask c={c} run={run} myTask={myTask?.task.id} waitingTask={myTask ? myTask.state === "waiting_on_other" : false} action={actionReady ? action : undefined} blockedOn={blockedOn} />
               <PlatformDetail c={c} k={shownKey} model={platforms.find((p) => p.key === shownKey)} run={run} recorded={Boolean(run && (finished || run.run.id !== "run-rule-1005"))} onReplayJourney={() => setJourney(0)} />
             </aside>
           </div>
@@ -294,7 +295,7 @@ function Room({ id, run }: { id: string; run: RunCtx | null }) {
 
 /* ---------- side panel ---------- */
 
-function YourTask({ c, run, myTask, action, blockedOn }: { c: RuleChange; run: RunCtx | null; myTask?: string; action?: { label: string; demo: string }; blockedOn: string | null }) {
+function YourTask({ c, run, myTask, action, blockedOn, waitingTask }: { c: RuleChange; run: RunCtx | null; myTask?: string; action?: { label: string; demo: string }; blockedOn: string | null; waitingTask?: boolean }) {
   const persona = useStore((s) => s.persona);
   const [reviewAll, setReviewAll] = useState(false);
   const pending = run?.active ? run.st?.pending : null;
@@ -326,7 +327,24 @@ function YourTask({ c, run, myTask, action, blockedOn }: { c: RuleChange; run: R
         </Button>
       </section>
     );
-  if (myTask) return <TaskDecision taskId={myTask} compact className="[&_.grid]:grid-cols-1" />;
+  // a story that just ended says so first; any task still open here follows
+  const next = storyNext(c.id, persona);
+  const task = myTask ? (
+    <section aria-label="Your task now">
+      <h2 className="mb-2 text-[13px] font-medium text-ink3">Your task now</h2>
+      <TaskDecision taskId={myTask} compact className="[&_.grid]:grid-cols-1" />
+    </section>
+  ) : null;
+  if (next && task && !waitingTask)
+    return task;
+  if (next)
+    return (
+      <>
+        <WhatsNext text={next.text} links={next.links} />
+        {task}
+      </>
+    );
+  if (task) return task;
   if (c.state === "closed") return <Note title="This change is closed" text={`Closed ${fmtDate(c.closed_at)} by ${userById(c.closed_by ?? "")?.name ?? "the CCO"}.`} />;
   if (c.state === "screened_out") return <Note title="Nothing to do" text="This rule doesn't apply to the bank." />;
   return <Note title="Nothing needs you here" text={blockedOn ? `Waiting on ${blockedOn}.` : `${userById(c.owner_id)?.name} has the next step.`} />;
@@ -465,4 +483,32 @@ function AnswersStrip({ c, blockedOn, next, onOpenCoverage }: { c: RuleChange; b
       </div>
     </section>
   );
+}
+
+/** The end of each story on this change: what changed, and two or three ways on. */
+function storyNext(id: string, persona: string): { text: string; links: NextLink[] } | null {
+  const s = useStore.getState();
+  const h = s.handoffs;
+  if (id === "RC-2026-014" && s.finishedRuns["run-rule-1005"])
+    return {
+      text: "6 obligations accepted and 1 excluded. One gap and one drift found; Margaret Ellison owns the fix.",
+      links: [
+        { label: "See it in Coverage", href: "/coverage/?view=field&plot=reg-01" },
+        { label: "Margaret's new task", href: "/", as: "u-margaret", highlight: "T-290" },
+      ],
+    };
+  if (id === "RC-2026-016") {
+    if (h["H-118"]?.status === "done") return { text: persona === "u-grace" ? "Procedure updated. Elena Petrova has been told." : "Grace Liu updated the procedure. The obligation is covered and the change is unblocked.", links: [{ label: "See it in Coverage", href: "/coverage/?view=field&plot=reg-02" }] };
+    if (h["H-118"]) return { text: "Linked, and the drift is with Grace Liu.", links: [{ label: "Grace's task", href: "/rules/RC-2026-016/", as: "u-grace" }] };
+  }
+  if (id === "RC-2026-011") {
+    if (h["H-116"]?.status === "done") return { text: "CTL-153 is in force. The MFA obligation is covered; 3 vendor reviews went to Nadia Brennan.", links: [{ label: "See it in Coverage", href: "/coverage/?view=field&plot=reg-04" }, { label: "Nadia's vendor reviews", href: "/", as: "u-nadia", highlight: "T-302" }] };
+    if (h["H-117"]?.status === "done") return { text: "Priya Raman answered. Anthony Marsh signs off next.", links: [{ label: "Anthony's sign-off", href: "/rules/RC-2026-011/", as: "u-anthony" }] };
+    if (h["H-117"]) return { text: "Design check D6 needs the owner. Priya Raman has the question.", links: [{ label: "Priya's question", href: "/rules/RC-2026-011/", as: "u-priya" }] };
+  }
+  if (id === "RC-2026-019") {
+    if (s.facts.flood_zone_lending) return { text: `Grace Liu answered: ${s.facts.flood_zone_lending.value}. ${s.facts.flood_zone_lending.value === "Yes" ? "The rule applies; Madison finds the obligations next." : "The rule is set aside."}`, links: [{ label: "All rule changes", href: "/rules/" }] };
+    if (persona !== "u-grace") return { text: "One bank fact decides this rule. Grace Liu has the question.", links: [{ label: "Grace's question", href: "/rules/RC-2026-019/", as: "u-grace" }] };
+  }
+  return null;
 }

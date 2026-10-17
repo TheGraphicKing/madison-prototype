@@ -51,7 +51,7 @@ export function applyRunResults(inst: Instance) {
     const grace = userById("u-grace")?.name ?? "the owner";
     const linkOnly = Object.values(inst.responses).includes("link_only");
     s.decideLink("LNK-021", "confirmed");
-    s.toast(linkOnly ? "Linked POL-MTG-02 3.1 to the revised Loan Estimate duty." : `Linked, and the drift is raised to ${grace}.`, `/rules/${r.change_id}/`);
+    s.toast(linkOnly ? "Linked POL-MTG-02 3.1 to the revised Loan Estimate obligation." : `Linked, and the drift is raised to ${grace}.`, `/rules/${r.change_id}/`);
   }
 
   s.finishRun(r.id, by, at, inst.responses);
