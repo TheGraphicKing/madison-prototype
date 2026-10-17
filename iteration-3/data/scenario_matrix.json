@@ -1,0 +1,83 @@
+[
+ {
+  "change_id": "RC-2026-014",
+  "citation": "12 CFR 1005.11(c)",
+  "stage": "Not started",
+  "steps_done": 0,
+  "of": 6,
+  "owner_area": "Debit card and ACH disputes",
+  "demo": "D1"
+ },
+ {
+  "change_id": "RC-2026-017",
+  "citation": "31 CFR 1020.220",
+  "stage": "Applies",
+  "steps_done": 1,
+  "of": 6,
+  "owner_area": "Customer identification",
+  "demo": "(stage example)"
+ },
+ {
+  "change_id": "RC-2026-013",
+  "citation": "12 CFR 1030.4",
+  "stage": "Obligations proposed",
+  "steps_done": 2,
+  "of": 6,
+  "owner_area": "Deposit account disclosures",
+  "demo": "(stage example)"
+ },
+ {
+  "change_id": "RC-2026-016",
+  "citation": "12 CFR 1026.19(e)",
+  "stage": "Linked",
+  "steps_done": 3,
+  "of": 6,
+  "owner_area": "Mortgage disclosures",
+  "demo": "D3"
+ },
+ {
+  "change_id": "RC-2026-011",
+  "citation": "12 CFR 208 App. D-2 III.C",
+  "stage": "What's left",
+  "steps_done": 4,
+  "of": 6,
+  "owner_area": "Privileged access",
+  "demo": "D2"
+ },
+ {
+  "change_id": "RC-2026-009",
+  "citation": "12 CFR 337.6",
+  "stage": "Closed",
+  "steps_done": 6,
+  "of": 6,
+  "owner_area": "Brokered deposits",
+  "demo": "D5 (finished example)"
+ },
+ {
+  "change_id": "RC-2026-012",
+  "citation": "12 CFR 208 App. D-1 II.A.6",
+  "stage": "Closed with a known gap",
+  "steps_done": 6,
+  "of": 6,
+  "owner_area": "Wire transfers",
+  "demo": "D5"
+ },
+ {
+  "change_id": "RC-2026-018",
+  "citation": "12 CFR 1005.18",
+  "stage": "Doesn't apply",
+  "steps_done": 1,
+  "of": 1,
+  "owner_area": "(none: no prepaid accounts)",
+  "demo": "D4"
+ },
+ {
+  "change_id": "RC-2026-019",
+  "citation": "12 CFR 339.3",
+  "stage": "Needs a bank fact",
+  "steps_done": 0,
+  "of": 6,
+  "owner_area": "Flood insurance",
+  "demo": "D4"
+ }
+]

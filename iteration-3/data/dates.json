@@ -1,0 +1,62 @@
+{
+ "today": "2026-10-16",
+ "rule": "Every rule change shows four dates the same way: Published, Effective, Northgate deadline (effective date minus the bank's 30-day buffer) and Days left. Overdue in risk colour.",
+ "changes": [
+  {
+   "change_id": "RC-2026-014",
+   "published": "2026-09-30",
+   "effective": "2027-01-04",
+   "northgate_deadline": "2026-12-04"
+  },
+  {
+   "change_id": "RC-2026-011",
+   "published": "2026-09-18",
+   "effective": "2026-12-01",
+   "northgate_deadline": "2026-11-01"
+  },
+  {
+   "change_id": "RC-2026-016",
+   "published": "2026-08-14",
+   "effective": "2027-03-01",
+   "northgate_deadline": "2027-01-30"
+  },
+  {
+   "change_id": "RC-2026-013",
+   "published": "2026-09-02",
+   "effective": "2027-02-01",
+   "northgate_deadline": "2027-01-02"
+  },
+  {
+   "change_id": "RC-2026-017",
+   "published": "2026-09-25",
+   "effective": "2027-04-01",
+   "northgate_deadline": "2027-03-02"
+  },
+  {
+   "change_id": "RC-2026-009",
+   "published": "2026-06-10",
+   "effective": "2026-09-14",
+   "northgate_deadline": "2026-08-15",
+   "closed": "2026-09-10"
+  },
+  {
+   "change_id": "RC-2026-012",
+   "published": "2026-05-02",
+   "effective": "2026-07-01",
+   "northgate_deadline": "2026-06-01",
+   "closed": "2026-06-28"
+  },
+  {
+   "change_id": "RC-2026-018",
+   "published": "2026-09-30",
+   "effective": "2027-01-04",
+   "northgate_deadline": null
+  },
+  {
+   "change_id": "RC-2026-019",
+   "published": "2026-09-11",
+   "effective": "2027-01-01",
+   "northgate_deadline": "2026-12-02"
+  }
+ ]
+}

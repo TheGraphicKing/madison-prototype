@@ -1,0 +1,65 @@
+# Iteration 3: progress
+
+If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then continue from the first unchecked item. Evidence is under `docs/iteration-3/`.
+
+## Setup
+- [x] Read the pack (30, 31, 32 and data/*)
+- [x] Before screenshots: `docs/iteration-3/before/`
+- [x] Plan and progress written
+
+## J Data and ownership
+- [ ] J1 ownership, dates, scenarios and flows merged and typed
+- [ ] J2 every change seeded at its stage; flow handoffs dormant
+- [ ] J3 Hannah Cole added and in the persona switch
+- [ ] J4 one selector per count, used everywhere
+- [ ] J5 no raw field names or ids in the UI
+- [ ] J6 "What changed this week" only for the last 7 days
+- [ ] J7 the four dates everywhere
+- [ ] J8 "Who owns this" block
+- [ ] Phase J checks and commit
+
+## K The change map
+- [ ] K1 change room layout: header, map, side panel, strip
+- [ ] K2 sources, platforms, plot; platform states drawn
+- [ ] K3 the run plays in place (all three runs)
+- [ ] K4 pucks, arcs and packets, gate, person ring
+- [ ] K5 side panel: platform detail and pinned Decision
+- [ ] K6 four answers strip
+- [ ] K7 blocks settle into the plot; Open in Coverage flies there
+- [ ] K8 all five states
+- [ ] K9 camera: follow, overview, wheel, zoom buttons
+- [ ] K10 List view toggle; run page out of navigation
+- [ ] Phase K checks and commit
+
+## L Rule changes
+- [ ] L1 stage strip
+- [ ] L2 collapsed table with owner, deadline and days left
+- [ ] L3 before and after on expand
+- [ ] Phase L checks and commit
+
+## M Coverage and fixes
+- [ ] M1 lens switch (Coverage and the Today mini field)
+- [ ] M2 plot labels by regulation, no collisions
+- [ ] M3 specific plot panel with actions
+- [ ] M4 wheel fix on every 3D view
+- [ ] M5 record chain readable
+- [ ] M6 Today: one action per row, counts agree
+- [ ] M7 lineage drift label never clipped
+- [ ] M8 toasts never over a scene
+- [ ] M9 typing always completes
+- [ ] M10 Live label until the run ends
+- [ ] Phase M checks and commit
+
+## N Demo hub and guide
+- [ ] N1 Demos rail entry, panel, shortcut D
+- [ ] N2 scenario reset per flow
+- [ ] N3 coach card, spotlight, talk track, end card
+- [ ] N4 data-demo targets
+- [ ] Phase N checks and commit
+
+## O Prove and ship
+- [ ] O1 e2e D1 to D5 passing
+- [ ] O2 screenshots: every map state and each flow's end, three themes
+- [ ] O3 side-by-side critique
+- [ ] O4 docs/DEMO.md with the five flows
+- [ ] O5 push and redeploy

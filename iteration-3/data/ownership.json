@@ -1,0 +1,170 @@
+{
+ "note": "Who owns what at Northgate. Every obligation, rule change, policy, control and plot shows this.",
+ "business_lines": [
+  {
+   "id": "BL-PAY",
+   "name": "Payments and card services",
+   "head_id": "u-margaret"
+  },
+  {
+   "id": "BL-LEND",
+   "name": "Lending",
+   "head_id": "u-grace"
+  },
+  {
+   "id": "BL-SEC",
+   "name": "Information security",
+   "head_id": "u-priya"
+  },
+  {
+   "id": "BL-RET",
+   "name": "Retail deposits",
+   "head_id": "u-hannah"
+  },
+  {
+   "id": "BL-TRS",
+   "name": "Treasury",
+   "head_id": "u-daniel"
+  },
+  {
+   "id": "BL-FC",
+   "name": "Financial crime",
+   "head_id": "u-tom"
+  },
+  {
+   "id": "BL-TPR",
+   "name": "Third party risk",
+   "head_id": "u-nadia"
+  }
+ ],
+ "process_areas": [
+  {
+   "process_tag": "card_disputes",
+   "name": "Debit card disputes",
+   "business_line": "BL-PAY",
+   "owner_id": "u-margaret",
+   "policy": "POL-DISP-01",
+   "regulations": [
+    "12 CFR 1005"
+   ]
+  },
+  {
+   "process_tag": "ach_disputes",
+   "name": "ACH disputes",
+   "business_line": "BL-PAY",
+   "owner_id": "u-margaret",
+   "policy": "POL-DISP-01",
+   "regulations": [
+    "12 CFR 1005"
+   ]
+  },
+  {
+   "process_tag": "wires",
+   "name": "Wire transfers",
+   "business_line": "BL-PAY",
+   "owner_id": "u-margaret",
+   "policy": "POL-WIRE-01",
+   "regulations": [
+    "12 CFR 208 App. D-1"
+   ]
+  },
+  {
+   "process_tag": "mortgage_origination",
+   "name": "Mortgage disclosures",
+   "business_line": "BL-LEND",
+   "owner_id": "u-grace",
+   "policy": "POL-MTG-02",
+   "regulations": [
+    "12 CFR 1026",
+    "12 CFR 1024"
+   ]
+  },
+  {
+   "process_tag": "flood",
+   "name": "Flood insurance",
+   "business_line": "BL-LEND",
+   "owner_id": "u-grace",
+   "policy": null,
+   "regulations": [
+    "12 CFR 339"
+   ]
+  },
+  {
+   "process_tag": "privileged_access",
+   "name": "Privileged access",
+   "business_line": "BL-SEC",
+   "owner_id": "u-priya",
+   "policy": "POL-ISP-01",
+   "regulations": [
+    "12 CFR 208 App. D-2"
+   ]
+  },
+  {
+   "process_tag": "data_hosting",
+   "name": "Data protection and hosting",
+   "business_line": "BL-SEC",
+   "owner_id": "u-priya",
+   "policy": "POL-ISP-01",
+   "regulations": [
+    "12 CFR 208 App. D-2"
+   ]
+  },
+  {
+   "process_tag": "consumer_deposits",
+   "name": "Deposit account disclosures",
+   "business_line": "BL-RET",
+   "owner_id": "u-hannah",
+   "policy": "POL-DEP-02",
+   "regulations": [
+    "12 CFR 1030"
+   ]
+  },
+  {
+   "process_tag": "brokered_deposits",
+   "name": "Brokered deposits",
+   "business_line": "BL-TRS",
+   "owner_id": "u-daniel",
+   "policy": "POL-BRKD-01",
+   "regulations": [
+    "12 CFR 337"
+   ]
+  },
+  {
+   "process_tag": "bsa_cip",
+   "name": "Customer identification",
+   "business_line": "BL-FC",
+   "owner_id": "u-tom",
+   "policy": "POL-BSA-03",
+   "regulations": [
+    "31 CFR 1020"
+   ]
+  },
+  {
+   "process_tag": "vendor_access",
+   "name": "Vendor oversight",
+   "business_line": "BL-TPR",
+   "owner_id": "u-nadia",
+   "policy": "POL-TPR-01",
+   "regulations": [
+    "12 CFR 208 App. D-2",
+    "12 CFR 1005"
+   ]
+  }
+ ],
+ "roles_on_every_obligation": {
+  "accountable_owner": "The process owner from process_areas (does the work, fixes gaps)",
+  "policy_owner": "Owner of the linked policy section",
+  "control_owner": "Owner of each linked control",
+  "compliance_reviewer": "u-elena (checks Madison's proposals)",
+  "approver": "u-anthony (CCO: accepts impact, signs off, accepts known gaps)"
+ },
+ "add_users": [
+  {
+   "id": "u-hannah",
+   "name": "Hannah Cole",
+   "initials": "HC",
+   "role": "Head of Retail Deposits",
+   "team": "Retail"
+  }
+ ]
+}

@@ -1,0 +1,250 @@
+[
+ {
+  "id": "D1",
+  "title": "A new rule lands",
+  "audience": "Anyone; the headline demo",
+  "persona": "u-elena",
+  "minutes": 4,
+  "start": "/",
+  "scenario_reset": [
+   "RC-2026-014"
+  ],
+  "story": "The CFPB amends Reg E. Madison reads it, works out that it applies, finds the obligations, double-checks them, waits for Elena, matches them to Northgate's policies and controls, finds a gap and a drift, and shows the impact on the coverage field.",
+  "steps": [
+   {
+    "n": 1,
+    "where": "Today",
+    "do": "Point at 'What changed this week', click 'Provisional credit for card and ACH disputes'",
+    "see": "Change room, Not started (0 of 6)"
+   },
+   {
+    "n": 2,
+    "where": "Change room",
+    "do": "Click 'Run Madison on this rule'",
+    "see": "The agentic change map comes alive: the rule text flows from eCFR, sections split, the scope check lights up"
+   },
+   {
+    "n": 3,
+    "where": "Change map",
+    "do": "Click the 'Find the obligations' platform while it works",
+    "see": "Side panel: each obligation with the rule's own words"
+   },
+   {
+    "n": 4,
+    "where": "Change map",
+    "do": "Watch the double-check gate hold one back; hover the held block",
+    "see": "Reason shown in plain words"
+   },
+   {
+    "n": 5,
+    "where": "Change map",
+    "do": "At 'You decide', press 'Accept 6 obligations and exclude 1'",
+    "see": "Decision side sheet; flow continues"
+   },
+   {
+    "n": 6,
+    "where": "Change map",
+    "do": "Watch policies and controls flow in; the drift appears",
+    "see": "4 covered, 1 not yet confirmed, 1 gap; owner Margaret Ellison named"
+   },
+   {
+    "n": 7,
+    "where": "Change map",
+    "do": "Click 'Open in Coverage'",
+    "see": "Coverage flies to the Reg E plot; the new gap block is raised and red, owner shown"
+   }
+  ],
+  "end": "Reg E plot updated; task for Margaret Ellison created; record has signed entries",
+  "talk_track": [
+   "Every step is checkable: click any platform",
+   "Madison proposes; Elena decides",
+   "The gap has an owner and a deadline the moment it is found"
+  ]
+ },
+ {
+  "id": "D2",
+  "title": "Close a gap with a new control",
+  "audience": "CCO, CISO",
+  "persona": "u-elena",
+  "minutes": 4,
+  "start": "/rules/RC-2026-011",
+  "scenario_reset": [
+   "RC-2026-011"
+  ],
+  "story": "MFA rule is 4 of 6 steps done. One obligation has nothing behind it. Madison drafts the smallest fix, runs seven design checks, asks the owner one question, gets the CCO's sign-off, and the coverage block turns green.",
+  "steps": [
+   {
+    "n": 1,
+    "where": "Change room",
+    "do": "Show the map: 4 platforms done, 'What's left' active with one red block",
+    "see": "Owner Priya Raman, deadline 1 Nov (Northgate) / 1 Dec (effective)"
+   },
+   {
+    "n": 2,
+    "where": "Change room",
+    "do": "Click 'Choose a fix'",
+    "see": "Control design platforms appear: suggest, draft, seven checks"
+   },
+   {
+    "n": 3,
+    "where": "Change map",
+    "do": "Watch D1 to D7 fill; D6 stops at 'can't tell'",
+    "see": "A handoff to Priya is created"
+   },
+   {
+    "n": 4,
+    "where": "Header",
+    "do": "Switch to Priya Raman; open her task; answer",
+    "see": "Task drawer with what she was given and what she must provide"
+   },
+   {
+    "n": 5,
+    "where": "Header",
+    "do": "Switch to Anthony Marsh; sign off",
+    "see": "CTL-153 goes into force"
+   },
+   {
+    "n": 6,
+    "where": "Change room",
+    "do": "Switch back to Elena; open Coverage",
+    "see": "The MFA block is green; 3 vendor reviews sent to Nadia Brennan"
+   }
+  ],
+  "end": "Gap closed, control in force, vendor reviews and a retest planned",
+  "talk_track": [
+   "Design checks are visible, not a black box",
+   "People answer only what Madison cannot know"
+  ]
+ },
+ {
+  "id": "D3",
+  "title": "A handoff that unblocks a change",
+  "audience": "Operations heads, analysts",
+  "persona": "u-elena",
+  "minutes": 3,
+  "start": "/rules/RC-2026-016",
+  "scenario_reset": [
+   "RC-2026-016"
+  ],
+  "story": "Loan Estimate rule is 3 of 6 steps done. Madison finds the procedure says 5 days where the rule says 3. Elena raises it to Grace; Grace responds; the change unblocks.",
+  "steps": [
+   {
+    "n": 1,
+    "where": "Change room",
+    "do": "Click 'Check coverage' on the Linked platform",
+    "see": "Policy, procedure and control stacks flow into the compare platform; drift shown with both numbers"
+   },
+   {
+    "n": 2,
+    "where": "Decision sheet",
+    "do": "Choose 'Link and raise the drift'",
+    "see": "'Blocked: waiting on Grace Liu' appears on the map"
+   },
+   {
+    "n": 3,
+    "where": "Header",
+    "do": "Switch to Grace Liu; Today shows the task from Elena",
+    "see": "Drawer: three quotes given; new wording and date needed"
+   },
+   {
+    "n": 4,
+    "where": "Task drawer",
+    "do": "Fill the wording and date; press 'Update the procedure'",
+    "see": "Toast; record entry"
+   },
+   {
+    "n": 5,
+    "where": "Header",
+    "do": "Switch back to Elena",
+    "see": "'Grace Liu responded'; the map unblocks; obligation turns Covered"
+   }
+  ],
+  "end": "Drift fixed, obligation covered, both sides in the record",
+  "talk_track": [
+   "Everyone sees what they were given and what they owe"
+  ]
+ },
+ {
+  "id": "D4",
+  "title": "Madison knows when a rule does not apply",
+  "audience": "CCO",
+  "persona": "u-elena",
+  "minutes": 2,
+  "start": "/rules",
+  "scenario_reset": [
+   "RC-2026-018",
+   "RC-2026-019"
+  ],
+  "story": "Two quick contrasts: prepaid rule screened out with the bank fact that decided it; flood rule waiting on one bank fact that Grace answers.",
+  "steps": [
+   {
+    "n": 1,
+    "where": "Rule changes",
+    "do": "Open 'Prepaid account error resolution'",
+    "see": "Only the Applies platform, verdict 'Doesn't apply', the deciding fact (no prepaid accounts), certainty Clear"
+   },
+   {
+    "n": 2,
+    "where": "Rule changes",
+    "do": "Open 'Flood insurance'",
+    "see": "Applies platform waiting on a bank fact; handoff to Grace Liu"
+   },
+   {
+    "n": 3,
+    "where": "Header",
+    "do": "Switch to Grace; answer 'Yes'",
+    "see": "Back as Elena: it now applies; obligations step unlocks"
+   }
+  ],
+  "end": "Two rules resolved without wasted work",
+  "talk_track": [
+   "Madison does not create work for rules that do not bind you"
+  ]
+ },
+ {
+  "id": "D5",
+  "title": "The CCO's view: where we stand and the proof",
+  "audience": "CCO, board, examiners, Siva",
+  "persona": "u-anthony",
+  "minutes": 4,
+  "start": "/",
+  "scenario_reset": [],
+  "story": "Anthony lands on Today, flies through the coverage field, sees owners and accepted gaps, approves the board pack, and replays a run in the record.",
+  "steps": [
+   {
+    "n": 1,
+    "where": "Today",
+    "do": "Point at Needs your sign-off and the mini field",
+    "see": "Four counts with monthly change"
+   },
+   {
+    "n": 2,
+    "where": "Coverage",
+    "do": "Orbit; switch the lens to 'By owner'",
+    "see": "Plots coloured by owner; legend with names"
+   },
+   {
+    "n": 3,
+    "where": "Coverage",
+    "do": "Click the wire transfers plot",
+    "see": "Known gap accepted by Anthony until 31 Dec, why, owner Margaret Ellison, consequence"
+   },
+   {
+    "n": 4,
+    "where": "Reports",
+    "do": "Open the board pack; read conclusions; open 'How this was built'; approve",
+    "see": "Status Approved, signed"
+   },
+   {
+    "n": 5,
+    "where": "The record",
+    "do": "Click the Reg E run cluster; Replay",
+    "see": "The change map replays in place"
+   }
+  ],
+  "end": "Board pack approved; the record shows the signature",
+  "talk_track": [
+   "Every number traces to an obligation and a named decision"
+  ]
+ }
+]
