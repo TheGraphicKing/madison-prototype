@@ -30,8 +30,10 @@ import { Checkpoint, decisionText } from "@/components/run/run-view";
 import { useSceneSupport } from "@/components/scene/support";
 import { appliesVerdict, AppliesBody, AppliesChip, CloseBody, CoveredBody, LinkedBody, ObligationsBody, WhatsLeftBody } from "./battle-cards";
 import { ChangeList } from "./change-list";
+import { MapDetail } from "./map-detail";
 import { datesFor } from "@/data";
 
+const PLATFORM_KEYS = new Set<string>(["applies", "obligations", "linked", "covered", "whats_left", "close", "suggest", "draft", "checks"]);
 const ChangeMap = dynamic(() => import("./change-map").then((m) => m.ChangeMap), { ssr: false, loading: () => <div className="h-full w-full" /> });
 
 export function ChangeRoom({ id }: { id: string }) {
@@ -179,7 +181,8 @@ function Room({ id, run }: { id: string; run: RunCtx | null }) {
   }, [c, blockedOn, journey, run?.active, run?.st, run?.run, handoffs, finished]);
 
   const current = platforms.find((p) => p.status === "current" || p.status === "blocked");
-  const shownKey = selected ?? current?.key ?? (c.state === "screened_out" ? "applies" : "close");
+  const sceneKey = selected;
+  const shownKey = (selected && PLATFORM_KEYS.has(selected) ? selected : null) ?? current?.key ?? (c.state === "screened_out" ? "applies" : "close");
 
   // where a person answers on the map
   const ring = useMemo(() => {
@@ -198,6 +201,14 @@ function Room({ id, run }: { id: string; run: RunCtx | null }) {
   // the persona's task here, and the action that starts this change's run
   const myTask = useMemo(() => views.filter((v) => v.task.change_id === id && v.task.assignee_id === persona && v.state !== "done").sort((a, b) => a.task.priority - b.task.priority)[0], [views, id, persona]);
   const action = run && !finished && !run.active ? RUN_ACTION[run.run.id] : undefined;
+  // a decision or task that waits for this person, kept one click away while other detail is open
+  const pendingMine = run?.active && run.st?.pending?.waiting_for === persona;
+  const taskWaiting = Boolean(pendingMine || (myTask && myTask.state !== "waiting_on_other"));
+  const taskWaitingLabel = pendingMine ? "You decide" : myTask ? myTask.task.title : "";
+  const pendingKey = pendingMine ? run?.st?.pending?.key : null;
+  useEffect(() => {
+    if (pendingKey) setTimeout(() => setSelected(null), 0);
+  }, [pendingKey]);
   const actionReady = Boolean(action && (run!.run.id !== "run-design-mfa" || !handoffs["H-117"]) && (run!.run.id !== "run-coverage-1026" || c.state === "linked"));
 
   const setViewUrl = (v: "map" | "list") => {
@@ -259,7 +270,7 @@ function Room({ id, run }: { id: string; run: RunCtx | null }) {
       {map ? (
         <>
           <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,65fr)_minmax(0,35fr)]">
-            <div className="relative h-[600px] overflow-hidden rounded-[16px] border border-line max-md:h-[460px]">
+            <div className="relative h-[clamp(480px,calc(100vh-244px),600px)] overflow-hidden rounded-[16px] border border-line max-md:h-[460px]">
               <ChangeMap
                 change={c}
                 regulation={regulation}
@@ -277,9 +288,21 @@ function Room({ id, run }: { id: string; run: RunCtx | null }) {
                 onOpenCoverage={() => router.push(`/coverage/?view=field&plot=${c.regulation_id}`)}
               />
             </div>
-            <aside aria-label="Side panel" className="flex max-h-[600px] min-w-0 flex-col gap-3 overflow-y-auto pr-1 max-lg:max-h-none">
-              <YourTask c={c} run={run} myTask={myTask?.task.id} waitingTask={myTask ? myTask.state === "waiting_on_other" : false} action={actionReady ? action : undefined} blockedOn={blockedOn} />
-              <PlatformDetail c={c} k={shownKey} model={platforms.find((p) => p.key === shownKey)} run={run} recorded={Boolean(run && (finished || run.run.id !== "run-rule-1005"))} onReplayJourney={() => setJourney(0)} />
+            <aside aria-label="Side panel" className="flex max-h-[clamp(480px,calc(100vh-244px),600px)] min-w-0 flex-col gap-3 overflow-y-auto pr-1 max-lg:max-h-none">
+              {/* while something on the map is open, the task stays one click away */}
+              {sceneKey && taskWaiting ? (
+                <button onClick={() => setSelected(null)} className="flex items-center justify-between gap-3 rounded-[12px] bg-highlight px-4 py-2.5 text-left text-[13.5px] font-medium text-highlight-ink">
+                  <span>Back to your task</span>
+                  <span className="text-[12.5px] opacity-80">{taskWaitingLabel}</span>
+                </button>
+              ) : (
+                <YourTask c={c} run={run} myTask={myTask?.task.id} waitingTask={myTask ? myTask.state === "waiting_on_other" : false} action={actionReady ? action : undefined} blockedOn={blockedOn} />
+              )}
+              {sceneKey && !PLATFORM_KEYS.has(sceneKey) ? (
+                <MapDetail k={sceneKey} c={c} run={run?.run} st={run?.st} />
+              ) : (
+                <PlatformDetail c={c} k={shownKey} model={platforms.find((p) => p.key === shownKey)} run={run} recorded={Boolean(run && (finished || run.run.id !== "run-rule-1005"))} onReplayJourney={() => setJourney(0)} />
+              )}
             </aside>
           </div>
           <AnswersStrip c={c} blockedOn={blockedOn} next={actionReady && action ? { label: action.label, onClick: run!.start, demo: action.demo } : undefined} onOpenCoverage={() => router.push(`/coverage/?view=field&plot=${c.regulation_id}`)} />

@@ -18,14 +18,14 @@ export function Label({
   position: [number, number, number];
   children: ReactNode;
   /** which edge of the label sits on the point */
-  anchor?: "bottom" | "top" | "center" | "left";
+  anchor?: "bottom" | "top" | "center" | "left" | "right";
   interactive?: boolean;
   width?: number;
   z?: [number, number];
   style?: CSSProperties;
 }) {
   const portal = useContext(LabelPortal);
-  const t = anchor === "bottom" ? "translate(-50%, -100%)" : anchor === "top" ? "translate(-50%, 0)" : anchor === "left" ? "translate(0, -50%)" : "translate(-50%, -50%)";
+  const t = anchor === "bottom" ? "translate(-50%, -100%)" : anchor === "top" ? "translate(-50%, 0)" : anchor === "left" ? "translate(0, -50%)" : anchor === "right" ? "translate(-100%, -50%)" : "translate(-50%, -50%)";
   return (
     <Html position={position} zIndexRange={z} portal={(portal ?? undefined) as React.RefObject<HTMLElement> | undefined} style={{ pointerEvents: interactive ? "auto" : "none" }}>
       <div style={{ transform: t, width, ...style }}>{children}</div>

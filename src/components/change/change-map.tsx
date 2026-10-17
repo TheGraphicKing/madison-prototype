@@ -6,7 +6,7 @@
 // platform they work on, packets travel the arcs, obligation blocks pass the gate, queue at the
 // person ring and settle into the plot. Nothing disappears afterwards.
 import { Line } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
@@ -24,19 +24,19 @@ const D = 1.4;
 const H = 0.14;
 const LIFT = 0.22;
 const POS: Record<string, [number, number]> = {
-  applies: [-5.7, 2.3],
-  obligations: [-3.6, 0.3],
-  linked: [-1.2, -0.9],
-  covered: [1.2, -0.9],
-  whats_left: [3.6, 0.3],
-  close: [5.7, 2.3],
+  applies: [-6.3, 2.3],
+  obligations: [-3.9, 0.4],
+  linked: [-1.3, -0.8],
+  covered: [1.3, -0.8],
+  whats_left: [3.9, 0.4],
+  close: [6.3, 2.3],
   suggest: [1.3, -3.6],
   draft: [3.3, -3.9],
   checks: [5.3, -3.6],
 };
-const GATE: [number, number] = [-2.4, -0.4];
+const GATE: [number, number] = [-2.6, -0.3];
 const HELD: [number, number] = [-1.8, 1.4];
-const PLOT: [number, number] = [7.8, -2.6];
+const PLOT: [number, number] = [8.2, -2.6];
 const PLOT_COLS = 12;
 const CELL = 0.19;
 
@@ -48,6 +48,14 @@ const SOURCES = [
   { id: "controls", label: "Controls", detail: "212 in inventory" },
   { id: "vendors", label: "Vendors", detail: "41 in scope" },
 ] as const;
+const SOURCE_HINT: Record<string, string> = {
+  ecfr: "Click to see the rule's sections and what changed",
+  fr: "Click to see the notice",
+  profile: "Click to see the bank facts used",
+  policies: "Click to see the policy sections linked",
+  controls: "Click to see the controls, owners and freshness",
+  vendors: "Click to see the vendors in scope and why",
+};
 const SRC_Z = (i: number) => -3.4 + (6.8 * i) / (SOURCES.length - 1);
 const SRC_X = -8.7;
 const srcPos = (id: string): [number, number] => {
@@ -154,6 +162,9 @@ function MapScene({
   onHover,
   onlyApplies,
 }: ChangeMapProps & { tk: Tokens; follow: boolean; reset: number; zoom: ZoomSignal; onHover: (h: { title: string; text: string } | null) => void; onlyApplies: boolean }) {
+  const [hovered, setHovered] = useState<string | null>(null);
+  // a narrow canvas has no room for every platform's note: keep the current one and what the person points at
+  const narrow = useThree((s) => s.size.width) < 900;
   const field = useLiveField();
   const plotIdx = field.plots.findIndex((p) => p.citation === regulation || regulation.startsWith(p.citation));
   const plot: Plot | undefined = field.plots[plotIdx];
@@ -166,8 +177,8 @@ function MapScene({
   const top = (k: string) => (stateOf(k) === "current" ? H + LIFT : H);
 
   /* ---------- static objects: what each done platform holds ---------- */
-  const staticItems = useMemo<BlockItem[]>(() => {
-    const out: BlockItem[] = [];
+  const staticItems = useMemo<(BlockItem & { id: string })[]>(() => {
+    const out: (BlockItem & { id: string })[] = [];
     const ds = dutiesFor(change.id);
     const inScope = ds.filter((d) => d.applicability === "in_scope");
     const excluded = ds.filter((d) => d.applicability === "excluded");
@@ -181,18 +192,18 @@ function MapScene({
     if (!hideRun && stateOf("obligations") === "done") {
       inScope.forEach((d, i) => {
         const [x, y, z] = grid("obligations", inScope.length, i, top("obligations"));
-        out.push({ x, y: y + 0.09, z, color: tk["--ink3"] });
+        out.push({ id: d.id, x, y: y + 0.09, z, color: tk["--ink3"] });
       });
       excluded.forEach((d, i) => {
         const [x, z] = POS.obligations;
-        out.push({ x: x + W / 2 - 0.25, y: top("obligations") + 0.09, z: z + D / 2 - 0.25 - i * 0.4, color: tk["--vizMuted"] });
+        out.push({ id: d.id, x: x + W / 2 - 0.25, y: top("obligations") + 0.09, z: z + D / 2 - 0.25 - i * 0.4, color: tk["--vizMuted"] });
       });
     }
     if (!hideRun && (stateOf("covered") === "done" || stateOf("whats_left") !== "waiting")) {
       inScope.forEach((d, i) => {
         if (stateOf("covered") !== "done") return;
         const [x, y, z] = grid("covered", inScope.length, i, top("covered"));
-        out.push({ x, y: y + 0.09, z, color: colour(d.coverage_state) });
+        out.push({ id: d.id, x, y: y + 0.09, z, color: colour(d.coverage_state) });
       });
     }
     if (!hideRun && ["current", "blocked", "done"].includes(stateOf("whats_left"))) {
@@ -200,7 +211,7 @@ function MapScene({
         .filter((d) => d.coverage_state === "nothing_behind" || d.coverage_state === "not_yet_confirmed")
         .forEach((d, i) => {
           const [x, y, z] = grid("whats_left", 4, i, top("whats_left"));
-          out.push({ x, y: y + 0.09, z, color: colour(d.coverage_state), sy: d.coverage_state === "nothing_behind" ? 1.6 : 1.2 });
+          out.push({ id: d.id, x, y: y + 0.09, z, color: colour(d.coverage_state), sy: d.coverage_state === "nothing_behind" ? 1.6 : 1.2 });
         });
     }
     return out;
@@ -353,9 +364,9 @@ function MapScene({
   }, [runActive, run, st?.stages, platforms, onlyApplies]);
 
   /* ---------- camera ---------- */
-  const minX = SRC_X - 1.8;
-  const maxX = onlyApplies ? POS.applies[0] + 3.5 : PLOT[0] + 1.6;
-  const overview: Frame = onlyApplies ? { center: [(minX + maxX) / 2, 0.3, 0.4], size: [maxX - minX, 1, 8.4] } : { center: [(minX + maxX) / 2, 0.3, 0.2], size: [maxX - minX, 1, 8.4] };
+  const minX = SRC_X - 3.6;
+  const maxX = onlyApplies ? POS.applies[0] + 3.5 : PLOT[0] + 1.7;
+  const overview: Frame = onlyApplies ? { center: [(minX + maxX) / 2, 0.3, 0.4], size: [maxX - minX, 1, 8.4] } : { center: [(minX + maxX) / 2, 0.3, 0], size: [maxX - minX, 1, 8.0] };
   const active = platforms.find((p) => p.status === "current");
   const activeKey = runActive && st ? (run?.stages.find((s) => ["running", "waiting_person"].includes(st.stages[s.key].state))?.key ?? null) : null;
   const activePlace = activeKey && run ? STAGE_PLACE[run.id]?.[activeKey] : active?.key;
@@ -374,23 +385,29 @@ function MapScene({
 
   return (
     <>
-      <CameraRig overview={overview} focus={focus} resetKey={reset} zoom={zoom} drift={!playing} padding={-0.34} azimuth={0} polar={40} />
+      <CameraRig overview={overview} focus={focus} resetKey={reset} zoom={zoom} drift={!playing} padding={0.02} azimuth={0} polar={40} fitMode="box" />
 
       {/* sources */}
       {SOURCES.map((s, i) => {
         if (onlyApplies && !["ecfr", "fr", "profile"].includes(s.id)) return null;
         const [x, z] = [SRC_X, SRC_Z(i)];
         const feeding = FEEDS.some((f) => f.src === s.id && platforms.find((p) => p.key === f.to)?.working);
+        const key = `src:${s.id}`;
+        const on = selected === key;
+        const lift = hovered === key || on ? 0.08 : 0;
+        const pick = (e: { stopPropagation: () => void }) => (e.stopPropagation(), onSelect(on ? null : key));
+        const over = (e: { stopPropagation: () => void }) => (e.stopPropagation(), setHovered(key), (document.body.style.cursor = "pointer"), onHover({ title: s.label, text: SOURCE_HINT[s.id] }));
+        const out = () => (setHovered(null), (document.body.style.cursor = ""), onHover(null));
         return (
           <group key={s.id}>
             {[0, 1, 2, 3].map((k) => (
-              <Platform key={k} position={[x + (k % 2) * 0.03, k * 0.1, z - (k % 2) * 0.02]} size={[1.3, 0.08, 0.9]} radius={0.03} color={k === 3 && feeding ? mix(tk["--surface"], tk["--highlight"], 0.5) : tk["--surface2"]} />
+              <Platform key={k} position={[x + (k % 2) * 0.03, k * 0.1 + lift * (k / 3), z - (k % 2) * 0.02]} size={[1.3, 0.08, 0.9]} radius={0.03} color={on ? mix(tk["--surface"], tk["--ink"], 0.12) : k === 3 && feeding ? mix(tk["--surface"], tk["--highlight"], 0.5) : tk["--surface2"]} onClick={pick} onOver={over} onOut={out} />
             ))}
-            <Label position={[x + 0.78, 0.3, z]} anchor="left" z={[8, 2]}>
-              <div className="whitespace-nowrap">
-                <div className="text-[12.5px] leading-4 font-medium text-ink">{s.label}</div>
-                <div className="font-mono text-[9.5px] tracking-[0.08em] text-ink3 uppercase">{s.detail}</div>
-              </div>
+            <Label position={[x - 0.78, 0.3, z]} anchor="right" interactive z={[8, 2]}>
+              <button onClick={() => onSelect(on ? null : key)} onMouseEnter={() => onHover({ title: s.label, text: SOURCE_HINT[s.id] })} onMouseLeave={() => onHover(null)} className={cn("block rounded-[6px] px-1 text-right whitespace-nowrap", on && "bg-ink text-surface")}>
+                <span className={cn("block text-[12.5px] leading-4 font-medium", on ? "text-surface" : "text-ink")}>{s.label}</span>
+                <span className={cn("block text-[11px] leading-4", on ? "text-surface/70" : "text-ink3")}>{s.detail}</span>
+              </button>
             </Label>
           </group>
         );
@@ -441,21 +458,21 @@ function MapScene({
               color={dim ? mix(colour, tk["--ground"], 0.6) : colour}
               opacity={hollow ? 0.28 : 1}
               onClick={(e) => (e.stopPropagation(), onSelect(selected === p.key ? null : p.key))}
-              onOver={(e) => (e.stopPropagation(), (document.body.style.cursor = "pointer"))}
-              onOut={() => (document.body.style.cursor = "")}
+              onOver={(e) => (e.stopPropagation(), setHovered(p.key), (document.body.style.cursor = "pointer"), onHover({ title: PLATFORM_LABEL[p.key], text: p.status === "waiting" ? "Not started yet · click for what happens here" : "Click to see what Madison found here" }))}
+              onOut={() => (setHovered(null), (document.body.style.cursor = ""), onHover(null))}
             />
             {hollow ? <Outline x={x} z={z} w={w} d={d} color={tk["--ink3"]} /> : null}
             {selected === p.key ? <Platform position={[x, 0, z]} size={[w + 0.18, 0.02, d + 0.18]} radius={0.22} color={tk["--ink"]} castShadow={false} /> : null}
             {ring && ring.at === p.key ? <Ring x={x} y={y + H + 0.3} z={z} r={Math.min(w, d) * 0.42} color={ring.pending ? tk["--highlight"] : tk["--ink3"]} pulse={ring.pending} /> : null}
-            <Label position={[x, y, z + d / 2 + 0.1]} anchor="top" interactive width={onlyApplies ? 200 : 150} z={[14, 4]}>
+            <Label position={[x, y, z + d / 2 + 0.1]} anchor="top" interactive width={onlyApplies ? 200 : 112} z={[14, 4]}>
               <button
                 onClick={() => onSelect(selected === p.key ? null : p.key)}
                 data-demo={p.key === "obligations" ? "D1-3" : p.key === "whats_left" ? "D1-6 D2-1" : undefined}
                 className={cn("block w-full text-center", dim && "opacity-35")}
               >
-                <span className={cn("inline-block rounded-[8px] px-2 py-0.5 text-[13px] leading-[18px] font-medium", lifted ? "bg-highlight text-highlight-ink" : hollow ? "text-ink3" : "text-ink")}>{PLATFORM_LABEL[p.key]}</span>
-                {p.note ? (
-                  <span className={cn("mt-0.5 block text-[12px] leading-[16px]", p.status === "blocked" ? "font-medium text-warn" : "text-ink2")}>{p.note}</span>
+                <span className={cn("inline-block rounded-[8px] px-1.5 py-0.5 text-[12.5px] leading-[17px] font-medium", lifted ? "bg-highlight text-highlight-ink" : hollow ? "text-ink3" : "text-ink")}>{PLATFORM_LABEL[p.key]}</span>
+                {p.note && (!narrow || lifted || p.status === "blocked" || selected === p.key || hovered === p.key) ? (
+                  <span className={cn("mt-0.5 block text-[11.5px] leading-[15px]", p.status === "blocked" ? "font-medium text-warn" : "text-ink2")}>{p.note}</span>
                 ) : null}
                 {onlyApplies && p.key === "applies" ? (
                   <span className="mt-1.5 flex flex-wrap justify-center gap-1">
@@ -472,20 +489,26 @@ function MapScene({
       {/* the gate between Obligations and Linked, with the tray for what it holds back */}
       {!onlyApplies && stateOf("obligations") !== "hidden" ? (
         <>
-          <Gate position={[GATE[0], 0, GATE[1]]} width={1.3} height={0.85} color={tk["--ink3"]} paneColor={tk["--highlight"]} fill={gateFill(st, run)} />
-          <Label position={[GATE[0], 0.95, GATE[1]]} anchor="bottom" z={[10, 3]}>
-            <span className="text-[11.5px] whitespace-nowrap text-ink3" data-demo="D1-4">
+          <group
+            onClick={(e) => (e.stopPropagation(), onSelect(selected === "gate" ? null : "gate"))}
+            onPointerOver={(e) => (e.stopPropagation(), (document.body.style.cursor = "pointer"), onHover({ title: "The double-check", text: "Click to see every check and its result" }))}
+            onPointerOut={() => ((document.body.style.cursor = ""), onHover(null))}
+          >
+            <Gate position={[GATE[0], 0, GATE[1]]} width={1.3} height={0.85} color={selected === "gate" ? tk["--ink"] : tk["--ink3"]} paneColor={tk["--highlight"]} fill={gateFill(st, run)} />
+          </group>
+          <Label position={[GATE[0], 0, GATE[1] - 1.15]} anchor="bottom" interactive z={[10, 3]}>
+            <button onClick={() => onSelect("gate")} className="text-[11.5px] whitespace-nowrap text-ink3 hover:text-ink" data-demo="D1-4">
               Double-check
-            </span>
+            </button>
           </Label>
           {held.length || heldReason ? (
             <>
               <Platform position={[HELD[0], 0, HELD[1]]} size={[1.0, 0.05, 0.7]} radius={0.06} color={tk["--surface3"]} />
               {!runActive && heldReason ? (
-                <Blocks count={1} items={[{ x: HELD[0], y: 0.14, z: HELD[1], color: tk["--vizWarn"] }]} size={SIZE.block} radius={0.06} onHover={() => onHover({ title: "Held back by the double-check", text: heldReason })} onOut={() => onHover(null)} />
+                <Blocks count={1} items={[{ x: HELD[0], y: 0.14, z: HELD[1], color: tk["--vizWarn"] }]} size={SIZE.block} radius={0.06} onHover={() => ((document.body.style.cursor = "pointer"), onHover({ title: "Held back by the double-check", text: heldReason }))} onOut={() => ((document.body.style.cursor = ""), onHover(null))} onClick={() => onSelect("held")} />
               ) : null}
-              <Label position={[HELD[0], 0, HELD[1] + 0.45]} anchor="top" z={[8, 2]}>
-                <span className="text-[11px] whitespace-nowrap text-ink3">Held back · hover for why</span>
+              <Label position={[HELD[0], 0, HELD[1] + 0.45]} anchor="top" interactive z={[8, 2]}>
+                <button onClick={() => onSelect("held")} className="text-[11px] whitespace-nowrap text-ink3 hover:text-ink">Held back · click for why</button>
               </Label>
             </>
           ) : null}
@@ -494,11 +517,23 @@ function MapScene({
 
       {/* this regulation's coverage plot, the same blocks as Coverage */}
       {!onlyApplies && plot ? (
-        <PlotHere tk={tk} tiles={plotTiles} changeDuties={changeDuties} label={`${plot.citation} · ${plot.short}`} counts={plot.counts} onHover={onHover} />
+        <PlotHere tk={tk} tiles={plotTiles} changeDuties={changeDuties} label={`${plot.citation} · ${plot.short}`} counts={plot.counts} onHover={onHover} onSelect={() => onSelect("plot")} />
       ) : null}
 
       {/* static results on the platforms */}
-      <Blocks count={staticItems.length} items={staticItems} size={SIZE.block} radius={0.06} />
+      <Blocks
+        count={staticItems.length}
+        items={staticItems}
+        size={SIZE.block}
+        radius={0.06}
+        onHover={(i) => {
+          const d = getDuty(staticItems[i]?.id);
+          document.body.style.cursor = "pointer";
+          if (d) onHover({ title: d.plain, text: "Click to see this obligation" });
+        }}
+        onOut={() => ((document.body.style.cursor = ""), onHover(null))}
+        onClick={(i) => staticItems[i] && onSelect(`duty:${staticItems[i].id}`)}
+      />
 
       {/* the run's moving things */}
       {runActive && run ? (
@@ -512,10 +547,16 @@ function MapScene({
               const id = slots.block[i];
               const c = held.find((h) => h.item_ref === id);
               const d = getDuty(id);
+              document.body.style.cursor = "pointer";
               if (c) onHover({ title: "Held back by the double-check", text: c.reason });
-              else if (d) onHover({ title: d.plain, text: d.citation });
+              else if (d) onHover({ title: d.plain, text: "Click to see this obligation" });
             }}
-            onOut={() => onHover(null)}
+            onOut={() => ((document.body.style.cursor = ""), onHover(null))}
+            onClick={(i) => {
+              const id = slots.block[i];
+              if (held.some((h) => h.item_ref === id)) onSelect("held");
+              else if (getDuty(id)) onSelect(`duty:${id}`);
+            }}
           />
           <Blocks count={slots.sheet.length} size={SIZE.sheet} radius={0.006} animate={animateFor("sheet")} />
           <Blocks count={slots.tile.length} size={SIZE.tile} radius={0.03} animate={animateFor("tile")} />
@@ -548,7 +589,11 @@ function MapScene({
           working={a.working}
           focused={focusAgent === a.id}
           dim={Boolean(focusAgent && focusAgent !== a.id)}
-          onClick={() => onFocusAgent(focusAgent === a.id ? null : a.id)}
+          onClick={() => {
+            const on = focusAgent === a.id;
+            onFocusAgent(on ? null : a.id);
+            onSelect(on ? null : `agent:${a.id}`);
+          }}
         />
       ))}
     </>
@@ -662,7 +707,7 @@ function Ring({ x, y, z, r, color, pulse }: { x: number; y: number; z: number; r
   );
 }
 
-function PlotHere({ tk, tiles, changeDuties, label, counts, onHover }: { tk: Tokens; tiles: LiveTile[]; changeDuties: Set<string>; label: string; counts: Plot["counts"]; onHover: (h: { title: string; text: string } | null) => void }) {
+function PlotHere({ tk, tiles, changeDuties, label, counts, onHover, onSelect }: { tk: Tokens; tiles: LiveTile[]; changeDuties: Set<string>; label: string; counts: Plot["counts"]; onHover: (h: { title: string; text: string } | null) => void; onSelect: () => void }) {
   const unit = 0.075;
   const items = useMemo<BlockItem[]>(
     () =>
@@ -678,7 +723,7 @@ function PlotHere({ tk, tiles, changeDuties, label, counts, onHover }: { tk: Tok
   const rows = Math.ceil(tiles.length / PLOT_COLS) || 1;
   return (
     <group>
-      <Platform position={[PLOT[0], 0, PLOT[1] + ((rows - 1) / 2 - 4) * CELL]} size={[PLOT_COLS * CELL + 0.3, 0.06, rows * CELL + 0.3]} radius={0.06} color={tk["--surface2"]} />
+      <Platform position={[PLOT[0], 0, PLOT[1] + ((rows - 1) / 2 - 4) * CELL]} size={[PLOT_COLS * CELL + 0.3, 0.06, rows * CELL + 0.3]} radius={0.06} color={tk["--surface2"]} onClick={(e) => (e.stopPropagation(), onSelect())} onOver={(e) => (e.stopPropagation(), (document.body.style.cursor = "pointer"), onHover({ title: label, text: "Click to open this regulation in Coverage" }))} onOut={() => ((document.body.style.cursor = ""), onHover(null))} />
       <Blocks
         count={items.length}
         items={items}
@@ -690,15 +735,16 @@ function PlotHere({ tk, tiles, changeDuties, label, counts, onHover }: { tk: Tok
           const owner = d ? userById(d.owner_id)?.name : undefined;
           onHover(d ? { title: d.plain, text: `${t.state === "covered" ? "Covered" : t.state === "nothing_behind" ? "Nothing behind it" : t.state === "known_gap" ? "Known gap" : "Not yet confirmed"}${owner ? ` · owner ${owner}` : ""}` } : null);
         }}
-        onOut={() => onHover(null)}
+        onOut={() => ((document.body.style.cursor = ""), onHover(null))}
+        onClick={() => onSelect()}
       />
-      <Label position={[PLOT[0], 0.1, PLOT[1] - 4 * CELL - 0.3]} anchor="bottom" z={[10, 3]}>
-        <div className="text-center whitespace-nowrap">
-          <div className="text-[12.5px] font-medium text-ink">{label}</div>
-          <div className="text-[11px] text-ink2">
-            {counts.covered} covered · {counts.not_yet_confirmed} not yet · {counts.nothing_behind} nothing behind · {counts.known_gap} gap
-          </div>
-        </div>
+      <Label position={[PLOT[0], 0.1, PLOT[1] - 4 * CELL - 0.3]} anchor="bottom" interactive z={[10, 3]}>
+        <button onClick={onSelect} className="block text-center whitespace-nowrap">
+          <span className="block text-[12.5px] font-medium text-ink">{label}</span>
+          <span className="block text-[11px] text-ink2">
+            {counts.covered} covered · {counts.not_yet_confirmed + counts.nothing_behind + counts.known_gap} open
+          </span>
+        </button>
       </Label>
     </group>
   );

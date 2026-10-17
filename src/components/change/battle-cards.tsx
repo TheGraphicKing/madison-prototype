@@ -99,7 +99,7 @@ export function Card({
 
 // ---------- Applies ----------
 
-const FACTS_FOR: Record<string, string[]> = {
+export const FACTS_FOR: Record<string, string[]> = {
   "RC-2026-014": ["consumer_eft", "debit_cards", "prepaid_cards"],
   "RC-2026-011": ["consumer_deposits", "wires"],
   "RC-2026-016": ["mortgage_origination"],
@@ -110,7 +110,7 @@ const FACTS_FOR: Record<string, string[]> = {
   "RC-2026-012": ["wires"],
   "RC-2026-017": ["consumer_deposits"],
 };
-const FLAG_LABEL: Record<string, string> = {
+export const FLAG_LABEL: Record<string, string> = {
   consumer_eft: "Electronic transfers",
   debit_cards: "Debit cards",
   prepaid_cards: "Prepaid cards",
@@ -119,6 +119,8 @@ const FLAG_LABEL: Record<string, string> = {
   flood_zone_lending: "Flood zone lending",
   consumer_deposits: "Consumer deposits",
   brokered_deposits: "Brokered deposits",
+  commercial_lending: "Commercial lending",
+  crypto_custody: "Crypto custody",
 };
 
 export function appliesVerdict(c: RuleChange, answered?: string) {

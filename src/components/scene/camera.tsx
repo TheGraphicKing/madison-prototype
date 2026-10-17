@@ -14,12 +14,19 @@ export interface Frame {
 
 const DEG = Math.PI / 180;
 
-/** Look at a frame from a given angle, far enough that its bounding sphere fills the view. */
-function fit(c: CameraControls, f: Frame, azimuth: number, polar: number, aspect: number, margin: number, smooth: boolean) {
+/** Look at a frame from a given angle, far enough that its bounding sphere (or, for "box", its box) fills the view. */
+function fit(c: CameraControls, f: Frame, azimuth: number, polar: number, aspect: number, margin: number, smooth: boolean, mode: "sphere" | "box" = "sphere") {
   const r = 0.5 * Math.hypot(f.size[0], f.size[1], f.size[2]);
   const v = 35 * DEG;
   const h = 2 * Math.atan(Math.tan(v / 2) * aspect);
-  const dist = (r / Math.sin(Math.min(v, h) / 2)) * (1 + margin);
+  // a box seen from above at this angle: its width must fit the horizontal view, its foreshortened depth the vertical
+  const boxDist = () => {
+    const halfW = f.size[0] / 2;
+    const halfV = (f.size[2] * Math.cos(polar) + f.size[1] * Math.sin(polar)) / 2;
+    const near = (f.size[2] * Math.sin(polar)) / 2;
+    return Math.max(halfW / Math.tan(h / 2), halfV / Math.tan(v / 2)) + near;
+  };
+  const dist = (mode === "box" ? boxDist() : r / Math.sin(Math.min(v, h) / 2)) * (1 + margin);
   const [x, y, z] = f.center;
   const px = x + dist * Math.sin(polar) * Math.sin(azimuth);
   const py = y + dist * Math.cos(polar);
@@ -37,6 +44,7 @@ export function CameraRig({
   padding = 0.05,
   allowZoom = true,
   zoom,
+  fitMode = "sphere",
 }: {
   overview: Frame;
   /** the active item; null frames the overview */
@@ -52,6 +60,8 @@ export function CameraRig({
   allowZoom?: boolean;
   /** a signal from the +/- buttons */
   zoom?: ZoomSignal;
+  /** "box" fits a wide, shallow scene to the canvas's shape */
+  fitMode?: "sphere" | "box";
 }) {
   const ref = useRef<CameraControls>(null);
   const touched = useRef(false);
@@ -68,7 +78,7 @@ export function CameraRig({
     // guided: keep the current angle when following an item, the home angle for the overview
     const az = focus && touched.current ? c.azimuthAngle : base.current;
     const pol = focus && touched.current ? c.polarAngle : polar * DEG;
-    fit(c, f, az, pol, size.width / Math.max(1, size.height), padding, smooth);
+    fit(c, f, az, pol, size.width / Math.max(1, size.height), padding, smooth, fitMode);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus?.center.join(), focus?.size.join(), overview.center.join(), overview.size.join(), size.width, size.height]);
 
@@ -77,7 +87,7 @@ export function CameraRig({
     if (!c || resetKey === 0) return;
     touched.current = false;
     base.current = azimuth * DEG;
-    fit(c, overview, base.current, polar * DEG, size.width / Math.max(1, size.height), padding, true);
+    fit(c, overview, base.current, polar * DEG, size.width / Math.max(1, size.height), padding, true, fitMode);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetKey]);
 
