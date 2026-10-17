@@ -32,10 +32,10 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [x] Phase K checks and commit
 
 ## L Rule changes
-- [ ] L1 stage strip
-- [ ] L2 collapsed table with owner, deadline and days left
-- [ ] L3 before and after on expand
-- [ ] Phase L checks and commit
+- [x] L1 stage strip
+- [x] L2 collapsed table with owner, deadline and days left
+- [x] L3 before and after on expand
+- [x] Phase L checks and commit
 
 ## M Coverage and fixes
 - [ ] M1 lens switch (Coverage and the Today mini field)

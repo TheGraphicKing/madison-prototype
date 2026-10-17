@@ -4,19 +4,20 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Regulation, RuleChange } from "@/data/types";
-import { dutiesFor, regulations, ruleChanges, sectionsFor, tasks } from "@/data";
-import { useChanges, stepsDone, STATE_WORD } from "@/lib/use-change";
+import { areaForChange, datesFor, dutiesFor, regulations, ruleChanges, sectionsFor, tasks, userById } from "@/data";
+import { useChanges, stageWord, stepsDone } from "@/lib/use-change";
 import { useStore } from "@/lib/store";
-import { daysFrom, fmtDate, fmtTime, relDays } from "@/lib/dates";
+import { daysFrom, fmtDate, fmtTime } from "@/lib/dates";
 import { Page, Section } from "@/components/layout/page";
 import { DataTable, type Col } from "@/components/core/data-table";
 import { Segmented } from "@/components/core/tabs";
 import { MonoLabel } from "@/components/core/labels";
 import { JourneyTrack } from "@/components/core/journey";
-import { PersonTag } from "@/components/core/tags";
 import { Mark, Square } from "@/components/core/mark";
 import { ButtonLink } from "@/components/core/button";
 import { Diff } from "@/components/change/diff";
+import { FourDates } from "@/components/core/dates4";
+import { StageStrip } from "./stage-strip";
 import { appliesVerdict, AppliesChip } from "@/components/change/battle-cards";
 
 type Filter = "all" | "new" | "newapplies" | "decision" | "progress" | "closed" | "out";
@@ -46,7 +47,8 @@ export function Rules() {
   const [q, setQ] = useState("");
   const [agency, setAgency] = useState<string | null>(null);
   const [when, setWhen] = useState<string | null>(null);
-  const [expanded, setExpanded] = useState<string | null>("RC-2026-014");
+  // collapsed by default: nothing opens until a row is clicked
+  const [expanded, setExpanded] = useState<string | null>(null);
   const [onlyChanges, setOnlyChanges] = useState(true);
 
   const f = FILTERS.find((x) => x.value === filter)!;
@@ -103,31 +105,41 @@ export function Rules() {
         cell: (c) => <AppliesChip verdict={appliesVerdict(c, useStore.getState().facts.flood_zone_lending?.value)} />,
       },
       {
-        id: "effective",
-        header: "Effective",
-        width: "150px",
-        sortValue: (c) => c.effective_date,
+        id: "owner",
+        header: "Owner",
+        width: "200px",
         hideOnMobile: true,
-        cell: (c) => (
-          <span className="text-[13px] leading-[18px]">
-            {fmtDate(c.effective_date)}
-            <span className="block text-[12px] text-ink3">{relDays(c.effective_date)}</span>
-          </span>
-        ),
+        sortValue: (c) => areaForChange(c.id)?.name ?? "",
+        cell: (c) => {
+          if (c.state === "screened_out") return <span className="text-[13px] text-ink3">No owner needed</span>;
+          const a = areaForChange(c.id);
+          return (
+            <span className="text-[13px] leading-[18px]">
+              {a?.name ?? "Compliance"}
+              <span className="block text-[12px] text-ink2">{userById(a?.owner_id ?? c.owner_id)?.name}</span>
+            </span>
+          );
+        },
       },
       {
-        id: "journey",
-        header: "Where it stands",
-        width: "170px",
+        id: "deadline",
+        header: "Bank deadline",
+        width: "140px",
+        sortValue: (c) => datesFor(c.id)?.northgate_deadline ?? "9",
+        cell: (c) => <FourDates changeId={c.id} compact closed={c.closed_at} />,
+      },
+      {
+        id: "stage",
+        header: "Stage",
+        width: "160px",
         sortValue: (c) => stepsDone(c),
         cell: (c) => (
           <span className="flex flex-col gap-1">
             <JourneyTrack done={stepsDone(c)} current={c.state !== "closed" && c.state !== "screened_out"} />
-            <span className="text-[12px] text-ink2">{STATE_WORD[c.state]}</span>
+            <span className="text-[12px] text-ink2">{stageWord(c)}</span>
           </span>
         ),
       },
-      { id: "owner", header: "Owner", width: "170px", hideOnMobile: true, sortValue: (c) => c.owner_id, cell: (c) => <PersonTag id={c.owner_id} /> },
     ],
     [],
   );
@@ -179,6 +191,8 @@ export function Rules() {
           </Chip>
         ))}
       </div>
+
+      <StageStrip changes={changes} />
 
       <Section className="mt-8">
         <DataTable<RuleChange>
@@ -298,7 +312,7 @@ function Expanded({ c, onlyChanges, setOnlyChanges }: { c: RuleChange; onlyChang
 /** "4 obligations · 1 gap", from the change's own counts. */
 function countWords(c: RuleChange) {
   const k = c.counts!;
-  const n = dutiesFor(c.id).filter((d) => d.applicability === "in_scope").length || k.covered + k.not_yet_confirmed + k.nothing_behind + k.known_gap;
+  const n = Math.max(k.duties ?? 0, dutiesFor(c.id).filter((d) => d.applicability === "in_scope").length, k.covered + k.not_yet_confirmed + k.nothing_behind + k.known_gap);
   const g = k.nothing_behind + k.known_gap;
   return `${n} obligation${n === 1 ? "" : "s"} · ${g === 0 ? "no gaps" : `${g} gap${g === 1 ? "" : "s"}`}`;
 }

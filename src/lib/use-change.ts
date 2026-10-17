@@ -68,3 +68,29 @@ export function useCoverage(d: { id: string; coverage_state: import("@/data/type
   const override = useStore((s) => s.obligationStates[d.id]);
   return override ?? d.coverage_state;
 }
+
+/** The stage name the scenario matrix uses, from the change's live state. */
+export function stageWord(c: RuleChange): string {
+  switch (c.state) {
+    case "new":
+      return "Not started";
+    case "applies":
+      return "Applies";
+    case "duties":
+      return "Obligations proposed";
+    case "linked":
+      return "Linked";
+    case "whats_left":
+      return "What's left";
+    case "covered":
+      return "Covered";
+    case "closed":
+      return c.counts?.known_gap ? "Closed with a known gap" : "Closed";
+    case "screened_out":
+      return "Doesn't apply";
+    case "uncertain":
+      return "Needs a bank fact";
+    default:
+      return STATE_WORD[c.state] ?? c.state;
+  }
+}

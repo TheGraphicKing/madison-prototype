@@ -25,8 +25,8 @@ export function FourDates({ changeId, compact, className, closed }: { changeId: 
   if (compact)
     return (
       <span className={cn("text-[13px] leading-[18px]", className)}>
-        {d.northgate_deadline ? fmtDate(d.northgate_deadline) : "No deadline"}
-        <span className={cn("block text-[12px]", tone)}>{left.text}</span>
+        {d.northgate_deadline ? fmtDate(d.northgate_deadline) : "Not needed"}
+        {d.northgate_deadline || closedOn ? <span className={cn("block text-[12px]", tone)}>{left.text}</span> : null}
       </span>
     );
   const items = [
