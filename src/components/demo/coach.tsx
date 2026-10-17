@@ -28,6 +28,8 @@ export function Coach() {
   const full = `${path}${sp.toString() ? `?${sp}` : ""}`;
   const key = flow ? `${flow.id}-${step}` : "";
   const ring = useSpotlight(flow && !finished ? key : null);
+  // the card never covers what it points at: when the target is low on the screen, it sits at the top
+  const up = Boolean(ring && typeof window !== "undefined" && Number(ring.top) + Number(ring.height) > window.innerHeight - 260);
   if (!flow) return null;
   const st = flow.steps[step - 1];
   const done = stepDone(flow.id, step, { s, path: full });
@@ -44,7 +46,11 @@ export function Coach() {
   return (
     <>
       {ring ? <div aria-hidden className="pointer-events-none fixed z-[55] rounded-[14px] shadow-[0_0_0_3px_var(--highlight),0_0_0_7px_color-mix(in_oklab,var(--highlight)_35%,transparent)] transition-all duration-300" style={ring} /> : null}
-      <div role="dialog" aria-label="Demo guide" className="no-print fixed bottom-5 left-1/2 z-[58] w-[360px] max-w-[calc(100vw-24px)] -translate-x-1/2 rounded-[16px] bg-surface p-4 shadow-(--overlay-shadow) ring-1 ring-line">
+      <div
+        role="dialog"
+        aria-label="Demo guide"
+        className={cn("no-print fixed left-1/2 z-[58] w-[360px] max-w-[calc(100vw-24px)] -translate-x-1/2 rounded-[16px] bg-surface p-4 shadow-(--overlay-shadow) ring-1 ring-line", up ? "top-[64px]" : "bottom-5")}
+      >
         {finished ? (
           <>
             <div className="text-[12.5px] font-medium text-ok">Demo complete</div>

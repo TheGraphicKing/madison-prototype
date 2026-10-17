@@ -119,7 +119,8 @@ export function startDemo(id: string, navigate: (href: string) => void) {
   useStore.getState().setPersona(flow.persona as PersonaId);
   useStore.getState().openTask(null);
   useGuide.getState().start(id);
-  navigate(flow.start.endsWith("/") ? flow.start : `${flow.start}/`);
+  const to = flow.start.endsWith("/") ? flow.start : `${flow.start}/`;
+  if (typeof window === "undefined" || window.location.pathname !== to) navigate(to);
 }
 
 export const flowById = (id: string | null) => demoFlows.find((f) => f.id === id);
