@@ -128,6 +128,19 @@ interface State {
   acceptReport: (id: string) => void;
   openTask: (id: string | null) => void;
   reset: () => void;
+  /** clear only what a demo flow changes: its rule changes, their runs, tasks, handoffs and obligations */
+  resetScenario: (scope: ScenarioScope) => void;
+}
+
+export interface ScenarioScope {
+  changes: string[];
+  runs: string[];
+  tasks: string[];
+  handoffs: string[];
+  obligations: string[];
+  links: string[];
+  facts: string[];
+  reports?: boolean;
 }
 
 const initial = {
@@ -194,6 +207,28 @@ export const useStore = create<State>()(
       acceptReport: (id) => set((s) => ({ reportAdditions: s.reportAdditions.map((r) => (r.id === id ? { ...r, status: "accepted" } : r)) })),
       openTask: (drawerTask) => set({ drawerTask }),
       reset: () => set((s) => ({ ...initial, palette: s.palette, mode: s.mode, toasts: [] })),
+      resetScenario: (sc) =>
+        set((s) => {
+          const omit = <T,>(o: Record<string, T>, keys: string[]) => Object.fromEntries(Object.entries(o).filter(([k]) => !keys.includes(k)));
+          const inScope = (x: { changeId?: string; runId?: string }) => (x.changeId && sc.changes.includes(x.changeId)) || (x.runId && sc.runs.includes(x.runId));
+          return {
+            changes: omit(s.changes, sc.changes),
+            finishedRuns: omit(s.finishedRuns, sc.runs),
+            revealed: omit(s.revealed, sc.runs),
+            tasksDone: omit(s.tasksDone, sc.tasks),
+            handoffs: omit(s.handoffs, sc.handoffs),
+            threads: omit(s.threads, [...sc.handoffs, ...sc.tasks]),
+            obligationStates: omit(s.obligationStates, sc.obligations),
+            linkDecisions: omit(s.linkDecisions, sc.links),
+            facts: omit(s.facts, sc.facts),
+            decisions: s.decisions.filter((d) => !inScope(d) && !(sc.reports && /board pack/i.test(d.text))),
+            record: s.record.filter((r) => !inScope(r) && !(sc.reports && /board pack/i.test(r.what))),
+            notices: s.notices.filter((n) => !(n.handoffId && sc.handoffs.includes(n.handoffId))),
+            reportAdditions: sc.reports ? [] : s.reportAdditions,
+            drawerTask: null,
+            toasts: [],
+          };
+        }),
     }),
     {
       name: "madison-demo-v2",

@@ -6,9 +6,10 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { institution } from "@/data";
 import { useTaskCounts } from "@/lib/counts";
+import { useGuide } from "@/lib/demo";
 import { useStore } from "@/lib/store";
 import { NAV_ITEMS } from "./crumbs";
-import { NAV_GLYPHS, GlyphChevron } from "@/components/glyphs";
+import { NAV_GLYPHS, GlyphChevron, GlyphDemos } from "@/components/glyphs";
 import { Dialog } from "@/components/core/overlays";
 import { Button } from "@/components/core/button";
 
@@ -118,6 +119,21 @@ export function Rail({ collapsed, onToggle }: { collapsed: boolean; onToggle: ()
       ) : null}
 
       <div className={cn("mt-auto flex flex-col gap-1 border-t border-line pt-3", wide ? "px-0" : "items-center")}>
+        <button
+          onClick={() => useGuide.getState().setHub(true)}
+          aria-keyshortcuts="D"
+          aria-label="Demos"
+          onMouseEnter={(e) => !wide && setTip({ label: "Demos · D", y: e.currentTarget.getBoundingClientRect().top + 18 })}
+          onMouseLeave={() => setTip(null)}
+          className={cn("flex h-9 items-center gap-2 rounded-[10px] text-[13.5px] whitespace-nowrap text-ink2 hover:bg-surface2 hover:text-ink", wide ? "px-2.5" : "w-10 justify-center")}
+        >
+          <GlyphDemos size={18} />
+          {wide ? (
+            <>
+              Demos <span className="ml-auto t-data text-[11px] text-ink3">D</span>
+            </>
+          ) : null}
+        </button>
         {wide ? (
           <button onClick={() => setConfirm(true)} className="h-8 rounded-[10px] px-2.5 text-left text-[13px] whitespace-nowrap text-ink3 hover:bg-surface2 hover:text-ink">
             Reset demo

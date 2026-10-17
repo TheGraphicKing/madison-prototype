@@ -270,3 +270,11 @@ export function TaskGlyph({ kind, size = 34, className }: { kind: TaskKind; size
     </span>
   );
 }
+
+/** Demos: a ring with a play wedge made of right-angle lines, then a short track. */
+export const GlyphDemos = (p: GlyphProps) => (
+  <G {...p}>
+    <circle cx="10" cy="10" r="7" />
+    <path d="M8.5 7v6l4.5-3z" {...fill} />
+  </G>
+);

@@ -217,7 +217,7 @@ function DrawerBody({ taskId }: { taskId: string }) {
                       <span className="font-medium text-ink">What happens next: </span>
                       {o.next}
                     </span>
-                    <Button variant={o.primary ? "primary" : "quiet"} size={40} disabled={o.disabled} onClick={() => submit(o.id)}>
+                    <Button variant={o.primary ? "primary" : "quiet"} size={40} disabled={o.disabled} onClick={() => submit(o.id)} data-demo={o.demo}>
                       {o.label}
                     </Button>
                   </div>

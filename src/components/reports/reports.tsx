@@ -188,7 +188,7 @@ export function BoardPack() {
               {ap.status === "Approved" ? `By ${userById(ap.by)?.name}, ${fmtDate(ap.at.slice(0, 10))}` : `Waiting on ${userById(BP.approver_id)?.name}`}
             </p>
             {ap.status !== "Approved" && persona === BP.approver_id ? (
-              <Button variant="primary" size={32} className="mt-3 w-full" onClick={approve}>
+              <Button variant="primary" size={32} className="mt-3 w-full" onClick={approve} data-demo="D5-4">
                 Approve the board pack
               </Button>
             ) : null}

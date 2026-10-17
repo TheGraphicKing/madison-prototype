@@ -9,6 +9,9 @@ import { Header } from "./header";
 import { Toasts } from "./toasts";
 import { PlaybackEngine } from "@/lib/player/engine";
 import { TaskDrawer } from "@/components/tasks/task-drawer";
+import { DemoHub } from "@/components/demo/demo-hub";
+import { Coach } from "@/components/demo/coach";
+import { Suspense } from "react";
 
 export function AppShell({ children, ask }: { children: React.ReactNode; ask?: React.ReactNode }) {
   const pathname = usePathname();
@@ -78,6 +81,10 @@ export function AppShell({ children, ask }: { children: React.ReactNode; ask?: R
       {ask}
       <TaskDrawer />
       <Toasts />
+      <DemoHub />
+      <Suspense>
+        <Coach />
+      </Suspense>
     </div>
   );
 }

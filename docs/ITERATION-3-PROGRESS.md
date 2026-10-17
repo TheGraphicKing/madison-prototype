@@ -51,11 +51,11 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [x] Phase M checks and commit
 
 ## N Demo hub and guide
-- [ ] N1 Demos rail entry, panel, shortcut D
-- [ ] N2 scenario reset per flow
-- [ ] N3 coach card, spotlight, talk track, end card
-- [ ] N4 data-demo targets
-- [ ] Phase N checks and commit
+- [x] N1 Demos rail entry, panel, shortcut D
+- [x] N2 scenario reset per flow
+- [x] N3 coach card, spotlight, talk track, end card
+- [x] N4 data-demo targets
+- [x] Phase N checks and commit
 
 ## O Prove and ship
 - [ ] O1 e2e D1 to D5 passing

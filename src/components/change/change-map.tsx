@@ -112,7 +112,7 @@ export function ChangeMap(props: ChangeMapProps) {
       ) : null}
       <div className="absolute right-3 bottom-3 flex flex-wrap items-center justify-end gap-2">
         {!onlyApplies ? (
-          <button onClick={props.onOpenCoverage} data-demo="D1-7" className="inline-flex h-8 items-center rounded-[10px] bg-surface px-3 text-[13px] font-medium shadow-[inset_0_0_0_1px_var(--line)] hover:bg-surface2">
+          <button onClick={props.onOpenCoverage} data-demo="D1-7 D2-6" className="inline-flex h-8 items-center rounded-[10px] bg-surface px-3 text-[13px] font-medium shadow-[inset_0_0_0_1px_var(--line)] hover:bg-surface2">
             Open in Coverage
           </button>
         ) : null}

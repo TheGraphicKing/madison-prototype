@@ -14,6 +14,7 @@ export function PersonaSwitch() {
   const toast = useStore((s) => s.toast);
   const u = userById(persona)!;
   return (
+    <span data-demo="D3-5" className="inline-flex">
     <MenuButton<PersonaId>
       label={`Viewing as ${u.name}`}
       value={persona}
@@ -48,5 +49,6 @@ export function PersonaSwitch() {
         );
       }}
     />
+    </span>
   );
 }

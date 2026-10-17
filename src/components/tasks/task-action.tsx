@@ -52,7 +52,10 @@ export function useTaskAction(taskId: string) {
     store.toast(`${o?.label ?? "Done"}.`);
   };
 
-  const options = spec.options.map((o) => ({ ...o, disabled: (o.primary && !o.href && !ready) || blocked || !isMine }));
+  // guide targets: the answer that moves each demo flow on
+  const DEMO: Record<string, string> = { "H-117": "D2-4", "H-116:approve": "D2-5", "H-118:fix": "D3-4", "H-114": "D4-3", "T-280:approve": "D5-4" };
+  const demoFor = (oid: string) => DEMO[`${v.handoff?.id ?? t.id}:${oid}`] ?? (v.handoff && spec.options[0]?.id === oid ? DEMO[v.handoff.id] : undefined);
+  const options = spec.options.map((o) => ({ ...o, demo: demoFor(o.id), disabled: (o.primary && !o.href && !ready) || blocked || !isMine }));
   const doneInfo = done
     ? {
         label: local?.option ? spec.options.find((o) => o.id === local.option)?.label ?? "Done" : (store.decisions.find((d) => d.text.includes(t.title))?.label ?? "Done"),

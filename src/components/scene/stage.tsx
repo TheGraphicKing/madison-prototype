@@ -4,9 +4,12 @@
 // with soft shadows, a Lightformer environment (no HDR files), a matte ground with contact
 // shadows, and subtle ambient occlusion. Matte, soft, no bloom, no glow.
 import { Canvas } from "@react-three/fiber";
-import { ContactShadows, Environment, Html, Lightformer } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
-import type { ReactNode } from "react";
+import { createContext, useRef, type ReactNode, type RefObject } from "react";
+
+/** The wrapper every scene label mounts into: a stable target, so no label is dropped or orphaned. */
+export const LabelPortal = createContext<RefObject<HTMLDivElement | null> | null>(null);
 import type { Tokens } from "./tokens";
 
 export function Stage({
@@ -32,8 +35,11 @@ export function Stage({
   onMissed?: () => void;
   className?: string;
 }) {
+  const portal = useRef<HTMLDivElement>(null);
   return (
     <div className={className ?? "relative h-full w-full"} style={{ background: tk["--ground"] }}>
+      <div ref={portal} className="pointer-events-none absolute inset-0 z-[1] overflow-hidden" />
+      <LabelPortal.Provider value={portal}>
       <Canvas
         shadows="soft"
         flat
@@ -47,10 +53,6 @@ export function Stage({
         <color attach="background" args={[tk["--ground"]]} />
         <LightRig tk={tk} extent={extent} />
         {ground ? <Ground tk={tk} size={extent * 5} /> : null}
-        {/* drei drops the first Html it mounts in a scene; this empty one takes that slot */}
-        <Html position={[0, -1000, 0]} style={{ display: "none" }}>
-          <span />
-        </Html>
         {children}
         {ao ? (
           <EffectComposer multisampling={4}>
@@ -58,6 +60,7 @@ export function Stage({
           </EffectComposer>
         ) : null}
       </Canvas>
+      </LabelPortal.Provider>
     </div>
   );
 }
