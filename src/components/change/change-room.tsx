@@ -131,6 +131,11 @@ function Room({ id, run }: { id: string; run: RunCtx | null }) {
   const blockers = useBlockers(id);
   const views = useTaskViews();
   const [view, setView] = useState<"map" | "list">(sp.get("view") === "list" ? "list" : "map");
+  // phones open on the List view; the map's labels need more width than a phone has
+  useEffect(() => {
+    if (!sp.get("view") && window.innerWidth < 768) setTimeout(() => setView("list"), 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [selected, setSelected] = useState<string | null>(null);
   const [focusAgent, setFocusAgent] = useState<string | null>(null);
   const [journey, setJourney] = useState<number | null>(null);

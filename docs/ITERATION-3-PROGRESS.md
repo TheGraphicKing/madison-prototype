@@ -59,7 +59,7 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 
 ## O Prove and ship
 - [x] O1 e2e D1 to D5 passing (npm run e2e: 5 passed, twice in a row)
-- [ ] O2 screenshots: every map state and each flow's end, three themes
-- [ ] O3 side-by-side critique
-- [ ] O4 docs/DEMO.md with the five flows
+- [x] O2 screenshots: every map state and each flow's end, three themes
+- [x] O3 side-by-side critique
+- [x] O4 docs/DEMO.md with the five flows
 - [ ] O5 push and redeploy

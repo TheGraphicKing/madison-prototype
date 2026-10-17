@@ -133,12 +133,14 @@ export function AppliesBody({ change }: { change: RuleChange }) {
   const r = change.run_id ? getRun(change.run_id) : undefined;
   const scope = r?.events.find((e) => e.type === "check" && e.gate === "RC-17");
   const verdict = appliesVerdict(change, fact?.value);
-  const sentence =
+  const raw =
     change.state === "screened_out" || change.state === "uncertain"
       ? change.screen_reason
       : scope && scope.type === "check"
         ? scope.reason
         : `${change.summary}`;
+  // the bank facts are shown as chips below, so the sentence drops its "(profile: …)" note
+  const sentence = raw?.replace(/\s*\((bank )?profile:[^)]*\)/i, "");
   return (
     <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="flex flex-col gap-3">

@@ -7,7 +7,7 @@ const [outDir, pathsArg, palette = "graphite", waitArg = "1200", widthsArg = "14
 const paths = pathsArg.split(",");
 const widths = widthsArg.split(",").map(Number);
 mkdirSync(outDir, { recursive: true });
-const browser = await chromium.launch();
+const browser = await chromium.launch({ args: ["--enable-gpu", "--ignore-gpu-blocklist", "--use-angle=metal"] });
 const errors = [];
 for (const w of widths) {
   const ctx = await browser.newContext({ viewport: { width: w, height: w > 800 ? 900 : 844 }, deviceScaleFactor: w > 800 ? 1 : 2 });

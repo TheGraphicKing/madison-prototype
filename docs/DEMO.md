@@ -1,63 +1,72 @@
-# Madison demo path (iteration 2)
+# Madison demos (iteration 3)
 
-Live at https://madison-prototype-2.vercel.app. Start with **Reset demo** in the rail. The default persona is the compliance analyst; switch personas with **Viewing as** in the header.
+Live at https://madison-prototype-2.vercel.app.
 
-## The 9 steps
+Open **Demos** at the bottom of the rail, or press **D**. Each card has **Start this demo**, which:
+- resets only that story's data;
+- switches to the starting person;
+- opens the starting screen;
+- turns on the coach card.
 
-1. **Today.**
-   - "Needs you" is the bold tile.
-   - The top task is "Accept the obligations found in 12 CFR 1005.11(c)".
-   - Below it: Waiting on others, the four counts with this month's change and a small trend beside the mini 3D field, What changed this week with Applies chips, and the overnight line.
+The coach shows each step, with Back, Next (which unlocks when the step has happened), Exit and a folded talk track. The guide is optional: every flow also works by hand.
 
-2. **A rule change.**
-   - Open the top task, or go to Rule changes and open 12 CFR 1005.11(c).
-   - "What we know" shows the summary, the diff, likely touches, and "Last read by Madison: today 05:00". There are no empty cards.
-   - **Run, then decide:** press **Run Madison on this rule** (this opens the Simple view). Switch to **Agent** to watch the live system:
-     - sections travel as sheets;
-     - obligations travel as blocks through the double-check gate, and one is held back in the tray;
-     - the blocks queue on the raised You decide platform, and the Decision panel slides in.
-   - Choose **Accept 6 obligations and exclude 1**. The blocks settle into the Regulation E plot; "What Madison found" answers all five questions.
+Every flow has a Playwright test (`npm run e2e`) that plays it to the end and checks the result.
 
-3. **Battle cards.** Go back to the change room. The cards are Applies, Obligations, Linked, Covered, What's left (with the provisional credit gap and its consequence) and Close. Each card has "See how", which opens the run at that step.
+## D1 · A new rule lands (4 min, as Elena Petrova)
+**First click:** on Today, the row "Provisional credit for card and ACH disputes" in Open rule changes.
 
-4. **Raise a drift.**
-   - Open 12 CFR 1026.19(e) (Loan Estimate timing) and press **Run the coverage check**.
-   - At the checkpoint choose **Link and raise the drift**.
-   - Today now shows "Waiting on Grace Liu".
+1. The change room opens, not started: sources, six outlined platforms, and "Run Madison on this rule".
+2. Run it. The map comes alive: the rule text flows from eCFR, sections split, and the scope check lights up.
+3. Click the Obligations platform while it works. The side panel lists each obligation with the rule's own words.
+4. The double-check gate holds one back. Hover the held block to see why.
+5. At You decide, the blocks queue on the ring. Press **Accept 6 obligations and exclude 1**.
+6. Policies and controls flow into Linked, and the drift appears. The strip reads 4 of 6, with owner Margaret Ellison.
+7. **Open in Coverage.** The Reg E plot holds the new gap block, raised and red, with its owner.
 
-5. **As Grace, respond.**
-   - Switch to Grace Liu. Needs you shows "Align the Loan Estimate procedure", from the analyst.
-   - Open it. You see the rule, policy and procedure quotes, and the fields to fill: new wording, an effective date and an optional file.
-   - Fill them and press **Update the procedure**.
+**Ending:** the Reg E plot is updated, Margaret Ellison has her policy and procedure tasks, and the record has the run's entries and the signed decision.
 
-6. **Back as Elena.**
-   - Switch back to Elena Petrova. "Grace Liu responded" is at the top of Needs you.
-   - The change room is unblocked, and D-1026-L2 is Covered.
-   - The second loop, if there is time:
-     - as Priya Raman, answer the D6 question;
-     - as Anthony Marsh, approve CTL-153;
-     - CTL-153 goes into force.
+## D2 · Close a gap with a new control (4 min, as Elena Petrova)
+**First click:** **Choose a fix** in the change room for 12 CFR 208 App. D-2 III.C (4 of 6 done, What's left active).
 
-7. **Coverage 3D.**
-   - Open Coverage and click the **Regulation E** plot. The camera flies to it.
-   - The panel shows the four counts, what covers it, and what isn't covered, with owners.
-   - It also shows what we're accepting, and what it means: the exam risk as a word and an "Illustrative only" line, never a figure.
+1. Suggest, Draft and Seven checks platforms appear. D1 to D7 fill, and D6 stops at "can't tell".
+2. A handoff to Priya Raman is created.
+3. As Priya: open her task, pick "Yes, but it is vaulted and needs two officers", and send.
+4. As Anthony Marsh: approve CTL-153.
+5. Back as Elena: the MFA obligation is covered, CTL-153 stands behind it in the lineage, and Nadia Brennan has 3 vendor reviews.
 
-8. **An obligation's lineage.**
-   - From the panel, open "Provisionally credit the customer within 5 business days".
-   - **What stands behind it** shows the six-layer stack, from the rule text down to the evidence, with a visible break between policy (10 business days) and procedure (7 days).
-   - Click a layer to read it; switch to Chain for the flat view.
+**Ending:** the gap is closed, the control is in force, and the vendor reviews and a retest are planned.
 
-9. **The board pack, then the record chain.**
-   - **Board pack:** open Reports, then the board pack: the 8-section navigator, conclusions, How this report was built, and comments.
-   - **Add to this report:** add a note. It stays pending until Anthony Marsh accepts it; as Anthony, accept it and approve the pack.
-   - **The record:** open The record. The Chain shows people as cubes and agents as tiles, linked to the entry before. Scroll to move through time and click an entry to open it, with "Replay this run".
+## D3 · A handoff that unblocks a change (3 min, as Elena Petrova)
+**First click:** **Check coverage** in the change room for 12 CFR 1026.19(e) (3 of 6 done).
 
-## If something looks off
+1. Policy, procedure and control flow into Linked, and the drift appears with both numbers.
+2. At the decision, choose **Link and raise the drift**. "Waiting on Grace Liu" appears on the map.
+3. As Grace Liu: Today shows the task from Elena. Open it: three quotes are given; new wording and a date are needed.
+4. Fill both and press **Update the procedure**. A toast confirms it and the record gets an entry.
+5. Back as Elena: "Grace Liu responded" is on Today, the obligation is Covered, and the map is unblocked.
 
-- **Reset demo** clears everything the session changed.
-- Without WebGL, or with reduced motion on, every 3D view shows its 2D form:
-  - Coverage shows the Map;
-  - the run shows the schematic;
-  - the lineage shows the Chain;
-  - the record shows the List.
+**Ending:** the drift is fixed, the obligation is covered, and both sides are in the record.
+
+## D4 · Madison knows when a rule does not apply (2 min, as Elena Petrova)
+**First click:** in Rule changes, the "Prepaid account error resolution" tile in the Doesn't apply column.
+
+1. Only the Applies platform is drawn, with the verdict, the deciding fact (prepaid accounts: no) and certainty Clear.
+2. Open "Flood insurance": its Applies platform is waiting on Grace Liu for one bank fact.
+3. As Grace: answer **Yes**. Back as Elena, the flood rule now applies and its obligations step unlocks.
+
+**Ending:** two rules are resolved without wasted work.
+
+## D5 · The CCO's view (3 min, as Anthony Marsh)
+**First click:** Today's mini coverage field and its lens switch, beside the four counts.
+
+1. Coverage: switch the lens to **Owner**. Plots are coloured by owner, with a legend of names.
+2. Click the 12 CFR 208 plot: the wire-release known gap, accepted by Anthony until 31 Dec 2026, why, owner Margaret Ellison, and the consequence.
+3. Reports, then the board pack: read the conclusions and How this report was built, then **Approve the board pack**.
+4. The record shows the signature. A run cluster offers **Replay this run**, which replays it in place on its change map.
+
+**Ending:** the board pack is approved, and the record shows the signature.
+
+## Notes for presenters
+- **Reset:** each demo resets only its own story. "Reset demo" in the rail resets everything.
+- **Scene controls:** the mouse wheel scrolls the page. Zoom with Ctrl or Cmd and the wheel, a pinch, or the + and − buttons. "Overview" reframes the scene.
+- **Fallbacks:** without WebGL, or with reduced motion, the change room shows the List view and Coverage shows the Map.

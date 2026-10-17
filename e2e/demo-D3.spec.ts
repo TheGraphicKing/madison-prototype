@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, fast, openTask, startFlow, viewAs, exitGuide } from "./helpers";
+import { clickDemo, fast, openTask, startFlow, viewAs, exitGuide, endShot } from "./helpers";
 
 // D3 A handoff that unblocks a change: Check coverage, Link and raise the drift, Grace updates the
 // procedure, and back as Elena the obligation is covered and the change is unblocked.
@@ -33,4 +33,5 @@ test("D3 · A handoff that unblocks a change", async ({ page }) => {
   await expect(page.getByText("Covered").first()).toBeVisible();
   await page.goto("/rules/RC-2026-016/", { waitUntil: "networkidle" });
   await expect(page.getByText("Waiting on Grace Liu")).toHaveCount(0);
+  await endShot(page, "D3");
 });

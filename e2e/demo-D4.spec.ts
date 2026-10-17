@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, openTask, startFlow, viewAs, exitGuide } from "./helpers";
+import { clickDemo, openTask, startFlow, viewAs, exitGuide, endShot } from "./helpers";
 
 // D4 Madison knows when a rule does not apply: prepaid shows Doesn't apply with the deciding fact;
 // flood waits on one bank fact, Grace answers Yes, and it applies.
@@ -30,4 +30,5 @@ test("D4 · Madison knows when a rule does not apply", async ({ page }) => {
   await expect(page.getByRole("region", { name: "Four answers" })).toContainText("Yes");
   await page.goto("/rules/RC-2026-018/", { waitUntil: "networkidle" });
   await expect(page.getByRole("region", { name: "Four answers" })).toContainText("Doesn't apply");
+  await endShot(page, "D4");
 });

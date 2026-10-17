@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { advance, clickDemo, fast, startFlow, viewAs } from "./helpers";
+import { advance, clickDemo, fast, startFlow, viewAs, endShot } from "./helpers";
 
 // D1 A new rule lands: Today, run Madison on 12 CFR 1005.11(c), accept 6 and exclude 1,
 // then Coverage shows the new gap in the Reg E plot and Margaret Ellison has a task.
@@ -47,4 +47,5 @@ test("D1 · A new rule lands", async ({ page }) => {
   await page.goto("/record/?view=list", { waitUntil: "networkidle" });
   await page.getByRole("radio", { name: "List" }).click();
   await expect(page.getByText(/Accepted 6 obligations and excluded 1/).first()).toBeVisible();
+  await endShot(page, "D1");
 });

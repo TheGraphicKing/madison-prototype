@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, fast, openTask, startFlow, viewAs, exitGuide } from "./helpers";
+import { clickDemo, fast, openTask, startFlow, viewAs, exitGuide, endShot } from "./helpers";
 
 // D2 Close a gap with a new control: Choose a fix, the design checks stop at D6, Priya answers,
 // Anthony signs off, CTL-153 goes into force, the MFA obligation is covered, 3 vendor reviews exist.
@@ -37,4 +37,5 @@ test("D2 · Close a gap with a new control", async ({ page }) => {
   await viewAs(page, "Nadia Brennan");
   await page.goto("/tasks/", { waitUntil: "networkidle" });
   await expect(page.getByText(/for phishing-resistant MFA/)).toHaveCount(3);
+  await endShot(page, "D2");
 });

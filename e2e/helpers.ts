@@ -2,6 +2,14 @@ import { expect, type Page } from "@playwright/test";
 
 /** Start a flow the way a presenter does: the Demos panel, then "Start this demo". */
 export async function startFlow(page: Page, id: string) {
+  // THEME=graphite-dark (or harbor-light) runs the flow in that palette and mode
+  const theme = process.env.THEME;
+  if (theme)
+    await page.addInitScript((t) => {
+      const [p, m] = t.split("-");
+      localStorage.setItem("mad_palette", p);
+      localStorage.setItem("mad_mode", m || "light");
+    }, theme);
   await page.goto("/", { waitUntil: "networkidle" });
   await page.keyboard.press("d");
   await page.locator(`[data-flow="${id}"]`).click({ noWaitAfter: true });
@@ -57,4 +65,11 @@ export async function advance(page: Page) {
 export async function exitGuide(page: Page) {
   await page.getByRole("dialog", { name: "Demo guide" }).getByRole("button", { name: "Exit" }).click();
   await expect(page.getByRole("dialog", { name: "Demo guide" })).toHaveCount(0);
+}
+
+/** With SHOTS set, the flow's ending is saved for the docs. */
+export async function endShot(page: Page, id: string) {
+  if (!process.env.SHOTS) return;
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: `docs/iteration-3/flows/${id}-end-${process.env.THEME ?? "graphite-light"}-1440.png` });
 }

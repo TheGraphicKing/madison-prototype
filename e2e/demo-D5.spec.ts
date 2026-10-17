@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, startFlow, exitGuide } from "./helpers";
+import { clickDemo, startFlow, exitGuide, endShot } from "./helpers";
 
 // D5 The CCO's view: Today, Coverage by owner, the wire transfers known gap, approve the board pack,
 // then the record shows the signature and replays a run in place.
@@ -34,4 +34,5 @@ test("D5 · The CCO's view", async ({ page }) => {
   await clickDemo(page, "D5-5");
   await expect(page).toHaveURL(/\/rules\/.*replay=1/);
   await expect(page.getByText("Replay", { exact: true }).first()).toBeVisible({ timeout: 30_000 });
+  await endShot(page, "D5");
 });

@@ -36,7 +36,7 @@ const POS: Record<string, [number, number]> = {
 };
 const GATE: [number, number] = [-2.4, -0.4];
 const HELD: [number, number] = [-1.8, 1.4];
-const PLOT: [number, number] = [8.4, -2.4];
+const PLOT: [number, number] = [7.8, -2.6];
 const PLOT_COLS = 12;
 const CELL = 0.19;
 
@@ -49,7 +49,7 @@ const SOURCES = [
   { id: "vendors", label: "Vendors", detail: "41 in scope" },
 ] as const;
 const SRC_Z = (i: number) => -3.4 + (6.8 * i) / (SOURCES.length - 1);
-const SRC_X = -9.4;
+const SRC_X = -8.7;
 const srcPos = (id: string): [number, number] => {
   const i = SOURCES.findIndex((s) => s.id === id);
   return [SRC_X, SRC_Z(Math.max(0, i))];
@@ -374,7 +374,7 @@ function MapScene({
 
   return (
     <>
-      <CameraRig overview={overview} focus={focus} resetKey={reset} zoom={zoom} drift={!playing} padding={-0.26} azimuth={0} polar={36} />
+      <CameraRig overview={overview} focus={focus} resetKey={reset} zoom={zoom} drift={!playing} padding={-0.34} azimuth={0} polar={40} />
 
       {/* sources */}
       {SOURCES.map((s, i) => {
