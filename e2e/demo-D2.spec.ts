@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, fast, openTask, startFlow, viewAs, exitGuide, endShot } from "./helpers";
+import { clickDemo, fast, openTask, startFlow, viewAs, endShot } from "./helpers";
 
 // D2 Close a gap with a new control: Choose a fix, the design checks stop at D6, Priya answers,
 // Anthony signs off, CTL-153 goes into force, the MFA obligation is covered, 3 vendor reviews exist.
 test("D2 · Close a gap with a new control", async ({ page }) => {
   await startFlow(page, "D2");
-  await exitGuide(page);
   await expect(page).toHaveURL(/\/rules\/RC-2026-011\//);
   const strip = page.getByRole("region", { name: "Four answers" });
   await expect(strip).toContainText("Priya Raman");

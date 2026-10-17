@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, openTask, startFlow, viewAs, exitGuide, endShot } from "./helpers";
+import { clickDemo, openTask, startFlow, viewAs, endShot } from "./helpers";
 
 // D4 Madison knows when a rule does not apply: prepaid shows Doesn't apply with the deciding fact;
 // flood waits on one bank fact, Grace answers Yes, and it applies.
 test("D4 · Madison knows when a rule does not apply", async ({ page }) => {
   await startFlow(page, "D4");
-  await exitGuide(page);
   await expect(page).toHaveURL(/\/rules\/$/);
   // 1 prepaid: only the Applies platform, Doesn't apply, the deciding fact, certainty Clear
   await clickDemo(page, "D4-1");

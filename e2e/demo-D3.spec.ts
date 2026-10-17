@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, fast, openTask, startFlow, viewAs, exitGuide, endShot } from "./helpers";
+import { clickDemo, fast, openTask, startFlow, viewAs, endShot } from "./helpers";
 
 // D3 A handoff that unblocks a change: Check coverage, Link and raise the drift, Grace updates the
 // procedure, and back as Elena the obligation is covered and the change is unblocked.
 test("D3 · A handoff that unblocks a change", async ({ page }) => {
   await startFlow(page, "D3");
-  await exitGuide(page);
   await expect(page).toHaveURL(/\/rules\/RC-2026-016\//);
   // 1 Check coverage plays in place
   await clickDemo(page, "D3-1");

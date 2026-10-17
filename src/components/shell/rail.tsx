@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { institution } from "@/data";
 import { useTaskCounts } from "@/lib/counts";
 import { useGuide } from "@/lib/demo";
+import { usePresenter } from "@/lib/presenter";
 import { useStore } from "@/lib/store";
 import { NAV_ITEMS } from "./crumbs";
 import { NAV_GLYPHS, GlyphChevron, GlyphDemos } from "@/components/glyphs";
@@ -34,6 +35,7 @@ export function Rail({ collapsed, onToggle }: { collapsed: boolean; onToggle: ()
   const tipTimer = useRef<number | null>(null);
   // the badge and the Today "Needs you" tile read the same selector
   const openTasks = useTaskCounts(persona).needsYou;
+  const presenter = usePresenter();
   const wide = !collapsed || peek;
 
   const clear = () => {
@@ -119,6 +121,7 @@ export function Rail({ collapsed, onToggle }: { collapsed: boolean; onToggle: ()
       ) : null}
 
       <div className={cn("mt-auto flex flex-col gap-1 border-t border-line pt-3", wide ? "px-0" : "items-center")}>
+        {presenter ? (
         <button
           onClick={() => useGuide.getState().setHub(true)}
           aria-keyshortcuts="D"
@@ -134,6 +137,7 @@ export function Rail({ collapsed, onToggle }: { collapsed: boolean; onToggle: ()
             </>
           ) : null}
         </button>
+        ) : null}
         {wide ? (
           <button onClick={() => setConfirm(true)} className="h-8 rounded-[10px] px-2.5 text-left text-[13px] whitespace-nowrap text-ink3 hover:bg-surface2 hover:text-ink">
             Reset demo

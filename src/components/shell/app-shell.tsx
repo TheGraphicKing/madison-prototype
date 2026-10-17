@@ -12,10 +12,12 @@ import { TaskDrawer } from "@/components/tasks/task-drawer";
 import { DemoHub } from "@/components/demo/demo-hub";
 import { Coach } from "@/components/demo/coach";
 import { Suspense } from "react";
+import { usePresenter } from "@/lib/presenter";
 
 export function AppShell({ children, ask }: { children: React.ReactNode; ask?: React.ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const presenter = usePresenter();
 
   // Rehydrate the demo state before any child's effects run: a child that sets state first
   // would otherwise overwrite the saved session with defaults.
@@ -81,10 +83,14 @@ export function AppShell({ children, ask }: { children: React.ReactNode; ask?: R
       {ask}
       <TaskDrawer />
       <Toasts />
-      <DemoHub />
-      <Suspense>
-        <Coach />
-      </Suspense>
+      {presenter ? (
+        <>
+          <DemoHub />
+          <Suspense>
+            <Coach />
+          </Suspense>
+        </>
+      ) : null}
     </div>
   );
 }

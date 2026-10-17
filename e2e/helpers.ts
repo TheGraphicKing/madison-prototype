@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 
-/** Start a flow the way a presenter does: the Demos panel, then "Start this demo". */
+/** Every story starts on Today, as its person: a fresh tab is a fresh demo. */
 export async function startFlow(page: Page, id: string) {
   // THEME=graphite-dark (or harbor-light) runs the flow in that palette and mode
   const theme = process.env.THEME;
@@ -11,9 +11,9 @@ export async function startFlow(page: Page, id: string) {
       localStorage.setItem("mad_mode", m || "light");
     }, theme);
   await page.goto("/", { waitUntil: "networkidle" });
-  await page.keyboard.press("d");
-  await page.locator(`[data-flow="${id}"]`).click({ noWaitAfter: true });
-  await expect(page.getByRole("dialog", { name: "Demo guide" })).toBeVisible();
+  const persona = id === "D5" ? "Anthony Marsh" : "Elena Petrova";
+  if (persona !== "Elena Petrova") await viewAs(page, persona);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(persona.split(" ")[0]);
 }
 
 /** Switch persona through the "Viewing as" menu in the header. */

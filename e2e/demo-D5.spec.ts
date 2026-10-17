@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { clickDemo, startFlow, exitGuide, endShot } from "./helpers";
+import { clickDemo, startFlow, endShot } from "./helpers";
 
 // D5 The CCO's view: Today, Coverage by owner, the wire transfers known gap, approve the board pack,
 // then the record shows the signature and replays a run in place.
 test("D5 · The CCO's view", async ({ page }) => {
   await startFlow(page, "D5");
-  await exitGuide(page);
   await expect(page.getByRole("button", { name: /Viewing as Anthony Marsh/ })).toBeVisible();
   // 1 Today: counts with monthly change and the mini field
   await expect(page.getByText(/this month/).first()).toBeVisible();
