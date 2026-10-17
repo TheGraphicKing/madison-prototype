@@ -19,17 +19,17 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [x] Phase J checks and commit
 
 ## K The change map
-- [ ] K1 change room layout: header, map, side panel, strip
-- [ ] K2 sources, platforms, plot; platform states drawn
-- [ ] K3 the run plays in place (all three runs)
-- [ ] K4 pucks, arcs and packets, gate, person ring
-- [ ] K5 side panel: platform detail and pinned Decision
-- [ ] K6 four answers strip
-- [ ] K7 blocks settle into the plot; Open in Coverage flies there
-- [ ] K8 all five states
-- [ ] K9 camera: follow, overview, wheel, zoom buttons
-- [ ] K10 List view toggle; run page out of navigation
-- [ ] Phase K checks and commit
+- [x] K1 change room layout: header, map, side panel, strip
+- [x] K2 sources, platforms, plot; platform states drawn
+- [x] K3 the run plays in place (all three runs)
+- [x] K4 pucks, arcs and packets, gate, person ring
+- [x] K5 side panel: platform detail and pinned Decision
+- [x] K6 four answers strip
+- [x] K7 blocks settle into the plot; Open in Coverage flies there
+- [x] K8 all five states
+- [x] K9 camera: follow, overview, wheel, zoom buttons
+- [x] K10 List view toggle; run page out of navigation
+- [x] Phase K checks and commit
 
 ## L Rule changes
 - [ ] L1 stage strip
@@ -41,7 +41,7 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [ ] M1 lens switch (Coverage and the Today mini field)
 - [ ] M2 plot labels by regulation, no collisions
 - [ ] M3 specific plot panel with actions
-- [ ] M4 wheel fix on every 3D view
+- [x] M4 wheel fix on every 3D view
 - [ ] M5 record chain readable
 - [ ] M6 Today: one action per row, counts agree
 - [x] M7 lineage drift label never clipped (done in J)

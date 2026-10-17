@@ -78,7 +78,7 @@ export function Card({
         </button>
         {blocked ? <span className="shrink-0 rounded-full bg-warn-soft px-2.5 py-0.5 text-[12px] font-medium text-warn">Blocked</span> : null}
         {showHow && step && runId ? (
-          <Link href={`/runs/${runId}/?mode=replay&step=${step}&from=/rules/${change.id}/`} className="shrink-0 text-[13px] text-ink2 underline underline-offset-4 hover:text-ink">
+          <Link href={`/rules/${change.id}/?replay=1`} className="shrink-0 text-[13px] text-ink2 underline underline-offset-4 hover:text-ink">
             See how
           </Link>
         ) : null}

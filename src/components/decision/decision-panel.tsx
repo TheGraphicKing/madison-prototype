@@ -10,7 +10,7 @@ import { Initials } from "@/components/core/tags";
 import { GlyphDecide } from "@/components/glyphs";
 
 export type Evidence = { key: string; label: string; summary?: React.ReactNode; body?: React.ReactNode };
-export type DecisionOption = { id: string; label: string; next: string; primary?: boolean; disabled?: boolean };
+export type DecisionOption = { id: string; label: string; next: string; primary?: boolean; disabled?: boolean; /** a demo guide target */ demo?: string };
 
 /**
  * The one Decision panel. Used in the change room ("Your task now"), at every run checkpoint and
@@ -141,7 +141,7 @@ export function DecisionPanel({
                     <span className="font-medium text-ink">What happens next: </span>
                     {o.next}
                   </span>
-                  <Button variant={o.primary ? "primary" : "quiet"} size={40} disabled={!isMe || o.disabled} onClick={() => onChoose(o.id)}>
+                  <Button variant={o.primary ? "primary" : "quiet"} size={40} disabled={!isMe || o.disabled} onClick={() => onChoose(o.id)} data-demo={o.demo}>
                     {o.label}
                   </Button>
                 </li>

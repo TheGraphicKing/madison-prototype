@@ -58,7 +58,7 @@ export function KeyWords({ text }: { text: string }) {
 function hrefFor(label: string): string | undefined {
   if (/DR-031/.test(label)) return "/rules/RC-2026-014/#card-whats_left";
   if (/DR-029/.test(label)) return "/rules/RC-2026-016/#card-whats_left";
-  if (/CTL-153/.test(label)) return "/runs/run-design-mfa/?mode=replay&from=/tasks/";
+  if (/CTL-153/.test(label)) return "/rules/RC-2026-011/?replay=1";
   if (/POL-|PRC-/.test(label)) {
     const id = label.match(/(POL-[A-Z]+-\d+) ([\d.]+)|(PRC-[A-Z]+-\d+) step (\d+)/);
     if (id?.[1]) return `/coverage/?view=documents&doc=${id[1]}-${id[2]}`;

@@ -1,419 +1,463 @@
 "use client";
 
+// The change room: one screen. The 3D change map (about 65%), the side panel (about 35%) with
+// "Your task now" or the selected platform's detail, and the four-answers strip below.
+// Runs play in place on the map; "List" shows the same journey as the step list.
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import type { RuleChange } from "@/data/types";
-import { controlById, dutiesFor, getChange, impactFor, linksFor, policyById, procedureById, regulationById, sectionsFor, userById, vendorsFor, getDuty } from "@/data";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { areaForChange, dutiesFor, getDuty, handoffById, regulationById, run as getRun, userById } from "@/data";
+import type { PersonEvent, Run, RuleChange } from "@/data/types";
 import { useStore } from "@/lib/store";
-import { STEPS, STEP_LABEL, stepsDone, useChange } from "@/lib/use-change";
-import { useBlockers, useTaskViews, useWaitingOn } from "@/lib/work";
-import { daysFrom, fmtDate, fmtTime, relDays } from "@/lib/dates";
+import { useChange } from "@/lib/use-change";
+import { useBlockers, useTaskViews, raiseHandoff, handoffStatus } from "@/lib/work";
+import { useRunPlayer } from "@/lib/player/use-run-player";
+import { personEvents, type RunState } from "@/lib/player/derive";
+import { onPersonResponse } from "@/lib/player/results";
+import { demoNowIso, fmtDate } from "@/lib/dates";
+import { PLATFORMS, PLATFORM_LABEL, RUN_ACTION, RUN_FOR, STAGE_PLACE, runPlatforms, staticPlatforms, type PlaceKey, type PlatformModel } from "@/lib/change-map";
 import { Page } from "@/components/layout/page";
-import { PersonTag, Initials } from "@/components/core/tags";
 import { Button } from "@/components/core/button";
-import { SlideOver } from "@/components/core/overlays";
-import { StatusChip } from "@/components/core/status";
-import { Square } from "@/components/core/mark";
-import { RunStrip } from "@/components/run/strip";
-import { usePlayback } from "@/lib/player/engine";
+import { Segmented } from "@/components/core/tabs";
+import { FourDates, daysLeftWord } from "@/components/core/dates4";
+import { WhoOwns } from "@/components/core/who-owns";
+import { Initials } from "@/components/core/tags";
 import { TaskDecision } from "@/components/tasks/task-action";
-import { Diff } from "./diff";
-import { appliesVerdict, AppliesBody, AppliesChip, Card, CloseBody, CoveredBody, LinkedBody, ObligationsBody, WhatsLeftBody, type CardKey } from "./battle-cards";
+import { Checkpoint, decisionText } from "@/components/run/run-view";
+import { useSceneSupport } from "@/components/scene/support";
+import { appliesVerdict, AppliesBody, AppliesChip, CloseBody, CoveredBody, LinkedBody, ObligationsBody, WhatsLeftBody } from "./battle-cards";
+import { ChangeList } from "./change-list";
+import { datesFor } from "@/data";
 
-const RUN_FOR: Record<string, string> = { "RC-2026-014": "run-rule-1005", "RC-2026-011": "run-design-mfa", "RC-2026-016": "run-coverage-1026" };
-const TAG_WORDS: Record<string, string> = {
-  card_disputes: "card disputes",
-  ach_disputes: "ACH disputes",
-  privileged_access: "privileged access",
-  vendor_access: "vendor access",
-  data_hosting: "data hosting",
-  mortgage_origination: "mortgage lending",
-  consumer_deposits: "consumer deposits",
-  brokered_deposits: "brokered deposits",
-  wires: "wire transfers",
-  prepaid: "prepaid accounts",
-};
+const ChangeMap = dynamic(() => import("./change-map").then((m) => m.ChangeMap), { ssr: false, loading: () => <div className="h-full w-full" /> });
 
 export function ChangeRoom({ id }: { id: string }) {
+  const runId = RUN_FOR[id];
+  return runId ? <WithRun id={id} runId={runId} /> : <Room id={id} run={null} />;
+}
+
+type RunCtx = {
+  run: Run;
+  st: RunState | null;
+  playing: boolean;
+  active: boolean;
+  live: boolean;
+  start: () => void;
+  replay: (fromStage?: string) => void;
+  respond: (eventKey: string, actionId: string, label: string) => void;
+  speed: number;
+  setSpeed: (s: 1 | 2 | 4) => void;
+};
+
+/** A change with a run: the run plays in place on the map. */
+function WithRun({ id, runId }: { id: string; runId: string }) {
+  const sp = useSearchParams();
+  const persona = useStore((s) => s.persona);
+  const finished = useStore((s) => s.finishedRuns[runId]);
+  const handoffState = useStore((s) => s.handoffs);
+  const decide = useStore((s) => s.decide);
+  const { run, state, instance, controls } = useRunPlayer(runId, { key: runId });
+  const change = useChange(id);
+  const playing = Boolean(instance?.playing);
+  const started = Boolean(instance && (instance.playing || instance.t > 0));
+  const active = Boolean(run && started && !(instance?.completed && !playing && (finished || instance.mode === "replay")) && !(finished && instance?.mode === "live" && instance.completed));
+  const live = Boolean(instance?.mode === "live" && started && !instance.completed && !finished);
+
+  // answers given in a task (Priya's D6 answer, Anthony's sign-off) move the run on
+  const responses = () => {
+    const out: Record<string, string> = {};
+    if (!run || run.id !== "run-design-mfa") return out;
+    const s = useStore.getState();
+    for (const { e, i } of personEvents(run)) {
+      const h = e.waiting_for === "u-priya" ? handoffById("H-117") : e.waiting_for === "u-anthony" ? handoffById("H-116") : undefined;
+      if (h && handoffStatus(h, s) === "done") out[String(i)] = e.actions[0].id;
+    }
+    return out;
+  };
+  useEffect(() => {
+    if (!run || run.id !== "run-design-mfa" || !instance || !state) return;
+    // the owner's question exists only once the design checks reach it
+    if (state.pending?.waiting_for === "u-priya") raiseHandoff("H-117");
+    const want = responses();
+    for (const [k, a] of Object.entries(want)) if (!instance.responses[k]) controls.respond(k, a, persona, demoNowIso());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handoffState, instance?.responses, state?.pending?.key, run]);
+
+  // ?replay=1 (from the record or "How Madison did this") replays in place
+  const replayed = useRef(false);
+  useEffect(() => {
+    if (!run || replayed.current || sp.get("replay") !== "1") return;
+    replayed.current = true;
+    controls.restart({ mode: "replay", playing: true, speed: 2, responses: { ...(finished?.responses ?? {}), ...responses() } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [run, sp]);
+
+  if (!run || !change) return null;
+  const ctx: RunCtx = {
+    run,
+    st: state,
+    playing,
+    active,
+    live,
+    start: () => controls.restart({ mode: "live", playing: true, speed: instance?.speed ?? 1, responses: responses() }),
+    replay: (fromStage) => {
+      const t = fromStage ? (run.events.find((e) => e.type === "stage" && e.stage === fromStage && e.state === "running")?.t ?? 0) : 0;
+      controls.restart({ mode: "replay", playing: true, speed: 2, t, responses: { ...(finished?.responses ?? {}), ...responses() } });
+    },
+    speed: instance?.speed ?? 1,
+    setSpeed: (v) => controls.setSpeed(v),
+    respond: (eventKey, actionId, label) => {
+      const at = demoNowIso();
+      controls.respond(eventKey, actionId, persona, at);
+      decide({ label, text: decisionText(run.id, actionId, label, change.citation), by: persona, at, runId: run.id, changeId: run.change_id });
+      onPersonResponse(run.id, actionId);
+    },
+  };
+  return <Room id={id} run={ctx} />;
+}
+
+function Room({ id, run }: { id: string; run: RunCtx | null }) {
   const c = useChange(id)!;
   const sp = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   const persona = useStore((s) => s.persona);
-  const finished = useStore((s) => s.finishedRuns);
   const fact = useStore((s) => s.facts.flood_zone_lending);
-  const runId = RUN_FOR[id];
-  const recorded = runId === "run-design-mfa" || (runId ? Boolean(finished[runId]) : false);
-  const beforeRun = id === "RC-2026-014" && !finished["run-rule-1005"];
-  const doesntApply = c.state === "screened_out";
-  const views = useTaskViews();
+  const finished = useStore((s) => (run ? s.finishedRuns[run.run.id] : undefined));
+  const handoffs = useStore((s) => s.handoffs);
+  const support = useSceneSupport();
   const blockers = useBlockers(id);
-  const waiting = useWaitingOn(persona).filter((w) => w.changeId === id);
-  const [touches, setTouches] = useState(false);
+  const views = useTaskViews();
+  const [view, setView] = useState<"map" | "list">(sp.get("view") === "list" ? "list" : "map");
+  const [selected, setSelected] = useState<string | null>(null);
+  const [focusAgent, setFocusAgent] = useState<string | null>(null);
+  const [journey, setJourney] = useState<number | null>(null);
+  const blockedOn = blockers[0] ? (userById(blockers[0].h.to_user_id)?.name ?? null) : null;
+  const regulation = regulationById(c.regulation_id)?.citation ?? c.citation;
 
-  // the persona's task on this change, most urgent first
-  const myTask = useMemo(() => {
-    const mine = views.filter((v) => v.task.change_id === id && v.task.assignee_id === persona && v.state !== "done");
-    return mine.sort((a, b) => a.task.priority - b.task.priority || a.task.due.localeCompare(b.task.due))[0];
-  }, [views, id, persona]);
-  const lastDone = useMemo(() => views.filter((v) => v.task.change_id === id && v.task.assignee_id === persona && v.state === "done").pop(), [views, id, persona]);
-
-  const cards: CardKey[] = useMemo(() => {
-    if (beforeRun) return [];
-    if (doesntApply || c.state === "uncertain" || c.state === "new") return ["applies"];
-    const out: CardKey[] = ["applies"];
-    if (dutiesFor(id).length) out.push("obligations");
-    if (dutiesFor(id).some((d) => linksFor(d.id).length)) out.push("linked");
-    if (c.counts) out.push("covered");
-    if (["linked", "whats_left", "covered", "closed"].includes(c.state)) out.push("whats_left");
-    out.push("close");
-    return out;
-  }, [beforeRun, doesntApply, c.state, c.counts, id]);
-  const done = stepsDone(c);
-  const current: CardKey = useMemo(() => {
-    const byStep: Record<string, CardKey> = { applies: "applies", duties: "obligations", linked: "linked", covered: "covered", whats_left: "whats_left", close: "close" };
-    const k = byStep[STEPS[Math.min(done, 5)]] ?? "applies";
-    return cards.includes(k) ? k : cards[cards.length - 1];
-  }, [done, cards]);
-  const [open, setOpen] = useState<Set<CardKey>>(() => new Set([current]));
+  // a closed change without a recorded run replays its journey, platform by platform
   useEffect(() => {
-    const hash = typeof window !== "undefined" ? window.location.hash.replace("#card-", "") : "";
-    const k = (cards.includes(hash as CardKey) ? hash : current) as CardKey;
-    const t = setTimeout(() => {
-      setOpen(new Set([k]));
-      if (sp.get("touches")) setTouches(true);
-      if (hash) document.getElementById(`card-${hash}`)?.scrollIntoView({ block: "start", behavior: "smooth" });
-    }, 0);
+    if (journey === null) return;
+    if (journey > PLATFORMS.length) {
+      const t = setTimeout(() => setJourney(null), 600);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => setJourney((j) => (j === null ? null : j + 1)), 700);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [c.state, cards.length, sp]);
-  const toggle = (k: CardKey) => setOpen((s) => (s.has(k) ? new Set([...s].filter((x) => x !== k)) : new Set([...s, k])));
+  }, [journey]);
+  const startedJourney = useRef(false);
+  useEffect(() => {
+    if (!run && sp.get("replay") === "1" && !startedJourney.current) {
+      startedJourney.current = true;
+      setTimeout(() => setJourney(0), 0);
+    }
+  }, [run, sp]);
 
-  const inst = usePlayback((s) => (runId ? s.instances[runId] : undefined));
-  const live = Boolean(inst && inst.mode === "live" && !inst.completed && (inst.playing || inst.t > 0));
-  const effDays = daysFrom(c.effective_date);
-  const verdict = appliesVerdict(c, fact?.value);
+  const platforms: PlatformModel[] = useMemo(() => {
+    let base = staticPlatforms(c, blockedOn);
+    if (journey !== null) base = base.map((p, i) => ({ ...p, status: p.status === "hidden" ? "hidden" : i < journey ? "done" : i === journey ? "current" : "waiting", working: i === journey }));
+    if (run?.active && run.st) return runPlatforms(base, run.run.id, run.st, run.run.stages);
+    // the control design, once started, keeps its three platforms beside What's left
+    if (run?.run.id === "run-design-mfa" && (handoffs["H-117"] || finished)) {
+      const waiting = handoffs["H-117"]?.status !== "done" ? userById("u-priya")?.name : handoffs["H-116"]?.status !== "done" ? userById("u-anthony")?.name : null;
+      const design: PlatformModel[] = [
+        { key: "suggest", status: "done", note: "New control and one sentence", working: false },
+        { key: "draft", status: "done", note: "CTL-153 drafted", working: false },
+        { key: "checks", status: finished || !waiting ? "done" : "blocked", note: finished || !waiting ? "7 of 7 pass" : `Waiting on ${waiting}`, working: false },
+      ];
+      return [...base, ...design];
+    }
+    return base;
+  }, [c, blockedOn, journey, run?.active, run?.st, run?.run, handoffs, finished]);
+
+  const current = platforms.find((p) => p.status === "current" || p.status === "blocked");
+  const shownKey = selected ?? current?.key ?? (c.state === "screened_out" ? "applies" : "close");
+
+  // where a person answers on the map
+  const ring = useMemo(() => {
+    if (run?.active && run.st) {
+      const pending = run.st.pending;
+      if (pending) return { at: STAGE_PLACE[run.run.id]?.[pending.stage] ?? "obligations", pending: true, who: pending.waiting_for } as { at: PlaceKey; pending: boolean; who?: string };
+      const answered = run.st.responded.at(-1);
+      if (answered) return { at: STAGE_PLACE[run.run.id]?.[answered.event.stage] ?? "obligations", pending: false };
+    }
+    if (run?.run.id === "run-rule-1005" && finished) return { at: "obligations" as PlaceKey, pending: false };
+    return null;
+  }, [run?.active, run?.st, run?.run, finished]);
+
+  const heldReason = run?.run.id === "run-rule-1005" && finished ? (run.run.events.find((e) => e.type === "check" && e.result === "block" && e.kind !== "drift") as { reason?: string } | undefined)?.reason : undefined;
+
+  // the persona's task here, and the action that starts this change's run
+  const myTask = useMemo(() => views.filter((v) => v.task.change_id === id && v.task.assignee_id === persona && v.state !== "done").sort((a, b) => a.task.priority - b.task.priority)[0], [views, id, persona]);
+  const action = run && !finished && !run.active ? RUN_ACTION[run.run.id] : undefined;
+  const actionReady = Boolean(action && (run!.run.id !== "run-design-mfa" || !handoffs["H-117"]) && (run!.run.id !== "run-coverage-1026" || c.state === "linked"));
+
+  const setViewUrl = (v: "map" | "list") => {
+    setView(v);
+    const q = new URLSearchParams(sp.toString());
+    if (v === "list") q.set("view", "list");
+    else q.delete("view");
+    q.delete("replay");
+    router.replace(`${pathname}${q.toString() ? `?${q}` : ""}`, { scroll: false });
+  };
+  const map = view === "map" && support !== "2d";
+  const area = areaForChange(id);
+  const owner = userById(area?.owner_id ?? c.owner_id);
+
   return (
-    <Page>
-      {live && runId ? (
-        <div className="mb-8">
-          <RunStrip runId={runId} instanceKey={runId} href={`/runs/${runId}/?mode=live&view=simple&from=/rules/${id}/`} />
-        </div>
-      ) : null}
-
-      <header className="grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
+    <Page wide className="pt-6">
+      <header className="flex flex-wrap items-start justify-between gap-x-8 gap-y-4">
+        <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <span className="t-data text-ink">{c.citation}</span>
-            <AppliesChip verdict={verdict} />
-            <span className="text-[13px] text-ink3">
-              {c.agency} · {c.kind}
-            </span>
+            <AppliesChip verdict={appliesVerdict(c, fact?.value)} />
+            {run?.live ? (
+              <span className="inline-flex h-6 items-center gap-1.5 rounded-full bg-surface2 px-2.5 text-[12px] font-medium">
+                <span className="breathe block size-[6px] rounded-full bg-ok" /> Live
+              </span>
+            ) : run?.active ? (
+              <span className="inline-flex h-6 items-center rounded-full bg-surface2 px-2.5 text-[12px] font-medium">Replay</span>
+            ) : null}
+            {run?.active ? (
+              <Segmented<string> label="Speed" size={28} value={String(run.speed)} onChange={(v) => run.setSpeed(Number(v) as 1 | 2 | 4)} options={["1", "2", "4"].map((v) => ({ value: v, label: `${v}×` }))} />
+            ) : null}
           </div>
-          <h1 className="t-page mt-3 max-w-[32ch]">{c.title}</h1>
-          <p className="mt-2 text-[14.5px] text-ink2">
-            Effective {fmtDate(c.effective_date)} · {effDays >= 0 ? relDays(c.effective_date) : `in force for ${-effDays} days`}
-            {c.synthetic_note ? <span className="text-ink3"> · {c.synthetic_note}</span> : null}
-          </p>
+          <h1 className="mt-2 text-[26px] leading-[32px] font-medium tracking-[-0.015em]">{c.title}</h1>
+          <FourDates changeId={id} className="mt-3" />
         </div>
-        <WhoHasThis change={c} myTaskOwner={myTask?.task.assignee_id} blockers={blockers.map((b) => b.h.to_user_id)} />
+        <div className="flex flex-col items-end gap-3">
+          <Segmented<"map" | "list">
+            label="Change room view"
+            size={28}
+            value={map ? "map" : "list"}
+            onChange={setViewUrl}
+            options={[
+              { value: "map", label: "Map", disabled: support === "2d" },
+              { value: "list", label: "List" },
+            ]}
+          />
+          {c.state !== "screened_out" && owner ? (
+            <span className="flex items-center gap-2.5 rounded-full bg-surface px-1.5 py-1 pr-3.5 shadow-[inset_0_0_0_1px_var(--line)]">
+              <Initials initials={owner.initials} size={26} />
+              <span className="text-[13px] leading-4">
+                <span className="block font-medium">{owner.name}</span>
+                <span className="block text-ink2">{area?.name ?? "Owner"}</span>
+              </span>
+            </span>
+          ) : null}
+        </div>
       </header>
 
-      <div className="mt-10 flex flex-col gap-10">
-        <section aria-label="Your task now">
-          <h2 className="t-section mb-3">Your task now</h2>
-          {myTask ? (
-            <TaskDecision taskId={myTask.task.id} hideEvidence={beforeRun} />
-          ) : (
-            <NothingForYou change={c} waiting={[...waiting.map((w) => w.who), ...blockers.map((b) => userById(b.h.to_user_id)?.name ?? "")]} lastDone={lastDone?.task.title} />
-          )}
-        </section>
-
-        {beforeRun ? <WhatWeKnow change={c} /> : null}
-
-        {cards.length ? (
-          <section aria-label="Results" className="flex flex-col gap-3">
-            <div className="flex items-end justify-between gap-4">
-              <h2 className="t-section">{doesntApply ? "The verdict" : "What Madison found"}</h2>
-              {runId && recorded ? (
-                <Link href={`/runs/${runId}/?mode=replay&from=/rules/${id}/`} className="text-[14px] font-medium underline underline-offset-4">
-                  How Madison got here
-                </Link>
-              ) : null}
-            </div>
-            {cards.map((key) => (
-              <Card
-                key={key}
-                k={key}
+      {map ? (
+        <>
+          <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,65fr)_minmax(0,35fr)]">
+            <div className="relative h-[600px] overflow-hidden rounded-[16px] border border-line max-md:h-[460px]">
+              <ChangeMap
                 change={c}
-                open={open.has(key)}
-                onToggle={() => toggle(key)}
-                runId={runId}
-                showHow={Boolean(runId && recorded)}
-                blocked={key === "whats_left" && blockers.length > 0}
-                summary={cardSummary(key, c, verdict, blockers.length)}
-              >
-                {key === "applies" ? (
-                  <>
-                    <AppliesBody change={c} />
-                    {doesntApply ? <Reopen change={c} /> : null}
-                  </>
-                ) : null}
-                {key === "obligations" ? <ObligationsBody change={c} /> : null}
-                {key === "linked" ? <LinkedBody change={c} /> : null}
-                {key === "covered" ? <CoveredBody change={c} /> : null}
-                {key === "whats_left" ? (
-                  <>
-                    <WhatsLeftBody change={c} />
-                    {impactFor(id) || vendorsFor(id).length ? (
-                      <Button variant="quiet" size={32} className="mt-5" onClick={() => setTouches(true)}>
-                        Open what it touches
-                      </Button>
-                    ) : null}
-                  </>
-                ) : null}
-                {key === "close" ? <CloseBody change={c} /> : null}
-              </Card>
-            ))}
-          </section>
-        ) : null}
-
-      </div>
-
-      <TouchesOver change={c} open={touches} onOpenChange={(o) => {
-        setTouches(o);
-        if (!o && sp.get("touches")) router.replace(`/rules/${id}/`, { scroll: false });
-      }} />
+                regulation={regulation}
+                platforms={platforms}
+                run={run?.run}
+                st={run?.st}
+                runActive={Boolean(run?.active)}
+                playing={Boolean(run?.playing)}
+                ring={ring}
+                selected={selected}
+                onSelect={setSelected}
+                focusAgent={focusAgent}
+                onFocusAgent={setFocusAgent}
+                heldReason={heldReason}
+                onOpenCoverage={() => router.push(`/coverage/?view=field&plot=${c.regulation_id}`)}
+              />
+            </div>
+            <aside aria-label="Side panel" className="flex max-h-[600px] min-w-0 flex-col gap-3 overflow-y-auto pr-1 max-lg:max-h-none">
+              <YourTask c={c} run={run} myTask={myTask?.task.id} action={actionReady ? action : undefined} blockedOn={blockedOn} />
+              <PlatformDetail c={c} k={shownKey} model={platforms.find((p) => p.key === shownKey)} run={run} recorded={Boolean(run && (finished || run.run.id !== "run-rule-1005"))} onReplayJourney={() => setJourney(0)} />
+            </aside>
+          </div>
+          <AnswersStrip c={c} blockedOn={blockedOn} next={actionReady && action ? { label: action.label, onClick: run!.start, demo: action.demo } : undefined} onOpenCoverage={() => router.push(`/coverage/?view=field&plot=${c.regulation_id}`)} />
+        </>
+      ) : (
+        <div className="mt-8 flex flex-col gap-10">
+          <ChangeList id={id} />
+        </div>
+      )}
     </Page>
   );
 }
 
-function cardSummary(key: CardKey, c: RuleChange, verdict: string, blocked: number): string {
-  const ds = dutiesFor(c.id);
-  const k = c.counts;
-  switch (key) {
-    case "applies":
-      return c.state === "screened_out" ? "" : verdict === "Applies" ? `Applies to the bank · confirmed by ${userById(c.owner_id)?.name}` : verdict;
-    case "obligations":
-      return `${ds.filter((d) => d.applicability === "in_scope").length} obligations${ds.some((d) => d.applicability === "excluded") ? " · 1 excluded" : ""}`;
-    case "linked":
-      return `${ds.reduce((n, d) => n + linksFor(d.id).length, 0)} links to policies and controls`;
-    case "covered":
-      return k ? `${k.covered} covered · ${k.not_yet_confirmed} not yet confirmed · ${k.nothing_behind} nothing behind it · ${k.known_gap} known gaps` : "";
-    case "whats_left":
-      return blocked ? `Blocked on ${blocked} request${blocked > 1 ? "s" : ""}` : k && k.nothing_behind + k.not_yet_confirmed === 0 ? "Nothing left" : "Gaps, drift and tasks";
-    case "close":
-      return c.state === "closed" ? `Closed ${fmtDate(c.closed_at)}` : "What must be true to close";
+/* ---------- side panel ---------- */
+
+function YourTask({ c, run, myTask, action, blockedOn }: { c: RuleChange; run: RunCtx | null; myTask?: string; action?: { label: string; demo: string }; blockedOn: string | null }) {
+  const persona = useStore((s) => s.persona);
+  const [reviewAll, setReviewAll] = useState(false);
+  const pending = run?.active ? run.st?.pending : null;
+  if (pending && run?.st) {
+    if (pending.waiting_for === persona)
+      return (
+        <section aria-label="Your task now">
+          <h2 className="mb-2 text-[13px] font-medium text-ink3">Your task now</h2>
+          <Checkpoint run={run.run} st={run.st} pending={pending as PersonEvent & { key: string }} reviewAll={reviewAll} onReview={() => setReviewAll(true)} onRespond={run.respond} compact />
+        </section>
+      );
+    return <Note title={`Waiting on ${userById(pending.waiting_for)?.name}`} text={pending.prompt} />;
   }
+  if (run?.active) return <Note title="Madison is working" text={run.st?.narration?.text ?? "Reading the rule."} live />;
+  if (action && myTask)
+    return (
+      <section aria-label="Your task now" className="rounded-[14px] border border-line bg-surface p-4">
+        <h2 className="text-[13px] font-medium text-ink3">Your task now</h2>
+        <p className="mt-1 text-[16px] leading-[23px] font-medium">{action.label === "Choose a fix" ? "Choose a fix for the gap Madison found" : action.label === "Check coverage" ? "Check coverage for the revised Loan Estimate obligation" : "Let Madison read the amended rule"}</p>
+        <p className="mt-1 text-[13.5px] leading-[21px] text-ink2">
+          {action.label === "Choose a fix"
+            ? "One obligation has nothing behind it. Madison drafts the smallest fix and checks its design; you see every check."
+            : action.label === "Check coverage"
+              ? "Madison compares the rule, the policy, the procedure and the control, then asks you to confirm."
+              : "Madison reads the official text, checks it applies, finds the obligations and stops for your decision."}
+        </p>
+        <Button variant="primary" size={40} className="mt-3 w-full" onClick={run!.start} data-demo={action.demo}>
+          {action.label}
+        </Button>
+      </section>
+    );
+  if (myTask) return <TaskDecision taskId={myTask} compact className="[&_.grid]:grid-cols-1" />;
+  if (c.state === "closed") return <Note title="This change is closed" text={`Closed ${fmtDate(c.closed_at)} by ${userById(c.closed_by ?? "")?.name ?? "the CCO"}.`} />;
+  if (c.state === "screened_out") return <Note title="Nothing to do" text="This rule doesn't apply to the bank." />;
+  return <Note title="Nothing needs you here" text={blockedOn ? `Waiting on ${blockedOn}.` : `${userById(c.owner_id)?.name} has the next step.`} />;
 }
 
-function NothingForYou({ change, waiting, lastDone }: { change: RuleChange; waiting: string[]; lastDone?: string }) {
-  const who = Array.from(new Set(waiting.filter(Boolean)));
+function Note({ title, text, live }: { title: string; text: string; live?: boolean }) {
   return (
-    <div className="rounded-[14px] border border-line bg-surface px-6 py-5">
-      <p className="text-[16px] font-medium">{change.state === "closed" ? "This change is closed." : change.state === "screened_out" ? "Nothing to do. This rule doesn't apply." : "Nothing needs you here."}</p>
-      <p className="mt-1 text-[14px] text-ink2">
-        {who.length ? `Waiting on ${who.join(" and ")}.` : change.state === "closed" ? `Closed by ${userById(change.closed_by ?? "")?.name} on ${fmtDate(change.closed_at)}.` : `${userById(change.owner_id)?.name} owns the next step.`}
-        {lastDone ? ` You did: ${lastDone}.` : ""}
+    <div className="rounded-[14px] border border-line bg-surface p-4">
+      <p className="flex items-center gap-2 text-[15px] font-medium">
+        {live ? <span className="breathe block size-[7px] rounded-full bg-ok" /> : null}
+        {title}
       </p>
-      {who.length ? (
-        <Link href="/tasks/" className="mt-3 inline-block text-[14px] font-medium underline underline-offset-4">
-          See who has it
-        </Link>
-      ) : null}
+      <p className="mt-1 text-[13.5px] leading-[21px] text-ink2">{text}</p>
     </div>
   );
 }
 
-function WhoHasThis({ change, myTaskOwner, blockers }: { change: RuleChange; myTaskOwner?: string; blockers: string[] }) {
-  const closed = change.state === "closed" || change.state === "screened_out";
-  const now = closed ? null : myTaskOwner ?? blockers[0] ?? change.owner_id;
-  const rows = [
-    { k: "Now", v: now },
-    { k: "Next", v: closed ? null : "u-anthony" },
-    { k: "Waiting on", v: closed ? null : blockers[0] && blockers[0] !== now ? blockers[0] : blockers[1] ?? null },
-  ];
+function PlatformDetail({ c, k, model, run, recorded, onReplayJourney }: { c: RuleChange; k: string; model?: PlatformModel; run: RunCtx | null; recorded: boolean; onReplayJourney: () => void }) {
+  const stage = run ? run.run.stages.find((s) => STAGE_PLACE[run.run.id]?.[s.key] === k) : undefined;
+  const label = PLATFORM_LABEL[k as keyof typeof PLATFORM_LABEL] ?? k;
   return (
-    <dl className="flex flex-col self-end rounded-[14px] border border-line bg-surface px-5 py-3 lg:col-span-4">
-      <div className="flex items-center justify-between border-b border-line py-2">
-        <dt className="text-[13px] text-ink2">Owner</dt>
-        <dd>
-          <PersonTag id={change.owner_id} />
-        </dd>
+    <section aria-label={`${label} detail`} className="rounded-[14px] border border-line bg-surface p-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="text-[16px] font-medium">{label}</h2>
+        <span className={cn("text-[12.5px]", model?.status === "blocked" ? "font-medium text-warn" : "text-ink3")}>{model?.status === "waiting" ? "Not started" : model?.note}</span>
       </div>
-      {rows.map((r) => (
-        <div key={r.k} className="flex items-center justify-between border-b border-line py-2 last:border-b-0">
-          <dt className="text-[13px] text-ink2">{r.k}</dt>
-          <dd>{r.v ? <PersonTag id={r.v} /> : <span className="text-[13px] text-ink3">{change.state === "screened_out" ? "Not needed" : closed ? "Closed" : "No one"}</span>}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
-/** Before a run: what is known already, and the one action. No empty cards. */
-function WhatWeKnow({ change }: { change: RuleChange }) {
-  const changed = sectionsFor(change.id).filter((s) => s.changed);
-  const tags = Array.from(new Set(dutiesFor(change.id).filter((d) => d.applicability === "in_scope").flatMap((d) => d.process_tags)));
-  const reg = regulationById(change.regulation_id);
-  return (
-    <section aria-label="What we know" className="rounded-[14px] border border-line bg-surface shadow-(--shadow-rest)">
-      <div className="border-b border-line px-6 py-4">
-        <h2 className="t-section">What we know</h2>
+      <div className="mt-3 text-[14px] [&_.grid]:grid-cols-1">
+        {model?.status === "waiting" || !model ? (
+          <p className="text-[13.5px] leading-[21px] text-ink2">Nothing here yet. {k === "applies" ? "Madison has not read this rule." : "This step starts when the one before it is done."}</p>
+        ) : k === "applies" ? (
+          <AppliesBody change={c} />
+        ) : k === "obligations" ? (
+          <ObligationsBody change={c} />
+        ) : k === "linked" ? (
+          <LinkedBody change={c} />
+        ) : k === "covered" ? (
+          <CoveredBody change={c} />
+        ) : k === "whats_left" ? (
+          <WhatsLeftBody change={c} />
+        ) : k === "close" ? (
+          <CloseBody change={c} />
+        ) : (
+          <DesignDetail k={k} run={run} />
+        )}
       </div>
-      <div className="grid gap-8 px-6 py-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-        <div className="flex flex-col gap-4">
-          <p className="text-[15px] leading-[24px]">{change.summary}</p>
-          <div>
-            <div className="mb-2 text-[12.5px] font-medium text-ink3">What changed · {changed.length} sections</div>
-            <ul className="flex flex-col gap-3">
-              {changed.map((s) => (
-                <li key={s.id} className="rounded-[12px] bg-surface2 px-4 py-3">
-                  <div className="t-data text-[11.5px] text-ink2">
-                    {s.section_number} · {s.heading}
-                  </div>
-                  <p className="mt-1 text-[14px] leading-[23px]">
-                    <Diff before={s.before} after={s.after} />
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <dl className="flex flex-col gap-4 text-[14px]">
-          <div>
-            <dt className="text-[12.5px] font-medium text-ink3">Effective</dt>
-            <dd className="mt-0.5">
-              {fmtDate(change.effective_date)} · {relDays(change.effective_date)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[12.5px] font-medium text-ink3">Likely touches</dt>
-            <dd className="mt-1 flex flex-wrap gap-1.5">
-              {tags.map((t) => (
-                <span key={t} className="rounded-full bg-surface2 px-2.5 py-1 text-[13px]">
-                  {TAG_WORDS[t] ?? t}
-                </span>
-              ))}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[12.5px] font-medium text-ink3">Last read by Madison</dt>
-            <dd className="mt-0.5">Today {reg ? fmtTime(reg.last_check.checked_at) : "05:00"}, from eCFR</dd>
-          </div>
-          <div>
-            <dt className="text-[12.5px] font-medium text-ink3">Steps</dt>
-            <dd className="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-ink3">
-              {STEPS.map((s, i) => (
-                <span key={s} className="flex items-center gap-2">
-                  {i ? <span className="h-px w-3 bg-line-strong" /> : null}
-                  <Square size={7} filled={false} color="var(--lineStrong)" className="rounded-[2px]" />
-                  {STEP_LABEL[s]}
-                </span>
-              ))}
-              <span className="ml-1 rounded-full bg-surface2 px-2 py-0.5">Not read yet</span>
-            </dd>
-          </div>
-        </dl>
+      <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4">
+        {c.state !== "screened_out" ? <WhoOwns changeId={c.id} compact /> : null}
+        {run && recorded ? (
+          <Button variant="quiet" size={32} className="self-start" onClick={() => run.replay(stage?.key)}>
+            How Madison did this
+          </Button>
+        ) : c.state === "closed" ? (
+          <Button variant="quiet" size={32} className="self-start" onClick={onReplayJourney}>
+            Replay how Madison did this
+          </Button>
+        ) : null}
       </div>
     </section>
   );
 }
 
-function Reopen({ change }: { change: RuleChange }) {
-  const persona = useStore((s) => s.persona);
-  const decide = useStore((s) => s.decide);
-  const toast = useStore((s) => s.toast);
-  const done = useStore((s) => s.decisions.some((d) => d.changeId === change.id && d.label === "Reopen if this changes"));
+function DesignDetail({ k, run }: { k: string; run: RunCtx | null }) {
+  const checks = (run?.st?.checks ?? []).filter((x) => /^D\d$/.test(x.gate));
+  if (k === "suggest") return <p className="text-[13.5px] leading-[21px]">A new control, CTL-153, plus one sentence in POL-ISP-01 3.1. Changing the policy words alone would leave nothing to test.</p>;
+  if (k === "draft") return <p className="text-[13.5px] leading-[21px]">CTL-153: phishing-resistant MFA for privileged access, including vendors, checked monthly.</p>;
   return (
-    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-[12px] bg-surface2 px-4 py-3">
-      <span className="text-[14px] text-ink2">If Northgate starts offering prepaid accounts, this rule applies and Madison reads it again.</span>
-      <Button
-        variant="quiet"
-        size={32}
-        disabled={done}
-        onClick={() => {
-          decide({ label: "Reopen if this changes", text: `Asked Madison to re-check ${change.citation} if prepaid accounts are offered`, by: persona, at: new Date().toISOString(), changeId: change.id });
-          toast("Saved. Madison re-checks this rule if prepaid accounts are offered.");
-        }}
-      >
-        {done ? "Watching for a change" : "Reopen if this changes"}
-      </Button>
-    </div>
+    <ul className="flex flex-col gap-1.5" data-demo="D2-3">
+      {(checks.length ? checks : []).map((x, i) => (
+        <li key={i} className="flex items-start gap-2 text-[13px] leading-5">
+          <span className={cn("mt-1 block size-[8px] shrink-0 rounded-[2px]", x.result === "pass" ? "bg-ok" : "bg-warn")} />
+          <span>
+            <span className="font-medium">{x.gate} {x.label}</span>
+            <span className="block text-ink2">{x.result === "pass" ? "Passes" : x.reason}</span>
+          </span>
+        </li>
+      ))}
+      {!checks.length ? <li className="text-[13.5px] text-ink2">Seven design checks. D6, "cannot be bypassed", needs the owner's answer.</li> : null}
+    </ul>
   );
 }
 
-function TouchesOver({ change, open, onOpenChange }: { change: RuleChange; open: boolean; onOpenChange: (o: boolean) => void }) {
-  const imp = impactFor(change.id);
-  const ds = dutiesFor(change.id).filter((d) => d.applicability === "in_scope");
-  const vendors = vendorsFor(change.id);
-  const policies = imp?.policy_sections ?? Array.from(new Set(ds.flatMap((d) => linksFor(d.id).map((l) => l.policy_section_id).filter(Boolean) as string[])));
-  const controls = imp?.controls ?? Array.from(new Set(ds.flatMap((d) => linksFor(d.id).map((l) => l.control_id).filter(Boolean) as string[])));
-  const procedures = imp?.procedure_sections ?? [];
-  const Row = ({ href, title, sub, right }: { href: string; title: string; sub?: string; right?: React.ReactNode }) => (
-    <li className="border-b border-line last:border-b-0">
-      <Link href={href} onClick={() => onOpenChange(false)} className="flex items-start justify-between gap-3 py-2.5 hover:bg-surface2">
-        <span className="min-w-0">
-          <span className="block text-[14px]">{title}</span>
-          {sub ? <span className="block text-[12.5px] text-ink2">{sub}</span> : null}
-        </span>
-        {right}
-      </Link>
-    </li>
-  );
+/* ---------- the four answers strip ---------- */
+
+function AnswersStrip({ c, blockedOn, next, onOpenCoverage }: { c: RuleChange; blockedOn: string | null; next?: { label: string; onClick: () => void; demo: string }; onOpenCoverage: () => void }) {
+  const fact = useStore((s) => s.facts.flood_zone_lending);
+  const states = useStore((s) => s.obligationStates);
+  const ds = dutiesFor(c.id);
+  const inScope = ds.filter((d) => d.applicability === "in_scope");
+  const excluded = ds.filter((d) => d.applicability === "excluded").length;
+  const known = !["new", "uncertain", "screened_out", "applies"].includes(c.state);
+  const st = (id: string) => states[id] ?? getDuty(id)?.coverage_state;
+  // the change's own counts cover obligations the demo does not name one by one
+  const k = c.counts;
+  const total = k ? Math.max(k.duties, inScope.length) : inScope.length;
+  const named = inScope.filter((d) => st(d.id) === "covered").length;
+  const covered = k ? Math.max(k.covered, named) + (states["D-208-M1"] === "covered" && c.id === "RC-2026-011" && k.covered < 3 ? 1 : 0) : named;
+  const gaps = inScope.filter((d) => ["nothing_behind", "not_yet_confirmed"].includes(st(d.id) ?? ""));
+  const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
+  const area = areaForChange(c.id);
+  const deadline = datesFor(c.id)?.northgate_deadline;
+  const left = daysLeftWord(deadline);
+  const verdict = appliesVerdict(c, fact?.value);
+  const cells = [
+    { q: "Applies?", a: verdict === "Applies" ? "Yes" : verdict, sub: c.state === "screened_out" ? c.screen_reason : c.state === "uncertain" ? (blockedOn ? `Waiting on ${blockedOn}` : "Needs a bank fact") : verdict === "Applies" ? "Checked against the bank profile" : "Madison has not read it" },
+    { q: "What it asks", a: c.state === "screened_out" ? "Nothing here" : known ? plural(total, "obligation") : "Not read yet", sub: c.state === "screened_out" ? "The rule does not apply" : known && excluded ? `${excluded} excluded` : known ? "Each with the rule's own words" : "" },
+    { q: "Are we covered?", a: c.state === "screened_out" ? "Not needed" : known && c.state !== "duties" ? `${covered} of ${total}` : "Not yet known", sub: known && c.state !== "duties" ? `${gaps.length} still open` : "" },
+    {
+      q: "What's left",
+      a: c.state === "closed" || c.state === "screened_out" ? "Nothing" : gaps.length && known ? `${gaps.length} to fix` : blockedOn ? `Waiting on ${blockedOn}` : known ? "Nothing open" : "Not known yet",
+      sub: c.state === "screened_out" ? "Madison re-checks if the bank's products change" : c.state === "closed" ? `Closed ${fmtDate(c.closed_at)}` : `${area ? userById(area.owner_id)?.name : userById(c.owner_id)?.name} · due ${deadline ? fmtDate(deadline) : "no deadline"}${deadline ? ` · ${left.text}` : ""}`,
+    },
+  ];
   return (
-    <SlideOver open={open} onOpenChange={onOpenChange} title="What it touches" subtitle={change.citation}>
-      <div className="flex flex-col gap-7">
-        <section>
-          <h3 className="mb-1 text-[13px] font-medium text-ink3">Vendors · {vendors.length}</h3>
-          <ul>
-            {vendors.map(({ vendor, why }) => (
-              <Row key={vendor.id} href={`/rules/${change.id}/#card-whats_left`} title={vendor.name} sub={`${why} · owner ${userById(vendor.relationship_owner_id)?.name}`} right={<span className="text-[12px] text-ink3">{vendor.criticality}</span>} />
-            ))}
-          </ul>
-        </section>
-        <section>
-          <h3 className="mb-1 text-[13px] font-medium text-ink3">Obligations · {ds.length}</h3>
-          <ul>{ds.map((d) => <Row key={d.id} href={`/obligations/${d.id}/`} title={d.plain} right={<ObState id={d.id} />} />)}</ul>
-        </section>
-        <section>
-          <h3 className="mb-1 text-[13px] font-medium text-ink3">Policy sections · {policies.length}</h3>
-          <ul>
-            {policies.map((id) => {
-              const p = policyById(id)!;
-              return <Row key={id} href={`/coverage/?view=documents&doc=${id}`} title={`${p.document_code} ${p.section_number} ${p.heading}`} sub={p.drift ? "Disagrees with its procedure" : undefined} />;
-            })}
-          </ul>
-        </section>
-        {procedures.length ? (
-          <section>
-            <h3 className="mb-1 text-[13px] font-medium text-ink3">Procedures · {procedures.length}</h3>
-            <ul>
-              {procedures.map((id) => {
-                const p = procedureById(id)!;
-                return <Row key={id} href={`/coverage/?view=documents&doc=${id}`} title={`${p.document_code} ${p.section_number.toLowerCase()} ${p.heading}`} />;
-              })}
-            </ul>
-          </section>
-        ) : null}
-        <section>
-          <h3 className="mb-1 text-[13px] font-medium text-ink3">Controls · {controls.length}</h3>
-          <ul>
-            {controls.map((id) => {
-              const ctl = controlById(id)!;
-              return <Row key={id} href={`/obligations/?control=${id}`} title={`${id} ${ctl.name}`} sub={ctl.freshness_status === "quiet" ? `No evidence for ${ctl.quiet_days} days` : `${ctl.cadence ?? "No cadence"} · evidence ${fmtDate(ctl.last_artifact_date)}`} />;
-            })}
-          </ul>
-        </section>
+    <section aria-label="Four answers" className="mt-4 grid overflow-clip rounded-[16px] border border-line bg-surface md:grid-cols-[repeat(4,minmax(0,1fr))_auto]">
+      {cells.map((x, i) => (
+        <div key={x.q} className={cn("px-5 py-3.5", i && "md:border-l md:border-line", "max-md:border-b max-md:border-line")}>
+          <div className="text-[12px] font-medium text-ink3">{x.q}</div>
+          <div className="mt-0.5 text-[16px] leading-[22px] font-medium">{x.a}</div>
+          {x.sub ? <div className="mt-0.5 text-[12.5px] leading-[18px] text-ink2">{x.sub}</div> : null}
+        </div>
+      ))}
+      <div className="flex items-center px-5 py-3.5 md:border-l md:border-line">
+        {next ? (
+          <Button variant="primary" size={40} onClick={next.onClick} data-demo={next.demo}>
+            {next.label}
+          </Button>
+        ) : c.state !== "screened_out" && c.state !== "uncertain" && c.state !== "new" ? (
+          <Button variant="quiet" size={40} onClick={onOpenCoverage}>
+            Open in Coverage
+          </Button>
+        ) : (
+          <Link href="/rules/" className="text-[13.5px] underline underline-offset-4">
+            All rule changes
+          </Link>
+        )}
       </div>
-    </SlideOver>
+    </section>
   );
 }
-
-function ObState({ id }: { id: string }) {
-  const d = getDuty(id)!;
-  const st = useStore((s) => s.obligationStates[id]) ?? d.coverage_state;
-  return <StatusChip state={st} size="sm" />;
-}
-
-export { Initials, getChange };

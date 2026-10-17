@@ -85,7 +85,19 @@
    "nothing_behind": 0,
    "known_gap": 0
   },
-  "featured": true
+  "featured": true,
+  "after_run": {
+   "state": "whats_left",
+   "step": "whats_left",
+   "counts": {
+    "duties": 3,
+    "covered": 1,
+    "not_yet_confirmed": 2,
+    "nothing_behind": 0,
+    "known_gap": 0
+   }
+  },
+  "run_id": "run-coverage-1026"
  },
  {
   "id": "RC-2026-013",

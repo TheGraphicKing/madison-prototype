@@ -5,7 +5,7 @@
 // active. "Overview" frames the whole scene again.
 import { CameraControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export interface Frame {
   center: [number, number, number];
@@ -35,7 +35,8 @@ export function CameraRig({
   polar = 52,
   drift = true,
   padding = 0.05,
-  zoom = true,
+  allowZoom = true,
+  zoom,
 }: {
   overview: Frame;
   /** the active item; null frames the overview */
@@ -47,7 +48,10 @@ export function CameraRig({
   drift?: boolean;
   /** extra distance as a fraction, 0.05 = 5% more room */
   padding?: number;
-  zoom?: boolean;
+  /** false: no dolly at all (the Today mini field) */
+  allowZoom?: boolean;
+  /** a signal from the +/- buttons */
+  zoom?: ZoomSignal;
 }) {
   const ref = useRef<CameraControls>(null);
   const touched = useRef(false);
@@ -77,6 +81,27 @@ export function CameraRig({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetKey]);
 
+  // the wheel scrolls the page; Ctrl or Cmd plus the wheel (and a trackpad pinch) zooms
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    const el = gl.domElement;
+    const onWheel = (e: WheelEvent) => {
+      const c = ref.current;
+      if (!c || !allowZoom || !(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      touched.current = true;
+      void c.dolly(-e.deltaY * 0.01 * Math.max(1, c.distance / 10), true);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [gl, allowZoom]);
+  useEffect(() => {
+    const c = ref.current;
+    if (!c || !zoom || zoom.n === 0) return;
+    touched.current = true;
+    void c.dolly(zoom.dir * c.distance * 0.18, true);
+  }, [zoom]);
+
   useFrame(({ clock }) => {
     const c = ref.current;
     if (!c || !drift || touched.current || focus) return;
@@ -94,7 +119,8 @@ export function CameraRig({
       minDistance={2}
       maxDistance={120}
       dollyToCursor
-      mouseButtons={zoom ? undefined : { left: 1, middle: 0, right: 0, wheel: 0 }}
+      mouseButtons={{ left: 1, middle: allowZoom ? 8 : 0, right: 2, wheel: 0 }}
+      touches={{ one: 32, two: allowZoom ? 1024 : 64, three: 0 }}
       onStart={() => {
         touched.current = true;
         if (ref.current) base.current = ref.current.azimuthAngle;
@@ -109,5 +135,31 @@ export function OverviewButton({ onClick, className }: { onClick: () => void; cl
     <button onClick={onClick} className={"inline-flex h-8 items-center rounded-[10px] bg-surface px-3 text-[13px] font-medium shadow-[inset_0_0_0_1px_var(--line)] hover:bg-surface2 " + (className ?? "")}>
       Overview
     </button>
+  );
+}
+
+export interface ZoomSignal {
+  n: number;
+  dir: 1 | -1;
+}
+
+/** State for the +/- buttons of one scene. */
+export function useZoom() {
+  const [zoom, set] = useState<ZoomSignal>({ n: 0, dir: 1 });
+  return { zoom, zoomIn: () => set((z) => ({ n: z.n + 1, dir: 1 })), zoomOut: () => set((z) => ({ n: z.n + 1, dir: -1 })) };
+}
+
+/** The +/- buttons that sit next to Overview on every scene. */
+export function ZoomButtons({ onIn, onOut }: { onIn: () => void; onOut: () => void }) {
+  const b = "inline-grid size-8 place-items-center rounded-[10px] bg-surface text-[16px] leading-none shadow-[inset_0_0_0_1px_var(--line)] hover:bg-surface2";
+  return (
+    <span className="inline-flex gap-1">
+      <button onClick={onOut} aria-label="Zoom out" title="Zoom out (or Ctrl and the mouse wheel)" className={b}>
+        −
+      </button>
+      <button onClick={onIn} aria-label="Zoom in" title="Zoom in (or Ctrl and the mouse wheel)" className={b}>
+        +
+      </button>
+    </span>
   );
 }

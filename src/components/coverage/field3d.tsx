@@ -3,9 +3,9 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { coverageField, plotLayout, type Plot, type Tile } from "@/lib/coverage-field";
+import { plotLayout, useLiveField, type Plot, type Tile } from "@/lib/coverage-field";
 import { getDuty } from "@/data";
-import { Blocks, CameraRig, Label, OverviewButton, Platform, Stage, STATE_HEIGHT, STATE_VAR, STATE_WORD, useSceneTokens, type Frame, type Tokens } from "@/components/scene";
+import { Blocks, CameraRig, Label, OverviewButton, Platform, Stage, STATE_HEIGHT, STATE_VAR, STATE_WORD, useSceneTokens, useZoom, ZoomButtons, type Frame, type Tokens, type ZoomSignal } from "@/components/scene";
 
 export type HoverInfo = { plot: Plot; state: string; dutyId?: string; k: number } | null;
 
@@ -32,11 +32,12 @@ export function CoverageField({
   const tk = useSceneTokens();
   const [hover, setHover] = useState<HoverInfo>(null);
   const [reset, setReset] = useState(0);
+  const { zoom, zoomIn, zoomOut } = useZoom();
   if (!tk) return <div className="h-full w-full bg-surface" />;
   return (
     <div className="relative h-full w-full">
       <Stage tk={tk} label="Coverage field: every applicable obligation as a block, grouped by regulation" extent={7} camera={[8, 9, 10]} ao={!mini} onMissed={() => onSelectPlot(null)}>
-        <FieldScene tk={tk} selected={selected} onSelectPlot={onSelectPlot} onHover={(h) => (setHover(h), onHoverPlot?.(h?.plot ?? null))} highlightState={highlightState} mini={mini} reset={reset} />
+        <FieldScene tk={tk} selected={selected} onSelectPlot={onSelectPlot} onHover={(h) => (setHover(h), onHoverPlot?.(h?.plot ?? null))} highlightState={highlightState} mini={mini} reset={reset} zoom={zoom} />
       </Stage>
       {hover && !mini ? (
         <div className="pointer-events-none absolute top-4 left-4 max-w-[320px] rounded-[12px] bg-surface px-3.5 py-2.5 shadow-(--overlay-shadow) ring-1 ring-line">
@@ -52,7 +53,8 @@ export function CoverageField({
       ) : null}
       {!mini ? (
         <div className="absolute right-4 bottom-4 flex items-center gap-3">
-          <span className="text-[12px] text-ink3 max-md:hidden">Drag to orbit · scroll to zoom · click a plot</span>
+          <span className="text-[12px] text-ink3 max-md:hidden">Drag to orbit · Ctrl and scroll to zoom · click a plot</span>
+          <ZoomButtons onIn={zoomIn} onOut={zoomOut} />
           <OverviewButton
             onClick={() => {
               onSelectPlot(null);
@@ -73,6 +75,7 @@ function FieldScene({
   highlightState,
   mini,
   reset,
+  zoom,
 }: {
   tk: Tokens;
   selected: number | null;
@@ -81,8 +84,9 @@ function FieldScene({
   highlightState?: string | null;
   mini: boolean;
   reset: number;
+  zoom: ZoomSignal;
 }) {
-  const { plots, tiles } = useMemo(() => coverageField(), []);
+  const { plots, tiles } = useLiveField();
   const lay = useMemo(() => plotLayout(plots), [plots]);
   const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height));
   const cx = lay.width / 2;
@@ -134,7 +138,7 @@ function FieldScene({
 
   return (
     <>
-      <CameraRig overview={overview} focus={focus} resetKey={reset} drift={!mini} padding={mini ? (aspect > 1.6 ? -0.48 : -0.22) : -0.2} zoom={!mini} />
+      <CameraRig overview={overview} focus={focus} resetKey={reset} drift={!mini} padding={mini ? (aspect > 1.6 ? -0.48 : -0.22) : -0.2} allowZoom={!mini} zoom={zoom} />
 
       {plots.map((p, i) => {
         const q = lay.pos[i];

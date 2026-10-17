@@ -166,7 +166,7 @@ function EntryPanel({ e }: { e: ChainEntry | null }) {
         </ul>
       ) : null}
       {r ? (
-        <ButtonLink href={`/runs/${r.id}/?mode=replay&from=/record/`} variant="primary" size={32} className="self-start">
+        <ButtonLink href={`/rules/${r.change_id}/?replay=1`} variant="primary" size={32} className="self-start">
           Replay this run
         </ButtonLink>
       ) : null}

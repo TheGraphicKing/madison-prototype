@@ -127,3 +127,76 @@ export function plotLayout(plots: Plot[], tile = 0.12, gap = 0.03, plotGap = 0.5
   const depth = Math.max(...pos.map((p) => p.z + p.d));
   return { pos, width, depth, cell, tile };
 }
+
+// ---------- the live field: what the demo changed, applied on top of the seed ----------
+import { useMemo } from "react";
+import { getChange } from "@/data";
+import { useStore } from "./store";
+
+export interface LiveTile extends Tile {
+  /** added by a run during this demo (the Reg E obligations) */
+  fresh?: boolean;
+}
+
+/** Obligations that belong in the field: accepted, in scope, from a change Madison has worked on. */
+function inField(dutyId: string, ruleRunDone: boolean) {
+  const d = duties.find((x) => x.id === dutyId);
+  if (!d || d.applicability !== "in_scope" || !(STATES as string[]).includes(d.coverage_state)) return false;
+  if (d.change_id === "RC-2026-014") return ruleRunDone;
+  const c = getChange(d.change_id);
+  return Boolean(c && !["new", "duties", "screened_out", "uncertain"].includes(c.state));
+}
+
+export function liveField(states: Record<string, CoverageState>, ruleRunDone: boolean) {
+  const base = coverageField();
+  const plots: Plot[] = base.plots.map((p) => ({ ...p, counts: { ...p.counts } }));
+  let tiles: LiveTile[] = base.tiles.map((t) => ({ ...t }));
+  const named = new Set(tiles.map((t) => t.dutyId).filter(Boolean));
+  const plotHasNamed = new Set(tiles.filter((t) => t.dutyId).map((t) => t.plot));
+
+  // every named obligation gets a block of its own state; totals stay the same by swapping
+  // with an unnamed block of that state in a plot that names nothing
+  plots.forEach((p, pi) => {
+    for (const id of p.dutyIds) {
+      if (named.has(id) || !inField(id, false)) continue;
+      const st = duties.find((x) => x.id === id)!.coverage_state as FourState;
+      const here = tiles.find((t) => t.plot === pi && !t.dutyId && t.state !== st);
+      const there = tiles.find((t) => !plotHasNamed.has(t.plot) && t.plot !== pi && !t.dutyId && t.state === st);
+      if (!here || !there) continue;
+      there.state = here.state;
+      here.state = st;
+      here.dutyId = id;
+      named.add(id);
+    }
+  });
+
+  // the Reg E run adds its six obligations to the Reg E plot
+  if (ruleRunDone) {
+    const pi = plots.findIndex((p) => p.regulationId === "reg-01");
+    let k = tiles.filter((t) => t.plot === pi).length;
+    for (const d of duties.filter((x) => x.change_id === "RC-2026-014" && inField(x.id, true))) {
+      tiles.push({ i: 0, plot: pi, state: d.coverage_state as FourState, k: k++, dutyId: d.id, fresh: true });
+    }
+  }
+
+  // what people changed during the demo
+  for (const t of tiles) if (t.dutyId && states[t.dutyId] && (STATES as string[]).includes(states[t.dutyId])) t.state = states[t.dutyId] as FourState;
+
+  // trouble first inside each plot, then recount
+  const order: Record<FourState, number> = { known_gap: 0, nothing_behind: 1, not_yet_confirmed: 2, covered: 3 };
+  // fresh blocks go last, so they land after the blocks that were already there
+  const byPlot = plots.map((_, pi) => tiles.filter((t) => t.plot === pi).sort((a, b) => Number(Boolean(a.fresh)) - Number(Boolean(b.fresh)) || order[a.state] - order[b.state]));
+  tiles = byPlot.flatMap((list) => list.map((t, k) => ({ ...t, k })));
+  tiles.forEach((t, i) => (t.i = i));
+  plots.forEach((p, pi) => {
+    for (const s of STATES) p.counts[s] = byPlot[pi].filter((t) => t.state === s).length;
+    p.total = byPlot[pi].length;
+  });
+  return { plots, tiles };
+}
+
+export function useLiveField() {
+  const states = useStore((s) => s.obligationStates);
+  const ruleRunDone = useStore((s) => Boolean(s.finishedRuns["run-rule-1005"]));
+  return useMemo(() => liveField(states, ruleRunDone), [states, ruleRunDone]);
+}

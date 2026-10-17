@@ -43,7 +43,7 @@ function ChainScene({ tk, entries, selected, onSelect, cursor }: { tk: Tokens; e
 
   return (
     <>
-      <CameraRig overview={focus} focus={focus} azimuth={0} polar={58} padding={-0.1} drift={false} zoom={false} />
+      <CameraRig overview={focus} focus={focus} azimuth={0} polar={58} padding={-0.1} drift={false} allowZoom={false} />
       {clusters.map((k) => {
         const a = placeOf(k.from);
         const b = placeOf(k.to);

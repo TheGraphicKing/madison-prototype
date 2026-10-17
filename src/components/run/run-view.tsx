@@ -347,13 +347,14 @@ const NEXT: Record<string, string> = {
   link_only: "The policy is linked. The procedure keeps saying 5 business days until someone raises it.",
 };
 
-function Checkpoint({
+export function Checkpoint({
   run,
   st,
   pending,
   reviewAll,
   onReview,
   onRespond,
+  compact,
 }: {
   run: Run;
   st: RunState;
@@ -361,6 +362,7 @@ function Checkpoint({
   reviewAll: boolean;
   onReview: () => void;
   onRespond: (eventKey: string, actionId: string, label: string) => void;
+  compact?: boolean;
 }) {
   const persona = useStore((s) => s.persona);
   const [fields, setFields] = useState<Record<string, string>>({});
@@ -397,6 +399,7 @@ function Checkpoint({
     const ready = Boolean(fields[choice.id]);
     return (
       <DecisionPanel
+        compact={compact}
         deciding={h.ask}
         why={h.why}
         deadline={fmtDate(h.due)}
@@ -443,6 +446,7 @@ function Checkpoint({
   const isRule = run.id === "run-rule-1005";
   return (
     <DecisionPanel
+      compact={compact}
       deciding={isRule ? "Accept 6 obligations and exclude 1 (prepaid)" : "Link the policy, and raise the procedure drift?"}
       why={
         isRule ? (
@@ -459,7 +463,7 @@ function Checkpoint({
       expandAll={reviewAll}
       decider={pending.waiting_for}
       next={isRule ? "Madison matches to policies and controls; Anthony Marsh accepts the impact" : "Grace Liu, if you raise the drift"}
-      options={pending.actions.map((a, i) => ({ id: a.id, label: a.id === "accept_all" ? "Accept 6 obligations and exclude 1" : a.label, primary: i === 0, next: NEXT[a.id] ?? "" }))}
+      options={pending.actions.map((a, i) => ({ id: a.id, label: a.id === "accept_all" ? "Accept 6 obligations and exclude 1" : a.label, primary: i === 0, next: NEXT[a.id] ?? "", demo: a.id === "accept_all" ? "D1-5" : a.id === "link_and_raise" ? "D3-2" : undefined }))}
       onChoose={(id) => {
         if (id === "review") return onReview();
         const a = pending.actions.find((x) => x.id === id)!;

@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import { daysFrom, businessDaysFrom } from "./dates";
 import { useStore } from "./store";
 import { useTaskViews, useWaitingOn, type TaskView } from "./work";
-import { position } from "@/data";
+import { useLiveField } from "./coverage-field";
 
 export interface TaskCounts {
   /** every task of mine that is not done: the rail badge and the "Mine" filter */
@@ -48,15 +48,12 @@ export function useTaskCounts(persona: string): TaskCounts {
   }, [views, waiting, notices, persona]);
 }
 
-/** The four bank-wide counts, with what the demo changed applied. */
+/** The four bank-wide counts: the sum of the live field, so they always match what the field shows. */
 export function useCoverageTotals() {
-  const states = useStore((s) => s.obligationStates);
+  const { plots } = useLiveField();
   return useMemo(() => {
-    const p = position();
-    const t = { covered: p.covered, not_yet_confirmed: p.not_yet_confirmed, nothing_behind: p.nothing_behind, known_gap: p.known_gap };
-    // an obligation fixed during the demo moves from its seeded state to covered
-    if (states["D-208-M1"] === "covered") (t.covered++, t.nothing_behind--);
-    if (states["D-1026-L2"] === "covered") (t.covered++, t.not_yet_confirmed--);
+    const t = { covered: 0, not_yet_confirmed: 0, nothing_behind: 0, known_gap: 0 };
+    for (const p of plots) for (const k of Object.keys(t) as (keyof typeof t)[]) t[k] += p.counts[k];
     return { ...t, total: t.covered + t.not_yet_confirmed + t.nothing_behind + t.known_gap };
-  }, [states]);
+  }, [plots]);
 }

@@ -64,12 +64,13 @@ export function useTaskAction(taskId: string) {
 }
 
 /** A task as a Decision panel, with its form and evidence: "Your task now" in the change room. */
-export function TaskDecision({ taskId, next, className, hideEvidence }: { taskId: string; next?: string; className?: string; hideEvidence?: boolean }) {
+export function TaskDecision({ taskId, next, className, hideEvidence, compact }: { taskId: string; next?: string; className?: string; hideEvidence?: boolean; compact?: boolean }) {
   const a = useTaskAction(taskId);
   if (!a) return null;
   const { t, spec, fields, setFields, submit, options, isMine, blocked, done, doneInfo, v } = a;
   return (
     <DecisionPanel
+      compact={compact}
       className={className}
       deciding={spec.ask}
       why={

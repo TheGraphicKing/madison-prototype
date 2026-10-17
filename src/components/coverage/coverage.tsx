@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { getDuty, position, regulations } from "@/data";
-import { coverageField, STATES, type FourState, type Plot } from "@/lib/coverage-field";
+import { STATES, useLiveField, type FourState, type Plot } from "@/lib/coverage-field";
 import { fmtDate } from "@/lib/dates";
 import { Page } from "@/components/layout/page";
 import { Count, MonoLabel } from "@/components/core/labels";
@@ -86,7 +86,7 @@ export function Coverage() {
 }
 
 function FieldView({ highlight }: { highlight: FourState | null }) {
-  const { plots } = useMemo(() => coverageField(), []);
+  const { plots } = useLiveField();
   const sp = useSearchParams();
   const [sel, setSel] = useState<number | null>(() => {
     const i = plots.findIndex((p) => p.regulationId === sp.get("plot"));
@@ -148,7 +148,7 @@ export function MiniBar({ counts, width = 140 }: { counts: Record<FourState, num
 
 /** The 2D field: a flat grid of squares per regulation. Zoom: bank, then regulation, then duty. */
 function MapView({ highlight, note }: { highlight: FourState | null; note?: string }) {
-  const { plots, tiles } = useMemo(() => coverageField(), []);
+  const { plots, tiles } = useLiveField();
   const [plot, setPlot] = useState<number | null>(null);
   const [tile, setTile] = useState<number | null>(null);
   const byPlot = useMemo(() => plots.map((_, i) => tiles.filter((t) => t.plot === i)), [plots, tiles]);
@@ -246,13 +246,13 @@ function MapView({ highlight, note }: { highlight: FourState | null; note?: stri
 
 /** A table of regulations with a mini stacked bar of the four counts and a check per row. */
 function ByRule() {
-  const { plots } = useMemo(() => coverageField(), []);
+  const { plots } = useLiveField();
   const router = useRouter();
   const [checked, setChecked] = useState<Record<string, number>>({});
   const [running, setRunning] = useState<string | null>(null);
   const check = (p: Plot) => {
     if (p.regulationId === "reg-02") {
-      router.push(`/runs/run-coverage-1026/?mode=live&from=/coverage/?view=rules`);
+      router.push(`/rules/RC-2026-016/`);
       return;
     }
     setRunning(p.regulationId);

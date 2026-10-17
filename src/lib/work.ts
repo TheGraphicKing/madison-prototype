@@ -223,6 +223,8 @@ function effects(h: Handoff, option: string, fields: Record<string, string>) {
     s.setObligationState("D-208-M1", "covered");
     s.overrideChange("RC-2026-011", { state: c.after_run!.state, step: c.after_run!.step, counts: c.after_run!.counts, new_control: c.after_run!.new_control });
     s.finishRun("run-design-mfa", h.to_user_id, demoNowIso(), {});
+    // Elena's "Choose a fix" is done once the fix is in force
+    s.completeTask("T-298", "u-elena", demoNowIso());
   }
 }
 
