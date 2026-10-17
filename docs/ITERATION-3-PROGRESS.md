@@ -62,4 +62,4 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [x] O2 screenshots: every map state and each flow's end, three themes
 - [x] O3 side-by-side critique
 - [x] O4 docs/DEMO.md with the five flows
-- [ ] O5 push and redeploy
+- [x] O5 push and redeploy (all five flows also pass against the live URL)
