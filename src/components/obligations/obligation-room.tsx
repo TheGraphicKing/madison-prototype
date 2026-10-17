@@ -37,55 +37,47 @@ export function ObligationRoom({ id }: { id: string }) {
 
   return (
     <Page wide>
-      <header className="grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+      <header className="grid gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_minmax(0,0.85fr)]">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <span className="t-data text-ink2">{d.citation}</span>
             <StatusChip state={state} />
           </div>
-          <h1 className="t-page mt-3 max-w-[36ch]">{d.plain}</h1>
-          <blockquote className="mt-4 max-w-[80ch] rounded-[12px] bg-surface2 px-4 py-3 text-[15px] leading-[25px]">
-            {sec ? <Quoted text={sec.after} quote={d.source_text} /> : <>&ldquo;{d.source_text}&rdquo;</>}
-            <span className="mt-1 block text-[12.5px] text-ink3">The rule&apos;s own words · {sec?.section_number ?? d.citation}</span>
-          </blockquote>
+          <h1 className="mt-2 text-[21px] leading-[28px] font-medium tracking-[-0.012em]">{d.plain}</h1>
+          <dl className="mt-2.5 flex flex-wrap gap-x-5 gap-y-1.5 text-[13px]">
+            <div>
+              <dt className="text-[12px] text-ink3">Certainty</dt>
+              <dd className="mt-0.5">
+                <CertaintyWord value={certaintyFrom(d.confidence)} />
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[12px] text-ink3">Deadline in the rule</dt>
+              <dd className="mt-0.5">{d.deadline_text}</dd>
+            </div>
+            <div>
+              <dt className="text-[12px] text-ink3">Compliance date</dt>
+              <dd className="mt-0.5">{change ? fmtDate(change.effective_date) : "In force"}</dd>
+            </div>
+            <div>
+              <dt className="text-[12px] text-ink3">Rule change</dt>
+              <dd className="mt-0.5">
+                <Link href={`/rules/${d.change_id}/`} className="t-data text-[12px] underline underline-offset-4">
+                  {change?.citation}
+                </Link>
+              </dd>
+            </div>
+          </dl>
         </div>
-        <div className="flex flex-col gap-3 self-end lg:col-span-4">
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-4 rounded-[14px] border border-line bg-surface p-5">
-          <div>
-            <dt className="text-[12.5px] text-ink3">State</dt>
-            <dd className="mt-1.5">
-              <StatusChip state={state} size="sm" />
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[12.5px] text-ink3">Certainty</dt>
-            <dd className="mt-1.5">
-              <CertaintyWord value={certaintyFrom(d.confidence)} />
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[12.5px] text-ink3">Deadline in the rule</dt>
-            <dd className="mt-1 text-[14px]">{d.deadline_text}</dd>
-          </div>
-          <div>
-            <dt className="text-[12.5px] text-ink3">Compliance date</dt>
-            <dd className="mt-1 text-[14px]">{change ? fmtDate(change.effective_date) : "In force"}</dd>
-          </div>
-          <div>
-            <dt className="text-[12.5px] text-ink3">Rule change</dt>
-            <dd className="mt-1">
-              <Link href={`/rules/${d.change_id}/`} className="t-data text-[12.5px] underline underline-offset-4">
-                {change?.citation}
-              </Link>
-            </dd>
-          </div>
-        </dl>
-        <WhoOwns dutyId={d.id} />
-        </div>
+        <blockquote className="min-w-0 self-start rounded-[12px] bg-surface2 px-4 py-3 text-[13.5px] leading-[21px]">
+          {sec ? <Quoted text={sec.after} quote={d.source_text} /> : <>&ldquo;{d.source_text}&rdquo;</>}
+          <span className="mt-1 block text-[12px] text-ink3">The rule&apos;s own words · {sec?.section_number ?? d.citation}</span>
+        </blockquote>
+        <WhoOwns dutyId={d.id} compact className="self-start" />
       </header>
 
       <Tabs<Tab>
-        className="mt-10"
+        className="mt-5"
         label="Obligation"
         value={tab}
         onChange={setTab}
@@ -95,7 +87,7 @@ export function ObligationRoom({ id }: { id: string }) {
           { value: "open", label: "Open items", count: open.length },
         ]}
       />
-      <div className="mt-6">
+      <div className="mt-4">
         {tab === "behind" ? <Behind id={id} /> : null}
         {tab === "history" ? <History items={history} /> : null}
         {tab === "open" ? <OpenItems items={open} id={id} /> : null}
@@ -122,11 +114,11 @@ function Behind({ id }: { id: string }) {
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="min-w-0">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-[13.5px] text-ink2">Rule text down to evidence. Click a layer to read it.</p>
-          {support === "3d" ? <Segmented<"3d" | "2d"> label="Lineage view" size={28} value={view} onChange={setView} options={[{ value: "3d", label: "Stack" }, { value: "2d", label: "Chain" }]} /> : null}
+          <p className="text-[13.5px] text-ink2">From the rule's text to the evidence. Click any step to read it.</p>
+          {support === "3d" ? <Segmented<"3d" | "2d"> label="Lineage view" size={28} value={view} onChange={setView} options={[{ value: "3d", label: "3D" }, { value: "2d", label: "List" }]} /> : null}
         </div>
         {three ? (
-          <div className="relative h-[640px] overflow-hidden rounded-[14px] border border-line max-md:h-[480px]">
+          <div className="relative h-[clamp(300px,calc(100vh-380px),460px)] overflow-hidden rounded-[14px] border border-line max-md:h-[360px]">
             <Lineage3D layers={layers} brk={brk} selected={sel} onSelect={setSel} />
           </div>
         ) : (
@@ -141,6 +133,13 @@ function Behind({ id }: { id: string }) {
           <>
             <h3 className="text-[16px] leading-6 font-medium">{layer.item.title}</h3>
             {layer.item.sub ? <p className="text-[13px] text-ink2">{layer.item.sub}</p> : null}
+            {layer.item.owner || layer.item.date ? (
+              <p className="text-[13px] text-ink2">
+                {layer.item.owner ? `Owner ${userById(layer.item.owner)?.name}` : ""}
+                {layer.item.owner && layer.item.date ? " · " : ""}
+                {layer.item.date ?? ""}
+              </p>
+            ) : null}
             <p className="rounded-[12px] bg-surface2 px-3.5 py-3 text-[14px] leading-[22px]">{layer.item.text}</p>
             {layer.item.href ? (
               <Link href={layer.item.href} className="text-[13.5px] font-medium underline underline-offset-4">
