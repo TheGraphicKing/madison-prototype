@@ -1,5 +1,7 @@
 "use client";
 
+import { WhoOwns } from "@/components/core/who-owns";
+
 import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -108,6 +110,7 @@ function DrawerBody({ taskId }: { taskId: string }) {
   const required = spec.needed.filter((f) => f.required);
   const thread = [...(v.handoff?.thread ?? []), ...(v.handoff ? store.threads[v.handoff.id] ?? [] : store.threads[t.id] ?? [])];
 
+  const owns = <WhoOwns dutyId={t.obligation_id ?? undefined} changeId={t.change_id ?? undefined} compact />;
   const given = (
     <Block title="What you've been given">
       {spec.provided.length === 0 ? <p className="text-[13.5px] text-ink3">Nothing was attached.</p> : null}
@@ -181,6 +184,7 @@ function DrawerBody({ taskId }: { taskId: string }) {
       {spec.decision ? (
         <>
           {given}
+          {owns}
           <DecisionPanel
             compact
             deciding={spec.ask}
@@ -198,6 +202,7 @@ function DrawerBody({ taskId }: { taskId: string }) {
       ) : (
         <>
           {given}
+          {owns}
           {form}
           <Block title="Options">
             {done ? (

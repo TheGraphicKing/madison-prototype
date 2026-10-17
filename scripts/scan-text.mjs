@@ -20,6 +20,8 @@ const checks = [
   { name: "dollar amount", re: /\$\d[\d,]*(\.\d+)?\s?(k|m|million|bn)?/gi, allow: (m) => allowedDollars.has(m.trim()) },
   { name: "bracket label", re: /\[\s+[A-Z]+\s+\]/g },
   { name: "model name", re: /claude-|prompt v\d|tokens?\b/gi },
+  { name: "raw field name", re: /\b[a-z]+(?:_[a-z]+)+\b/g },
+  { name: "raw change id", re: /\bRC-20\d\d-\d{3}\b/g },
 ];
 
 const browser = await chromium.launch();

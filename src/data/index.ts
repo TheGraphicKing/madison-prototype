@@ -134,7 +134,7 @@ export const run = (id: string) => runMap.get(id);
 export const runForChange = (changeId: string) => runs.find((r) => r.change_id === changeId);
 
 /** Who the "Viewing as" switch offers. */
-export const PERSONA_IDS = ["u-elena", "u-anthony", "u-priya", "u-grace", "u-margaret", "u-nadia", "u-ravi"] as const;
+export const PERSONA_IDS = ["u-elena", "u-anthony", "u-priya", "u-grace", "u-margaret", "u-hannah", "u-nadia", "u-ravi"] as const;
 export type PersonaId = (typeof PERSONA_IDS)[number];
 
 export const personaRole: Record<PersonaId, string> = {
@@ -143,6 +143,7 @@ export const personaRole: Record<PersonaId, string> = {
   "u-priya": "CISO",
   "u-grace": "Mortgage operations",
   "u-margaret": "Payment operations",
+  "u-hannah": "Retail deposits",
   "u-nadia": "Third party risk",
   "u-ravi": "Assurance",
 };
@@ -187,3 +188,52 @@ export const recordV2 = (words(recordV2Json) as RecordEntryV2[]).slice().sort((a
 export const handoffById = (id: string) => handoffs.find((h) => h.id === id);
 export const consequenceFor = (obligationId: string) => consequences.find((c) => c.obligation_id === obligationId);
 export const taskById = (id: string) => tasks.find((t) => t.id === id);
+
+// ---------- Iteration 3: ownership, dates, scenarios, demo flows ----------
+import ownershipJson from "./ownership.json";
+import datesJson from "./dates.json";
+import scenarioJson from "./scenario_matrix.json";
+import demoFlowsJson from "./demo_flows.json";
+import type { ChangeDates, DemoFlow, Ownership, ProcessArea, Scenario } from "./types";
+
+export const ownership = ownershipJson as Ownership;
+export const changeDates = (datesJson as { today: string; changes: ChangeDates[] }).changes;
+export const scenarios = scenarioJson as Scenario[];
+export const demoFlows = demoFlowsJson as DemoFlow[];
+export const datesFor = (changeId: string) => changeDates.find((d) => d.change_id === changeId);
+export const scenarioFor = (changeId: string) => scenarios.find((s) => s.change_id === changeId);
+export const businessLine = (id: string) => ownership.business_lines.find((b) => b.id === id);
+export const processArea = (tag: string) => ownership.process_areas.find((p) => p.process_tag === tag);
+/** The process area that owns a rule change, from its obligations' process tags (or its regulation). */
+export function areaForChange(changeId: string): ProcessArea | undefined {
+  for (const d of dutiesFor(changeId)) for (const t of d.process_tags) {
+    const a = processArea(t);
+    if (a) return a;
+  }
+  const c = getChange(changeId);
+  const reg = c ? regulationById(c.regulation_id) : undefined;
+  return reg ? areaForRegulation(reg.citation) : undefined;
+}
+/** The process area for a regulation citation ("12 CFR 1005"). */
+export function areaForRegulation(citation: string): ProcessArea | undefined {
+  const base = citation.replace(/ Subpart.*/, "");
+  return ownership.process_areas.find((p) => p.regulations.some((r) => base === r || base.startsWith(r) || r.startsWith(base)));
+}
+/** The five roles on every obligation. */
+export function ownersOf(dutyId: string) {
+  const d = getDuty(dutyId);
+  if (!d) return undefined;
+  const area = d.process_tags.map(processArea).find(Boolean) ?? areaForChange(d.change_id);
+  const links = linksFor(d.id);
+  const pol = links.map((l) => (l.policy_section_id ? policyById(l.policy_section_id) : undefined)).find(Boolean);
+  const ctls = links.map((l) => (l.control_id ? controlById(l.control_id) : undefined)).filter(Boolean) as Control[];
+  return {
+    area,
+    line: area ? businessLine(area.business_line) : undefined,
+    accountable: area?.owner_id ?? d.owner_id,
+    policyOwner: pol?.owner_id,
+    controlOwners: Array.from(new Set(ctls.map((c) => c.owner_id))),
+    reviewer: "u-elena",
+    approver: "u-anthony",
+  };
+}

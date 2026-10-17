@@ -9,7 +9,15 @@ export function obligationWords(text: string): string {
     .replace(/\bconsumer EFT\b/g, "consumer electronic transfers")
     .replace(/\bConsumer EFT\b/g, "Consumer electronic transfers")
     // internal process tags are not bank words: "(card_disputes)" is dropped
-    .replace(/\s\([a-z]+(?:_[a-z]+)+\)/g, "");
+    .replace(/\s\([a-z]+(?:_[a-z]+)+\)/g, "")
+    // any other raw field name reads as words: "flood_zone_lending" becomes "flood zone lending"
+    .replace(/\b[a-z]+(?:_[a-z]+)+\b/g, (m) => m.replace(/_/g, " "));
+}
+
+/** A raw field name as a label: "flood_zone_lending" becomes "Flood zone lending". */
+export function fieldWord(key: string) {
+  const w = key.replace(/_/g, " ");
+  return w.charAt(0).toUpperCase() + w.slice(1);
 }
 
 export const obligationTitle = obligationWords;

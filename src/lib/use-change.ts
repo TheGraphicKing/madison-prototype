@@ -30,10 +30,25 @@ export const STEP_LABEL: Record<(typeof STEPS)[number], string> = {
 
 /** How many journey steps are done for a change. */
 export function stepsDone(c: RuleChange): number {
-  if (c.state === "closed") return 6;
-  if (c.state === "covered") return 5;
-  if (c.state === "screened_out" || c.state === "new" || c.state === "uncertain") return 0;
-  return STEPS.indexOf(c.step);
+  // the scenario matrix: the stage name is the last step done, except What's left, which is current
+  switch (c.state) {
+    case "closed":
+      return 6;
+    case "covered":
+      return 5;
+    case "whats_left":
+      return 4;
+    case "linked":
+      return 3;
+    case "duties":
+      return 2;
+    case "applies":
+      return 1;
+    case "screened_out":
+      return 1;
+    default:
+      return 0;
+  }
 }
 
 export const STATE_WORD: Record<string, string> = {

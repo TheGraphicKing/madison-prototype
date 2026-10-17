@@ -9,6 +9,7 @@ import { useStore, type Notice } from "@/lib/store";
 import { daysFrom, fmtDate, relDays, businessDaysFrom } from "@/lib/dates";
 import { useTaskViews, useWaitingOn, type TaskView } from "@/lib/work";
 import { kindOf } from "@/lib/task-spec";
+import { useTaskCounts } from "@/lib/counts";
 import { Page, Section } from "@/components/layout/page";
 import { Segmented } from "@/components/core/tabs";
 import { Button } from "@/components/core/button";
@@ -61,6 +62,7 @@ export function Tasks() {
   const sp = useSearchParams();
   const views = useTaskViews();
   const waiting = useWaitingOn(persona);
+  const counts = useTaskCounts(persona);
   const [filter, setFilter] = useState<Filter>("mine");
 
   useEffect(() => {
@@ -85,7 +87,7 @@ export function Tasks() {
         <div>
           <h1 className="t-page">My tasks</h1>
           <p className="mt-2 text-ink2">
-            {mine.filter((v) => v.state !== "done").length} open for {userById(persona)?.name}. Each one opens with what you&apos;ve been given and what you need to provide.
+            {counts.open} open for {userById(persona)?.name}, {counts.needsYou} need you now. Each one opens with what you&apos;ve been given and what you need to provide.
           </p>
         </div>
         <Segmented<Filter>
@@ -93,10 +95,10 @@ export function Tasks() {
           value={filter}
           onChange={setFilter}
           options={[
-            { value: "mine", label: "Mine", count: mine.filter((v) => v.state !== "done").length },
-            { value: "waiting", label: "Waiting on others", count: mine.filter((v) => v.state === "waiting_on_other").length + waiting.length },
-            { value: "blocked", label: "Blocked", count: mine.filter((v) => v.state === "blocked").length },
-            { value: "done", label: "Done", count: mine.filter((v) => v.state === "done").length },
+            { value: "mine", label: "Mine", count: counts.open },
+            { value: "waiting", label: "Waiting on others", count: counts.waitingOnOthers },
+            { value: "blocked", label: "Blocked", count: counts.blocked },
+            { value: "done", label: "Done", count: counts.done },
           ]}
         />
       </header>

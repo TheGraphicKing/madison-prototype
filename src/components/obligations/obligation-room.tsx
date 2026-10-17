@@ -11,11 +11,11 @@ import { fmtDate, fmtStamp } from "@/lib/dates";
 import { Page } from "@/components/layout/page";
 import { Tabs, Segmented } from "@/components/core/tabs";
 import { CertaintyWord, certaintyFrom, StatusChip } from "@/components/core/status";
-import { PersonTag } from "@/components/core/tags";
 import { Square } from "@/components/core/mark";
 import { ButtonLink } from "@/components/core/button";
 import { Quoted } from "@/components/run/quoted";
 import { DriftPair } from "@/components/change/drift-pair";
+import { WhoOwns } from "@/components/core/who-owns";
 import { useSceneSupport } from "@/components/scene/support";
 import { LineageChain, lineageOf, type Layer } from "./lineage";
 
@@ -49,7 +49,8 @@ export function ObligationRoom({ id }: { id: string }) {
             <span className="mt-1 block text-[12.5px] text-ink3">The rule&apos;s own words · {sec?.section_number ?? d.citation}</span>
           </blockquote>
         </div>
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-4 self-end rounded-[14px] border border-line bg-surface p-5 lg:col-span-4">
+        <div className="flex flex-col gap-3 self-end lg:col-span-4">
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-4 rounded-[14px] border border-line bg-surface p-5">
           <div>
             <dt className="text-[12.5px] text-ink3">State</dt>
             <dd className="mt-1.5">
@@ -63,10 +64,12 @@ export function ObligationRoom({ id }: { id: string }) {
             </dd>
           </div>
           <div>
-            <dt className="text-[12.5px] text-ink3">Owner</dt>
-            <dd className="mt-1.5">
-              <PersonTag id={d.owner_id} />
-            </dd>
+            <dt className="text-[12.5px] text-ink3">Deadline in the rule</dt>
+            <dd className="mt-1 text-[14px]">{d.deadline_text}</dd>
+          </div>
+          <div>
+            <dt className="text-[12.5px] text-ink3">Compliance date</dt>
+            <dd className="mt-1 text-[14px]">{change ? fmtDate(change.effective_date) : "In force"}</dd>
           </div>
           <div>
             <dt className="text-[12.5px] text-ink3">Rule change</dt>
@@ -77,6 +80,8 @@ export function ObligationRoom({ id }: { id: string }) {
             </dd>
           </div>
         </dl>
+        <WhoOwns dutyId={d.id} />
+        </div>
       </header>
 
       <Tabs<Tab>

@@ -7,8 +7,8 @@ const st = () => useStore.getState();
 beforeEach(() => st().reset());
 
 describe("handoffs and tasks", () => {
-  it("there are 20 tasks across 8 assignees (the brief says 9; the data has 8)", () => {
-    expect(tasks).toHaveLength(20);
+  it("there are 23 tasks across 8 assignees (20 seeded plus 3 vendor reviews CTL-153 creates)", () => {
+    expect(tasks).toHaveLength(23);
     expect(new Set(tasks.map((t) => t.assignee_id)).size).toBe(8);
   });
 
@@ -32,6 +32,11 @@ describe("handoffs and tasks", () => {
 
   it("loop 2: Anthony is blocked until Priya answers, then signs and CTL-153 is in force", () => {
     const t297 = tasks.find((t) => t.id === "T-297")!;
+    // nothing exists until the control-design run asks the owner
+    expect(handoffStatus(handoffById("H-117")!, st())).toBe("dormant");
+    expect(taskView(t297, st()).hidden).toBe(true);
+    raiseHandoff("H-117");
+    expect(taskView(t297, st()).hidden).toBe(false);
     expect(taskView(t297, st()).state).toBe("blocked");
     respondHandoff("H-117", "answer", { answer: "Yes, but it is vaulted and needs two officers" }, "u-priya");
     expect(taskView(t297, st()).state).toBe("open");
@@ -39,6 +44,8 @@ describe("handoffs and tasks", () => {
     expect(st().changes["RC-2026-011"].new_control).toBe("CTL-153");
     expect(st().obligationStates["D-208-M1"]).toBe("covered");
     expect(st().finishedRuns["run-design-mfa"]).toBeTruthy();
+    // three vendor reviews and the retest now exist
+    for (const id of ["T-302", "T-303", "T-304", "T-286"]) expect(taskView(tasks.find((t) => t.id === id)!, st()).hidden).toBe(false);
   });
 
   it("Reset demo restores the seed", () => {

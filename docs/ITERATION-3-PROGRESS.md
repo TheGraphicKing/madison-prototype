@@ -8,15 +8,15 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [x] Plan and progress written
 
 ## J Data and ownership
-- [ ] J1 ownership, dates, scenarios and flows merged and typed
-- [ ] J2 every change seeded at its stage; flow handoffs dormant
-- [ ] J3 Hannah Cole added and in the persona switch
-- [ ] J4 one selector per count, used everywhere
-- [ ] J5 no raw field names or ids in the UI
-- [ ] J6 "What changed this week" only for the last 7 days
-- [ ] J7 the four dates everywhere
-- [ ] J8 "Who owns this" block
-- [ ] Phase J checks and commit
+- [x] J1 ownership, dates, scenarios and flows merged and typed
+- [x] J2 every change seeded at its stage; flow handoffs dormant
+- [x] J3 Hannah Cole added and in the persona switch
+- [x] J4 one selector per count, used everywhere
+- [x] J5 no raw field names or ids in the UI
+- [x] J6 "What changed this week" only for the last 7 days
+- [x] J7 the four dates everywhere (component done; header and list use it in K and L)
+- [x] J8 "Who owns this" block
+- [x] Phase J checks and commit
 
 ## K The change map
 - [ ] K1 change room layout: header, map, side panel, strip
@@ -44,7 +44,7 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [ ] M4 wheel fix on every 3D view
 - [ ] M5 record chain readable
 - [ ] M6 Today: one action per row, counts agree
-- [ ] M7 lineage drift label never clipped
+- [x] M7 lineage drift label never clipped (done in J)
 - [ ] M8 toasts never over a scene
 - [ ] M9 typing always completes
 - [ ] M10 Live label until the run ends

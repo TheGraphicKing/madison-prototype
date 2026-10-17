@@ -242,5 +242,41 @@
   "kind": "control_run",
   "control_id": "CTL-170",
   "priority": 3
+ },
+ {
+  "id": "T-302",
+  "title": "Review Marlow Card Services for phishing-resistant MFA",
+  "why": "CTL-153 covers vendors with privileged access; confirm they use phishing-resistant MFA.",
+  "assignee_id": "u-nadia",
+  "due": "2026-11-13",
+  "state": "open",
+  "kind": "vendor_review",
+  "requested_by_id": "u-elena",
+  "change_id": "RC-2026-011",
+  "priority": 2
+ },
+ {
+  "id": "T-303",
+  "title": "Review Corvane Payments for phishing-resistant MFA",
+  "why": "CTL-153 covers vendors with privileged access; confirm they use phishing-resistant MFA.",
+  "assignee_id": "u-nadia",
+  "due": "2026-11-13",
+  "state": "open",
+  "kind": "vendor_review",
+  "requested_by_id": "u-elena",
+  "change_id": "RC-2026-011",
+  "priority": 2
+ },
+ {
+  "id": "T-304",
+  "title": "Review Vantrel Payment Systems for phishing-resistant MFA",
+  "why": "CTL-153 covers vendors with privileged access; confirm they use phishing-resistant MFA.",
+  "assignee_id": "u-nadia",
+  "due": "2026-11-13",
+  "state": "open",
+  "kind": "vendor_review",
+  "requested_by_id": "u-elena",
+  "change_id": "RC-2026-011",
+  "priority": 2
  }
 ]

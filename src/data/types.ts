@@ -512,3 +512,60 @@ export interface ReportsV2 {
     areas: { name: string; proven: boolean; why?: string; items?: string[] }[];
   };
 }
+
+// ---------- Iteration 3 ----------
+export interface BusinessLine {
+  id: string;
+  name: string;
+  head_id: string;
+}
+export interface ProcessArea {
+  process_tag: string;
+  name: string;
+  business_line: string;
+  owner_id: string;
+  policy: string | null;
+  regulations: string[];
+}
+export interface Ownership {
+  note: string;
+  business_lines: BusinessLine[];
+  process_areas: ProcessArea[];
+  roles_on_every_obligation: Record<string, string>;
+  add_users: User[];
+}
+export interface ChangeDates {
+  change_id: string;
+  published: Iso;
+  effective: Iso;
+  northgate_deadline: Iso | null;
+  closed?: Iso;
+}
+export interface Scenario {
+  change_id: string;
+  citation: string;
+  stage: string;
+  steps_done: number;
+  of: number;
+  owner_area: string;
+  demo: string;
+}
+export interface DemoStep {
+  n: number;
+  where: string;
+  do: string;
+  see: string;
+}
+export interface DemoFlow {
+  id: string;
+  title: string;
+  audience: string;
+  persona: string;
+  minutes: number;
+  start: string;
+  scenario_reset: string[];
+  story: string;
+  steps: DemoStep[];
+  end: string;
+  talk_track: string[];
+}

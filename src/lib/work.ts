@@ -16,11 +16,20 @@ const CREATED_BY: Record<string, (s: St) => boolean> = {
   "H-118": (s) => s.handoffs["H-118"]?.status === "active" || s.handoffs["H-118"]?.status === "done",
   // the Reg E run hands the vendor check to Nadia Brennan
   "H-113": (s) => Boolean(s.finishedRuns["run-rule-1005"]),
+  // the control-design run asks the owner one question when design check D6 cannot tell
+  "H-117": (s) => Boolean(s.handoffs["H-117"]),
+  // the CCO's sign-off is created with that question and waits for its answer
+  "H-116": (s) => Boolean(s.handoffs["H-117"]) || Boolean(s.handoffs["H-116"]),
 };
 /** Tasks without a handoff that the Reg E run creates. */
 const TASK_CREATED_BY: Record<string, (s: St) => boolean> = {
   "T-290": (s) => Boolean(s.finishedRuns["run-rule-1005"]),
   "T-283": (s) => Boolean(s.finishedRuns["run-rule-1005"]),
+  // once CTL-153 is in force: the retest and the three vendor reviews
+  "T-286": (s) => s.handoffs["H-116"]?.status === "done" && s.handoffs["H-116"]?.option === "approve",
+  "T-302": (s) => s.handoffs["H-116"]?.status === "done" && s.handoffs["H-116"]?.option === "approve",
+  "T-303": (s) => s.handoffs["H-116"]?.status === "done" && s.handoffs["H-116"]?.option === "approve",
+  "T-304": (s) => s.handoffs["H-116"]?.status === "done" && s.handoffs["H-116"]?.option === "approve",
 };
 
 export type HandoffStatus = "dormant" | "open" | "overdue" | "waiting_on_previous" | "done";

@@ -69,7 +69,7 @@
    }
   ],
   "blocks": [
-   "RC-2026-016 cannot move to Covered",
+   "12 CFR 1026.19(e) cannot move to Covered",
    "D-1026-L2 stays Not yet confirmed"
   ],
   "thread": [
@@ -295,7 +295,7 @@
    }
   ],
   "blocks": [
-   "RC-2026-019 stays Uncertain"
+   "12 CFR 339.3 stays Uncertain"
   ],
   "thread": []
  },
@@ -333,7 +333,7 @@
    }
   ],
   "blocks": [
-   "RC-2026-014 cannot close"
+   "12 CFR 1005.11(c) cannot close"
   ],
   "thread": []
  }

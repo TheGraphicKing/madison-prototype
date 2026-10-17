@@ -5,11 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
-import { agentById, auditTrail, driftFlags, position, regulations, ruleChanges, userById } from "@/data";
+import { agentById, areaForChange, auditTrail, datesFor, driftFlags, position, regulations, ruleChanges, userById } from "@/data";
+import { useChanges } from "@/lib/use-change";
+import { FourDates } from "@/components/core/dates4";
 import type { Plot } from "@/lib/coverage-field";
 import { useStore } from "@/lib/store";
-import { fmtDate, fmtTime, relDays } from "@/lib/dates";
-import { useTaskViews, useWaitingOn } from "@/lib/work";
+import { daysFrom, fmtDate, fmtTime, relDays } from "@/lib/dates";
+import { useWaitingOn } from "@/lib/work";
+import { useTaskCounts, useCoverageTotals } from "@/lib/counts";
 import { Page, Section } from "@/components/layout/page";
 import { Count } from "@/components/core/labels";
 import { FOUR_STATES, STATE_LABEL } from "@/components/core/status";
@@ -35,15 +38,10 @@ export function Today() {
   const [hello, setHello] = useState("Good morning");
   useEffect(() => setHello(greetingWord()), []);
   const me = userById(persona)!;
-  const views = useTaskViews();
   const waiting = useWaitingOn(persona);
-
-  const mine = views
-    .filter((v) => v.task.assignee_id === persona && v.state !== "done")
-    .sort((a, b) => a.task.priority - b.task.priority || a.task.due.localeCompare(b.task.due));
-  const needs = mine.filter((v) => v.state !== "waiting_on_other" && v.state !== "blocked");
-  const thisWeek = mine.filter((v) => bucket(v) !== "Later");
-  const next = [...mine].sort((a, b) => a.task.due.localeCompare(b.task.due))[0];
+  const counts = useTaskCounts(persona);
+  const needs = counts.actionable;
+  const next = [...needs].sort((a, b) => a.task.due.localeCompare(b.task.due))[0];
   const firstOpen = needs[0]?.task.id;
 
   return (
@@ -59,13 +57,13 @@ export function Today() {
 
       {/* three tiles: the one bold thing is Needs you */}
       <div className="mt-8 grid gap-3 md:grid-cols-3">
-        <Tile href="#needs-you" label="Needs you" value={needs.length + notices.length} sub={next ? `Next due: ${next.task.title}, ${relDays(next.task.due)}` : "Nothing due"} bold />
-        <Tile href="/tasks/" label="Due this week" value={thisWeek.length} sub={`${mine.filter((v) => v.state === "overdue").length} overdue`} />
-        <Tile href="/tasks/?filter=waiting" label="Waiting on others" value={waiting.length} sub={waiting[0] ? `Longest: ${waiting[0].who}` : "No one"} />
+        <Tile href="#needs-you" label="Needs you" value={counts.needsYou} sub={next ? `Next due: ${next.task.title}, ${relDays(next.task.due)}` : "Nothing due"} bold />
+        <Tile href="/tasks/" label="Due this week" value={counts.dueThisWeek} sub={`${counts.overdue} overdue`} />
+        <Tile href="/tasks/?filter=waiting" label="Waiting on others" value={counts.waitingOnOthers} sub={waiting[0] ? `Longest: ${waiting[0].who}` : "No one"} />
       </div>
 
       <Section id="needs-you" className="mt-12">
-        <SectionTitle title="Needs you" count={needs.length + notices.length} action={{ href: "/tasks/", label: "All my tasks" }} />
+        <SectionTitle title="Needs you" count={counts.needsYou} action={{ href: "/tasks/", label: "All my tasks" }} />
         {notices.length ? (
           <ul className="mb-3 flex flex-col gap-2">
             {notices.map((n) => (
@@ -82,7 +80,7 @@ export function Today() {
       </Section>
 
       <Section className="mt-12">
-        <SectionTitle title="Waiting on others" count={waiting.length} action={{ href: "/tasks/?filter=waiting", label: "See all" }} />
+        <SectionTitle title="Waiting on others" count={counts.waitingOnOthers} action={{ href: "/tasks/?filter=waiting", label: "See all" }} />
         <WaitingList items={waiting} limit={4} />
       </Section>
 
@@ -93,26 +91,7 @@ export function Today() {
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         <Section className="mt-0">
-          <SectionTitle title="What changed this week" action={{ href: "/rules/", label: "All rule changes" }} />
-          <ul className="flex flex-col overflow-clip rounded-[14px] border border-line bg-surface">
-            {[...ruleChanges]
-              .filter((c) => c.state !== "closed")
-              .sort((a, b) => b.published_at.localeCompare(a.published_at))
-              .slice(0, 5)
-              .map((c) => (
-                <li key={c.id} className="border-b border-line last:border-b-0">
-                  <Link href={`/rules/${c.id}/`} className="flex items-center gap-4 px-5 py-3.5 hover:bg-surface2">
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[14.5px] leading-[21px] font-medium">{c.title}</span>
-                      <span className="block text-[12.5px] text-ink2">
-                        <span className="t-data text-[11.5px]">{c.citation}</span> · effective {fmtDate(c.effective_date)}
-                      </span>
-                    </span>
-                    <AppliesChip verdict={appliesVerdict(c, fact?.value)} />
-                  </Link>
-                </li>
-              ))}
-          </ul>
+          <ChangesList fact={fact?.value} />
         </Section>
         <Section className="mt-0">
           <SectionTitle title="Madison overnight" action={{ href: "/record/", label: "The record" }} />
@@ -152,6 +131,7 @@ function Tile({ href, label, value, sub, bold }: { href: string; label: string; 
 /** The four counts with this month's change and a small trend, beside a compact 3D field. */
 function Standing() {
   const pos = position();
+  const tot = useCoverageTotals();
   const router = useRouter();
   const support = useSceneSupport();
   const [hover, setHover] = useState<Plot | null>(null);
@@ -167,7 +147,7 @@ function Standing() {
           const good = key === "covered" ? delta >= 0 : delta <= 0;
           return (
             <Link key={s} href={`/coverage/?view=map&state=${s}`} className={cn("flex flex-col gap-2 px-5 py-4 hover:bg-surface2", i % 2 === 1 && "border-l border-line", i >= 2 && "border-t border-line")}>
-              <Count value={pos[key]} state={s} size="medium" animate={false} />
+              <Count value={tot[key]} state={s} size="medium" animate={false} />
               <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
                 <span className={cn("text-[12.5px] font-medium", delta === 0 ? "text-ink3" : good ? "text-ok" : "text-risk")}>
                   {delta > 0 ? "+" : delta < 0 ? "−" : "±"}
@@ -254,5 +234,40 @@ function Overnight({ live }: { live: { at: string; who: string; what: string }[]
         </ul>
       ) : null}
     </div>
+  );
+}
+
+/** Changes published in the last 7 days; when there are none, every open change by its deadline. */
+function ChangesList({ fact }: { fact?: string }) {
+  const changes = useChanges(ruleChanges);
+  const recent = changes.filter((c) => daysFrom(c.published_at) >= -7 && daysFrom(c.published_at) <= 0);
+  const list = (recent.length ? recent : changes.filter((c) => c.state !== "closed" && c.state !== "screened_out"))
+    .slice()
+    .sort((a, b) => (datesFor(a.id)?.northgate_deadline ?? "9").localeCompare(datesFor(b.id)?.northgate_deadline ?? "9"))
+    .slice(0, 5);
+  return (
+    <>
+      <SectionTitle title={recent.length ? "What changed this week" : "Open rule changes"} action={{ href: "/rules/", label: "All rule changes" }} />
+      <ul className="flex flex-col overflow-clip rounded-[14px] border border-line bg-surface">
+        {list.map((c) => {
+          const area = areaForChange(c.id);
+          return (
+            <li key={c.id} className="border-b border-line last:border-b-0">
+              <Link href={`/rules/${c.id}/`} data-demo={c.id === "RC-2026-014" ? "D1-1" : undefined} className="flex items-center gap-4 px-5 py-3.5 hover:bg-surface2">
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[14.5px] leading-[21px] font-medium">{c.title}</span>
+                  <span className="block text-[12.5px] text-ink2">
+                    <span className="t-data text-[11.5px]">{c.citation}</span>
+                    {area ? ` · ${area.name} · ${userById(area.owner_id)?.name}` : ""}
+                  </span>
+                </span>
+                <FourDates changeId={c.id} compact className="shrink-0 text-right max-sm:hidden" />
+                <AppliesChip verdict={appliesVerdict(c, fact)} />
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }

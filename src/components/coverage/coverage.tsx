@@ -19,6 +19,7 @@ import { Documents } from "./documents";
 import { Calendar } from "./calendar";
 import { PlotDetail } from "./plot-detail";
 import { useSceneSupport } from "@/components/scene/support";
+import { useCoverageTotals } from "@/lib/counts";
 
 const CoverageField = dynamic(() => import("./field3d").then((m) => m.CoverageField), { ssr: false, loading: () => <div className="h-full w-full bg-surface" /> });
 
@@ -41,6 +42,7 @@ export function Coverage() {
   const view: View = VIEWS.some((x) => x.value === v) ? v : "field";
   const highlight = (sp.get("state") as FourState | null) ?? null;
   const pos = position();
+  const tot = useCoverageTotals();
   const support = useSceneSupport();
   const webgl = support !== "2d";
   const setView = (nv: View) => router.replace(`/coverage/?view=${nv}${highlight ? `&state=${highlight}` : ""}`, { scroll: false });
@@ -52,7 +54,7 @@ export function Coverage() {
         <div>
           <h1 className="t-page">Coverage</h1>
           <p className="mt-2 text-ink2">
-            {pos.total_applicable.toLocaleString("en-US")} applicable obligations across {regulations.length} regulations, as of {fmtDate(pos.as_of)}. {pos.out_of_scope} more are out of scope and {pos.uncertain} are unsure.
+            {tot.total.toLocaleString("en-US")} applicable obligations across {regulations.length} regulations, as of {fmtDate(pos.as_of)}. {pos.out_of_scope} more are out of scope and {pos.uncertain} are unsure.
           </p>
         </div>
         <Segmented<View> label="Coverage view" value={view} onChange={setView} options={VIEWS} />
@@ -66,7 +68,7 @@ export function Coverage() {
             aria-pressed={highlight === s}
             className={cn("py-6 text-left transition-colors hover:bg-surface", i && "border-l border-line pl-6", "max-md:[&:nth-child(3)]:border-l-0 max-md:[&:nth-child(3)]:pl-0", highlight === s && "bg-surface shadow-[inset_0_-2px_0_var(--ink)]")}
           >
-            <Count value={pos[s]} state={s} />
+            <Count value={tot[s]} state={s} />
           </button>
         ))}
       </div>

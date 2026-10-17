@@ -62,5 +62,13 @@
   "initials": "TR",
   "role": "BSA Officer",
   "team": "Financial crime"
+ },
+ {
+  "id": "u-hannah",
+  "name": "Hannah Cole",
+  "initials": "HC",
+  "role": "Head of Retail Deposits",
+  "team": "Retail",
+  "is_current_user": false
  }
 ]

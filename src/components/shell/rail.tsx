@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { institution } from "@/data";
-import { useTaskViews } from "@/lib/work";
+import { useTaskCounts } from "@/lib/counts";
 import { useStore } from "@/lib/store";
 import { NAV_ITEMS } from "./crumbs";
 import { NAV_GLYPHS, GlyphChevron } from "@/components/glyphs";
@@ -31,8 +31,8 @@ export function Rail({ collapsed, onToggle }: { collapsed: boolean; onToggle: ()
   const [tip, setTip] = useState<{ label: string; y: number } | null>(null);
   const peekTimer = useRef<number | null>(null);
   const tipTimer = useRef<number | null>(null);
-  const views = useTaskViews();
-  const openTasks = views.filter((v) => v.task.assignee_id === persona && v.state !== "done").length;
+  // the badge and the Today "Needs you" tile read the same selector
+  const openTasks = useTaskCounts(persona).needsYou;
   const wide = !collapsed || peek;
 
   const clear = () => {

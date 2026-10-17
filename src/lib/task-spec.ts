@@ -64,7 +64,7 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
       return {
         ...base,
         ask: "Run the coverage check for revised Loan Estimates, then confirm the links.",
-        blocks: ["RC-2026-016 cannot move to Covered"],
+        blocks: ["12 CFR 1026.19(e) cannot move to Covered"],
         options: [{ id: "run", label: "Run the coverage check", next: "Madison compares policy, procedure and rule, then asks you to confirm.", primary: true, href: "/runs/run-coverage-1026/?mode=live&view=simple&from=/rules/RC-2026-016/" }],
       };
     case "T-289": {
@@ -74,7 +74,7 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
         ...base,
         decision: true,
         ask: `Accept ${ds.length} Truth in Savings obligations, each checked against the rule's own words.`,
-        blocks: ["RC-2026-013 cannot be linked to policies"],
+        blocks: ["12 CFR 1030.4 cannot be linked to policies"],
         options: [
           { id: "accept", label: `Accept ${ds.length} obligations`, next: "Madison matches them to policies and controls.", primary: true },
           { id: "open", label: "Review in the change room", next: "Opens the obligations one by one.", href: "/rules/RC-2026-013/" },
@@ -176,12 +176,12 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
 
 function nextFor(h: Handoff, option: string) {
   const sender = userById(h.from_user_id)?.name;
-  if (h.id === "H-118") return option === "fix" ? `${sender} sees your wording; RC-2026-016 can move to Covered.` : option === "dispute" ? `${sender} reviews your reason before anything changes.` : "You pick someone else to answer.";
+  if (h.id === "H-118") return option === "fix" ? `${sender} sees your wording; 12 CFR 1026.19(e) can move to Covered.` : option === "dispute" ? `${sender} reviews your reason before anything changes.` : "You pick someone else to answer.";
   if (h.id === "H-117") return "D6 is decided, and CTL-153 goes to Anthony Marsh for sign-off.";
   if (h.id === "H-116") return option === "approve" ? "CTL-153 goes into force; 3 vendor reviews and a test plan change start." : `${sender} gets CTL-153 back with your reason.`;
   if (h.id === "H-115") return option === "upload" ? "CTL-132 counts as fresh again." : "Ravi Sethuraman logs a control failure.";
   if (h.id === "H-114") return "Madison decides whether 12 CFR 339.3 applies.";
-  if (h.id === "H-113") return "RC-2026-014 can close once every vendor has answered.";
+  if (h.id === "H-113") return "12 CFR 1005.11(c) can close once every vendor has answered.";
   return `${sender} is told.`;
 }
 

@@ -1,0 +1,62 @@
+"use client";
+
+// One selector per count. Today, the rail badge, My tasks and Coverage all read these,
+// so a number shown in two places is always the same number.
+import { useMemo } from "react";
+import { daysFrom, businessDaysFrom } from "./dates";
+import { useStore } from "./store";
+import { useTaskViews, useWaitingOn, type TaskView } from "./work";
+import { position } from "@/data";
+
+export interface TaskCounts {
+  /** every task of mine that is not done: the rail badge and the "Mine" filter */
+  open: number;
+  /** open or overdue tasks I can act on now, plus unread responses: the Today "Needs you" tile */
+  needsYou: number;
+  actionable: TaskView[];
+  dueThisWeek: number;
+  overdue: number;
+  blocked: number;
+  done: number;
+  /** what others owe me: handoffs I sent and work I handed out */
+  waitingOnOthers: number;
+  responses: number;
+}
+
+export function useTaskCounts(persona: string): TaskCounts {
+  const views = useTaskViews();
+  const waiting = useWaitingOn(persona);
+  const notices = useStore((s) => s.notices);
+  return useMemo(() => {
+    const mine = views.filter((v) => v.task.assignee_id === persona);
+    const open = mine.filter((v) => v.state !== "done");
+    const actionable = open
+      .filter((v) => v.state === "open" || v.state === "overdue")
+      .sort((a, b) => a.task.priority - b.task.priority || a.task.due.localeCompare(b.task.due));
+    const responses = notices.filter((n) => n.to === persona && !n.read).length;
+    return {
+      open: open.length,
+      needsYou: actionable.length + responses,
+      actionable,
+      dueThisWeek: open.filter((v) => daysFrom(v.task.due) < 0 || businessDaysFrom(v.task.due) <= 5).length,
+      overdue: open.filter((v) => v.state === "overdue" || daysFrom(v.task.due) < 0).length,
+      blocked: mine.filter((v) => v.state === "blocked").length,
+      done: mine.filter((v) => v.state === "done").length,
+      waitingOnOthers: waiting.length,
+      responses,
+    };
+  }, [views, waiting, notices, persona]);
+}
+
+/** The four bank-wide counts, with what the demo changed applied. */
+export function useCoverageTotals() {
+  const states = useStore((s) => s.obligationStates);
+  return useMemo(() => {
+    const p = position();
+    const t = { covered: p.covered, not_yet_confirmed: p.not_yet_confirmed, nothing_behind: p.nothing_behind, known_gap: p.known_gap };
+    // an obligation fixed during the demo moves from its seeded state to covered
+    if (states["D-208-M1"] === "covered") (t.covered++, t.nothing_behind--);
+    if (states["D-1026-L2"] === "covered") (t.covered++, t.not_yet_confirmed--);
+    return { ...t, total: t.covered + t.not_yet_confirmed + t.nothing_behind + t.known_gap };
+  }, [states]);
+}

@@ -11,6 +11,7 @@ import { fmtDate } from "@/lib/dates";
 import { StatusChip } from "@/components/core/status";
 import { ButtonLink } from "@/components/core/button";
 import { Mark } from "@/components/core/mark";
+import { WhoOwns } from "@/components/core/who-owns";
 
 export function PlotDetail({ plot, onClose }: { plot: Plot; onClose: () => void }) {
   const states = useStore((s) => s.obligationStates);
@@ -53,6 +54,8 @@ export function PlotDetail({ plot, onClose }: { plot: Plot; onClose: () => void 
           <Mark kind="close" />
         </button>
       </div>
+
+      <WhoOwns regulation={plot.citation} dutyId={duties[0]?.id} compact />
 
       <ul className="grid grid-cols-2 gap-2">
         {STATES.map((s) => (

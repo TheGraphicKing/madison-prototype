@@ -139,7 +139,7 @@ function LineageScene({ tk, layers, brk, selected, onSelect }: { tk: Tokens; lay
               <Line points={[[0, a, 0], [0, mid + 0.16, 0]]} color={tk["--risk"]} lineWidth={2} />
               <Line points={[[0, mid - 0.16, 0], [0, b, 0]]} color={tk["--risk"]} lineWidth={2} />
               <Label position={[-SIZE[0] / 2 + 0.2, mid, SIZE[2] / 2]} anchor="left" z={[13, 0]}>
-                <div className="rounded-[10px] bg-risk-soft px-2.5 py-1.5 text-[12px] leading-[17px] whitespace-nowrap text-risk">
+                <div className="w-[210px] rounded-[10px] bg-risk-soft px-2.5 py-1.5 text-[12px] leading-[17px] text-risk shadow-[0_0_0_1px_var(--line)]">
                   Break: policy {brk.policy} · procedure {brk.procedure}
                   <span className="block text-ink2">The rule now says {brk.limit}</span>
                 </div>
