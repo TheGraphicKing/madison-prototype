@@ -51,3 +51,17 @@ export function useSceneTokens(): Tokens | null {
   }, [palette, mode]);
   return t;
 }
+
+/** Eight distinct, theme-aware colours for categories (owners), mixed from the palette's viz tokens. */
+export function categoryColours(tk: Tokens): string[] {
+  const mix = (a: string, b: string, k: number) => {
+    const pa = parseInt(a.slice(1), 16);
+    const pb = parseInt(b.slice(1), 16);
+    const ch = (v: number, s: number) => (v >> s) & 255;
+    const m = (s: number) => Math.round(ch(pa, s) + (ch(pb, s) - ch(pa, s)) * k);
+    return "#" + [16, 8, 0].map((s) => m(s).toString(16).padStart(2, "0")).join("");
+  };
+  const hex = (v: string) => (v.startsWith("#") && v.length === 7 ? v : "#888888");
+  const [ok, warn, risk, info, hl, ink2] = [tk["--vizOk"], tk["--vizWarn"], tk["--vizRisk"], tk["--vizInfo"], tk["--highlight"], tk["--ink2"]].map(hex);
+  return [info, ok, warn, risk, mix(info, risk, 0.5), mix(ok, info, 0.5), mix(warn, hl, 0.5), ink2];
+}

@@ -38,17 +38,17 @@ If the session drops, re-read `docs/ITERATION-3-PLAN.md` and this file, then con
 - [x] Phase L checks and commit
 
 ## M Coverage and fixes
-- [ ] M1 lens switch (Coverage and the Today mini field)
-- [ ] M2 plot labels by regulation, no collisions
-- [ ] M3 specific plot panel with actions
+- [x] M1 lens switch (Coverage and the Today mini field)
+- [x] M2 plot labels by regulation, no collisions
+- [x] M3 specific plot panel with actions
 - [x] M4 wheel fix on every 3D view
-- [ ] M5 record chain readable
-- [ ] M6 Today: one action per row, counts agree
+- [x] M5 record chain readable
+- [x] M6 Today: one action per row, counts agree
 - [x] M7 lineage drift label never clipped (done in J)
-- [ ] M8 toasts never over a scene
-- [ ] M9 typing always completes
-- [ ] M10 Live label until the run ends
-- [ ] Phase M checks and commit
+- [x] M8 toasts never over a scene
+- [x] M9 typing always completes
+- [x] M10 Live label until the run ends
+- [x] Phase M checks and commit
 
 ## N Demo hub and guide
 - [ ] N1 Demos rail entry, panel, shortcut D

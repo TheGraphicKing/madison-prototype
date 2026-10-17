@@ -63,9 +63,11 @@ export function Record() {
   const support = useSceneSupport();
   const entries = useEntries();
   const [view, setView] = useState<"chain" | "list">("chain");
+  // the latest entry is selected by default
   const [selected, setSelected] = useState<string | null>(null);
-  const [cursor, setCursor] = useState(() => Math.max(0, entries.length - 5));
-  const sel = entries.find((e) => e.id === selected) ?? null;
+  const sel0 = selected ?? entries.at(-1)?.id ?? null;
+  const [cursor, setCursor] = useState(() => Math.max(0, entries.length - 3));
+  const sel = entries.find((e) => e.id === sel0) ?? null;
   const chain = view === "chain" && support === "3d";
 
   // scrolling over the chain moves along time
@@ -74,6 +76,8 @@ export function Record() {
     const el = box.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
+      // the wheel scrolls the page; with Ctrl or Cmd (or sideways) it moves through time
+      if (!(e.ctrlKey || e.metaKey) && Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
       if (Math.abs(e.deltaY) + Math.abs(e.deltaX) < 4) return;
       e.preventDefault();
       setCursor((c) => Math.max(0, Math.min(entries.length - 1, c + Math.sign(e.deltaY || e.deltaX))));
@@ -104,7 +108,7 @@ export function Record() {
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
           <div>
             <div ref={box} className="relative h-[460px] overflow-hidden rounded-[16px] border border-line">
-              <Chain3D entries={entries} selected={selected} onSelect={setSelected} cursor={cursor} />
+              <Chain3D entries={entries} selected={sel0} onSelect={setSelected} cursor={cursor} />
               <div className="absolute right-4 bottom-4 left-4 flex items-center gap-3 rounded-[12px] bg-surface/95 px-3 py-2 shadow-[0_0_0_1px_var(--line)]">
                 <span className="text-[12px] whitespace-nowrap text-ink3 max-md:hidden">{fmtStamp(entries[0]?.at ?? "")}</span>
                 <input
@@ -119,7 +123,13 @@ export function Record() {
                 <span className="text-[12px] whitespace-nowrap text-ink3 max-md:hidden">{entries.at(-1)?.live ? "Now" : fmtStamp(entries.at(-1)?.at ?? "")}</span>
               </div>
             </div>
-            <p className="mt-2 text-[12.5px] text-ink3">A rounded cube is a person; a flat tile is an agent. Scroll over the chain to move through time; click an entry to open it.</p>
+            <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[12.5px] text-ink2">
+              <span className="flex items-center gap-1.5"><span className="block size-[11px] rounded-[3px] bg-ink2" /> A person</span>
+              <span className="flex items-center gap-1.5"><span className="block h-[5px] w-[13px] rounded-[2px] bg-viz-info" /> An agent</span>
+              <span className="flex items-center gap-1.5"><span className="block size-[11px] rounded-[3px] bg-highlight" /> This session</span>
+              <span className="flex items-center gap-1.5"><span className="block h-px w-[14px] bg-ink" /> Linked to the entry before</span>
+              <span className="text-ink3">Ctrl and scroll, or the slider, moves through time · click an entry to open it</span>
+            </div>
           </div>
           <EntryPanel e={sel} />
         </div>

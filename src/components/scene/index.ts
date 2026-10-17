@@ -4,5 +4,5 @@ export { Stage, LightRig, Ground } from "./stage";
 export { Blocks, Platform, Slab, Gate, roundedBox, type BlockItem } from "./blocks";
 export { Label } from "./label";
 export { CameraRig, OverviewButton, ZoomButtons, useZoom, type Frame, type ZoomSignal } from "./camera";
-export { useSceneTokens, readTokens, STATE_VAR, STATE_WORD, STATE_HEIGHT, type Tokens, type FourStateKey } from "./tokens";
+export { useSceneTokens, readTokens, categoryColours, STATE_VAR, STATE_WORD, STATE_HEIGHT, type Tokens, type FourStateKey } from "./tokens";
 export { useSceneSupport, type SceneSupport } from "./support";

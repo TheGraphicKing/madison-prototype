@@ -42,6 +42,10 @@ export function Register() {
     const p = none();
     const s = sp.get("state");
     if (s) p.state.add(s);
+    const r = sp.get("reg");
+    if (r) p.reg.add(r);
+    // from a plot: "Open these obligations" shows what is not covered first
+    if (r && sp.get("open")) ["nothing_behind", "not_yet_confirmed", "known_gap"].forEach((x) => p.state.add(x));
     return p;
   });
   const control = sp.get("control");

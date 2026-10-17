@@ -36,11 +36,12 @@ export function Typed({
   const last = useRef(0);
   if (controlled) last.current = elapsed!;
 
+  // the wall clock always runs too, so text finishes even when the run's clock stops
   useEffect(() => {
-    if (controlled || reduced) return;
+    if (reduced) return;
     let raf = 0;
     start.current = null;
-    const from = last.current;
+    const from = controlled ? 0 : last.current;
     setOwn(from);
     const tick = (now: number) => {
       if (start.current === null) start.current = now;
@@ -52,9 +53,9 @@ export function Typed({
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, controlled, reduced, cps, delay]);
+  }, [text, reduced, cps, delay]);
 
-  const ms = controlled ? elapsed! : reduced ? Infinity : own;
+  const ms = reduced ? Infinity : controlled ? Math.max(elapsed!, own) : own;
   const n = Math.min(text.length, Math.floor((ms / 1000) * cps));
   const done = n >= text.length;
   const showCaret = caret === true || (caret === "while" && !done);

@@ -3,7 +3,7 @@
 // One plot's detail: its four counts, what covers it, what does not and why, what the bank is
 // accepting, what it means in practice, and the next steps. Exposure is words only, never a figure.
 import Link from "next/link";
-import { consequenceFor, controlById, gapFor, getChange, getDuty, linksFor, policyById, userById } from "@/data";
+import { consequenceFor, controlById, gapFor, getChange, getDuty, ownersOf, linksFor, policyById, userById } from "@/data";
 import type { Duty } from "@/data/types";
 import { STATES, type Plot } from "@/lib/coverage-field";
 import { useStore } from "@/lib/store";
@@ -42,6 +42,8 @@ export function PlotDetail({ plot, onClose }: { plot: Plot; onClose: () => void 
   const accepted = duties.filter((d) => stateOf(d) === "known_gap");
   const worst = [...notCovered, ...accepted].map((d) => consequenceFor(d.id)).find(Boolean);
   const gaps = plot.counts.nothing_behind + plot.counts.known_gap + plot.counts.not_yet_confirmed;
+  // the change room where the first open gap is being fixed
+  const fixChange = [...notCovered, ...accepted].map((d) => d.change_id).find((id) => { const c = getChange(id); return c && c.state !== "closed"; });
 
   return (
     <aside aria-label={`${plot.short} detail`} className="flex flex-col gap-6 rounded-[14px] border border-line bg-surface p-5">
@@ -93,7 +95,7 @@ export function PlotDetail({ plot, onClose }: { plot: Plot; onClose: () => void 
                 </Link>
                 <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[12.5px] text-ink2">
                   <StatusChip state={stateOf(d)} size="sm" />
-                  <span>Owner {userById(d.owner_id)?.name}</span>
+                  <span>Owner {userById(ownersOf(d.id)?.accountable ?? d.owner_id)?.name}</span>
                   {d.change_id && (getChange(d.change_id)?.effective_date ?? "") > "2026-10-16" ? <span className="text-ink3">From the change effective {fmtDate(getChange(d.change_id)!.effective_date)}, not yet in the counts</span> : null}
                 </div>
                 <p className="mt-1.5 text-[13px] leading-5 text-ink2">{consequenceFor(d.id)?.headline ?? (stateOf(d) === "nothing_behind" ? "No policy or control stands behind it yet." : "Linked, but the owner has not confirmed the evidence.")}</p>
@@ -118,6 +120,8 @@ export function PlotDetail({ plot, onClose }: { plot: Plot; onClose: () => void 
                       Accepted by {userById(g.accepted_by_user_id)?.name} on {fmtDate(g.accepted_at)}, until {fmtDate(g.expiry)}. {g.rationale}
                     </p>
                   ) : null}
+                  <p className="mt-1 text-ink2">Owner {userById(ownersOf(d.id)?.accountable ?? d.owner_id)?.name}</p>
+                  {consequenceFor(d.id) ? <p className="mt-1 text-ink">{consequenceFor(d.id)!.headline}</p> : null}
                 </li>
               );
             })}
@@ -158,19 +162,18 @@ export function PlotDetail({ plot, onClose }: { plot: Plot; onClose: () => void 
       </Block>
 
       <div className="flex flex-wrap gap-2">
-        {notCovered[0] ? (
-          <ButtonLink href={`/obligations/${notCovered[0].id}/`} variant="primary" size={32}>
-            Open the obligation
+        <ButtonLink href={`/obligations/?reg=${plot.regulationId}${gaps ? "&open=1" : ""}`} variant="primary" size={32}>
+          Open these obligations
+        </ButtonLink>
+        {fixChange ? (
+          <ButtonLink href={`/rules/${fixChange}/`} variant="quiet" size={32}>
+            Start a fix
           </ButtonLink>
-        ) : null}
-        {worst ? (
+        ) : worst ? (
           <ButtonLink href={`/obligations/${worst.obligation_id}/?tab=open`} variant="quiet" size={32}>
             Start a fix
           </ButtonLink>
         ) : null}
-        <ButtonLink href="/tasks/" variant="quiet" size={32}>
-          Open my tasks
-        </ButtonLink>
       </div>
     </aside>
   );

@@ -4,8 +4,9 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { plotLayout, useLiveField, type Plot, type Tile } from "@/lib/coverage-field";
-import { getDuty } from "@/data";
-import { Blocks, CameraRig, Label, OverviewButton, Platform, Stage, STATE_HEIGHT, STATE_VAR, STATE_WORD, useSceneTokens, useZoom, ZoomButtons, type Frame, type Tokens, type ZoomSignal } from "@/components/scene";
+import { getDuty, userById } from "@/data";
+import { deadlineBand, ownersInField, plotDaysLeft, plotOwner, plotShortLabel, tileOwner, type Lens } from "@/lib/lens";
+import { Blocks, CameraRig, Label, OverviewButton, Platform, Stage, STATE_HEIGHT, STATE_VAR, STATE_WORD, useSceneTokens, useZoom, ZoomButtons, categoryColours, type Frame, type Tokens, type ZoomSignal } from "@/components/scene";
 
 export type HoverInfo = { plot: Plot; state: string; dutyId?: string; k: number } | null;
 
@@ -22,12 +23,14 @@ export function CoverageField({
   highlightState,
   mini = false,
   onHoverPlot,
+  lens = "state",
 }: {
   selected: number | null;
   onSelectPlot: (i: number | null) => void;
   highlightState?: string | null;
   mini?: boolean;
   onHoverPlot?: (p: Plot | null) => void;
+  lens?: Lens;
 }) {
   const tk = useSceneTokens();
   const [hover, setHover] = useState<HoverInfo>(null);
@@ -37,7 +40,7 @@ export function CoverageField({
   return (
     <div className="relative h-full w-full">
       <Stage tk={tk} label="Coverage field: every applicable obligation as a block, grouped by regulation" extent={7} camera={[8, 9, 10]} ao={!mini} onMissed={() => onSelectPlot(null)}>
-        <FieldScene tk={tk} selected={selected} onSelectPlot={onSelectPlot} onHover={(h) => (setHover(h), onHoverPlot?.(h?.plot ?? null))} highlightState={highlightState} mini={mini} reset={reset} zoom={zoom} />
+        <FieldScene tk={tk} selected={selected} onSelectPlot={onSelectPlot} onHover={(h) => (setHover(h), onHoverPlot?.(h?.plot ?? null))} highlightState={highlightState} mini={mini} reset={reset} zoom={zoom} lens={lens} />
       </Stage>
       {hover && !mini ? (
         <div className="pointer-events-none absolute top-4 left-4 max-w-[320px] rounded-[12px] bg-surface px-3.5 py-2.5 shadow-(--overlay-shadow) ring-1 ring-line">
@@ -49,6 +52,7 @@ export function CoverageField({
             <span className="block size-[8px] rounded-[2px]" style={{ background: `var(${STATE_VAR[hover.state as keyof typeof STATE_VAR]})` }} />
             {STATE_WORD[hover.state as keyof typeof STATE_WORD]}
           </div>
+          <div className="mt-1 text-[12.5px] text-ink2">Owner {userById(tileOwner(hover.plot, hover.dutyId))?.name}</div>
         </div>
       ) : null}
       {!mini ? (
@@ -76,6 +80,7 @@ function FieldScene({
   mini,
   reset,
   zoom,
+  lens,
 }: {
   tk: Tokens;
   selected: number | null;
@@ -85,6 +90,7 @@ function FieldScene({
   mini: boolean;
   reset: number;
   zoom: ZoomSignal;
+  lens: Lens;
 }) {
   const { plots, tiles } = useLiveField();
   const lay = useMemo(() => plotLayout(plots), [plots]);
@@ -105,8 +111,18 @@ function FieldScene({
     const base: Record<string, THREE.Color> = {};
     const dim = new THREE.Color(tk["--surface3"]);
     for (const [s, v] of Object.entries(STATE_VAR)) base[s] = new THREE.Color(tk[v]);
-    return { base, dim, ink: new THREE.Color(tk["--ink"]) };
-  }, [tk]);
+    // owner and deadline colours, per tile
+    const cats = categoryColours(tk);
+    const owners = ownersInField(plots).map((o) => o.id);
+    const band: Record<string, THREE.Color> = { late: new THREE.Color(tk["--vizRisk"]), soon: new THREE.Color(tk["--vizWarn"]), later: new THREE.Color(tk["--vizOk"]), none: new THREE.Color(tk["--vizMuted"]) };
+    const plotBand = plots.map((p) => deadlineBand(plotDaysLeft(p)));
+    const perTile = tiles.map((t) => {
+      if (lens === "owner") return new THREE.Color(cats[owners.indexOf(tileOwner(plots[t.plot], t.dutyId)) % cats.length]);
+      if (lens === "deadline") return band[plotBand[t.plot]];
+      return base[t.state];
+    });
+    return { base, dim, perTile, ink: new THREE.Color(tk["--ink"]) };
+  }, [tk, lens, plots, tiles]);
 
   const sel = useRef(selected);
   sel.current = selected;
@@ -128,11 +144,37 @@ function FieldScene({
     o.position.set(q.x, h / 2 + 0.05 + lift, q.z);
     o.scale.set(1, h / UNIT, 1);
     const dim = (sel.current !== null && t.plot !== sel.current) || (hl.current && t.state !== hl.current);
-    c.copy(colours.base[t.state]);
+    c.copy(colours.perTile[i] ?? colours.base[t.state]);
     if (dim) c.lerp(colours.dim, 0.75);
   };
 
   const overview: Frame = { center: [0, 0, 0], size: [lay.width + 0.4, 0.4, lay.depth + 0.4] };
+  // labels: biggest plots first; a label that would overlap one already placed waits for hover
+  const [visibleLabels, setVisible] = useState<Set<number>>(new Set());
+  const camera = useThree((s) => s.camera);
+  const size = useThree((s) => s.size);
+  const last = useRef(0);
+  useFrame(({ clock }) => {
+    if (mini || clock.elapsedTime - last.current < 0.3) return;
+    last.current = clock.elapsedTime;
+    const order = plots.map((_, i) => i).sort((a, b) => plots[b].total - plots[a].total);
+    const boxes: [number, number, number, number][] = [];
+    const next = new Set<number>();
+    const v = new THREE.Vector3();
+    for (const i of order) {
+      const q = lay.pos[i];
+      v.set(q.x - cx - 0.04, 0.08, q.z - cz - 0.12).project(camera);
+      const x = ((v.x + 1) / 2) * size.width;
+      const y = ((1 - v.y) / 2) * size.height;
+      const w = plotShortLabel(plots[i]).length * 6.2 + 6;
+      const box: [number, number, number, number] = [x, y - 18, x + w, y];
+      if (v.z > 1 || x < -20 || x > size.width) continue;
+      if (boxes.some((o) => box[0] < o[2] && box[2] > o[0] && box[1] < o[3] && box[3] > o[1])) continue;
+      boxes.push(box);
+      next.add(i);
+    }
+    if (next.size !== visibleLabels.size || [...next].some((i) => !visibleLabels.has(i))) setVisible(next);
+  });
   const focus: Frame | null =
     selected !== null ? { center: [lay.pos[selected].x + lay.pos[selected].w / 2 - cx, 0.1, lay.pos[selected].z + lay.pos[selected].d / 2 - cz], size: [lay.pos[selected].w * 1.6, 0.4, lay.pos[selected].d * 1.6] } : null;
 
@@ -156,15 +198,13 @@ function FieldScene({
               onOut={() => (setHoverPlot((h) => (h === i ? null : h)), mini && onHover(null))}
               onClick={(e) => (e.stopPropagation(), onSelectPlot(selected === i ? null : i))}
             />
-            {!mini && (lit || p.total >= 140) ? (
+            {!mini && (lit || visibleLabels.has(i)) ? (
               <Label position={[q.x - cx - 0.04, 0.08, q.z - cz - 0.12]} anchor="bottom" z={[10, 0]}>
                 <div style={{ transform: "translateX(50%)" }} className="whitespace-nowrap">
-                  <div className={lit ? "inline-block rounded-[8px] bg-ink px-1.5 py-0.5 text-[11px] font-medium text-surface" : "text-[11px] font-medium text-ink2"}>
-                    {p.short}
-                  </div>
+                  <div className={lit ? "inline-block rounded-[8px] bg-ink px-1.5 py-0.5 text-[11px] font-medium text-surface" : "text-[11px] font-medium text-ink2"}>{lit ? `${p.citation} · ${p.title}` : plotShortLabel(p)}</div>
                   {lit ? (
                     <div className="mt-1 rounded-[8px] bg-surface px-2 py-1 text-[11px] leading-4 text-ink shadow-(--overlay-shadow) ring-1 ring-line">
-                      {p.citation} · {p.counts.covered} covered · {p.counts.not_yet_confirmed} not yet confirmed · {p.counts.nothing_behind} nothing behind it · {p.counts.known_gap} known gaps
+                      {p.counts.covered} covered · {p.counts.not_yet_confirmed} not yet confirmed · {p.counts.nothing_behind} nothing behind it · {p.counts.known_gap} known gaps · owner {userById(plotOwner(p))?.name}
                     </div>
                   ) : null}
                 </div>

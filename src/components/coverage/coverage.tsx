@@ -18,6 +18,8 @@ import { DataTable } from "@/components/core/data-table";
 import { Documents } from "./documents";
 import { Calendar } from "./calendar";
 import { PlotDetail } from "./plot-detail";
+import { LensLegend, LensSwitch } from "./lens-switch";
+import type { Lens } from "@/lib/lens";
 import { useSceneSupport } from "@/components/scene/support";
 import { useCoverageTotals } from "@/lib/counts";
 
@@ -88,6 +90,14 @@ export function Coverage() {
 function FieldView({ highlight }: { highlight: FourState | null }) {
   const { plots } = useLiveField();
   const sp = useSearchParams();
+  const router = useRouter();
+  const lens = (["state", "owner", "deadline"].includes(sp.get("lens") ?? "") ? sp.get("lens") : "state") as Lens;
+  const setLens = (l: Lens) => {
+    const q = new URLSearchParams(sp.toString());
+    if (l === "state") q.delete("lens");
+    else q.set("lens", l);
+    router.replace(`/coverage/?${q.toString()}`, { scroll: false });
+  };
   const [sel, setSel] = useState<number | null>(() => {
     const i = plots.findIndex((p) => p.regulationId === sp.get("plot"));
     return i >= 0 ? i : null;
@@ -99,8 +109,14 @@ function FieldView({ highlight }: { highlight: FourState | null }) {
   }, []);
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-      <div className="relative h-[640px] overflow-hidden rounded-[14px] shadow-[0_0_0_1px_var(--line)] max-md:h-[420px]">
-        <CoverageField selected={sel} onSelectPlot={setSel} highlightState={highlight} />
+      <div className="min-w-0">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <LensSwitch lens={lens} onChange={setLens} />
+          <LensLegend lens={lens} plots={plots} />
+        </div>
+        <div className="relative h-[640px] overflow-hidden rounded-[14px] shadow-[0_0_0_1px_var(--line)] max-md:h-[420px]">
+          <CoverageField selected={sel} onSelectPlot={setSel} highlightState={highlight} lens={lens} />
+        </div>
       </div>
       <PlotPanel plot={sel !== null ? plots[sel] : null} onClose={() => setSel(null)} plots={plots} onPick={setSel} />
     </div>
@@ -119,10 +135,10 @@ function PlotPanel({ plot, onClose, plots, onPick }: { plot: Plot | null; onClos
             .sort((a, b) => b.p.counts.nothing_behind + b.p.counts.known_gap - (a.p.counts.nothing_behind + a.p.counts.known_gap) || b.p.total - a.p.total)
             .map(({ p, i }) => (
               <li key={p.regulationId}>
-                <button onClick={() => onPick(i)} className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-line py-2.5 text-left hover:bg-surface">
+                <button onClick={() => onPick(i)} data-demo={p.citation === "12 CFR 208" ? "D5-3" : undefined} className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-line py-2.5 text-left hover:bg-surface">
                   <span className="min-w-0">
                     <span className="t-data block text-[11.5px]">{p.citation}</span>
-                    <span className="block truncate text-[13px] text-ink2">{p.short}</span>
+                    <span className="block text-[13px] text-ink2">{p.short}</span>
                   </span>
                   <MiniBar counts={p.counts} width={96} />
                 </button>

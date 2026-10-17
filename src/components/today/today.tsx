@@ -17,6 +17,9 @@ import { Page, Section } from "@/components/layout/page";
 import { Count } from "@/components/core/labels";
 import { FOUR_STATES, STATE_LABEL } from "@/components/core/status";
 import { useSceneSupport } from "@/components/scene/support";
+import { LensLegend, LensSwitch } from "@/components/coverage/lens-switch";
+import { useLiveField } from "@/lib/coverage-field";
+import type { Lens } from "@/lib/lens";
 import { appliesVerdict, AppliesChip } from "@/components/change/battle-cards";
 import { NoticeRow, TaskRow, WaitingList, bucket } from "@/components/tasks/tasks";
 
@@ -135,6 +138,8 @@ function Standing() {
   const router = useRouter();
   const support = useSceneSupport();
   const [hover, setHover] = useState<Plot | null>(null);
+  const [lens, setLens] = useState<Lens>("state");
+  const { plots } = useLiveField();
   const h = pos.history;
   const last = h[h.length - 1];
   const prev = h[h.length - 2];
@@ -159,9 +164,14 @@ function Standing() {
           );
         })}
       </div>
+      <div className="flex flex-col gap-2" data-demo="D5-1">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <LensSwitch lens={lens} onChange={setLens} size={28} />
+        <LensLegend lens={lens} plots={plots} className="text-[11.5px]" />
+      </div>
       <div className="relative h-[260px] overflow-hidden rounded-[14px] border border-line">
         {support === "3d" ? (
-          <CoverageField mini selected={null} onSelectPlot={(i) => i !== null && router.push("/coverage/?view=field")} onHoverPlot={setHover} />
+          <CoverageField mini lens={lens} selected={null} onSelectPlot={(i) => i !== null && router.push(`/coverage/?view=field${lens !== "state" ? `&lens=${lens}` : ""}`)} onHoverPlot={setHover} />
         ) : (
           <Link href="/coverage/" className="grid h-full place-items-center bg-surface text-[14px] text-ink2 underline underline-offset-4">
             Open the coverage map
@@ -181,6 +191,7 @@ function Standing() {
             <span className="text-ink2">{regulations.length} regulations · hover a plot, click to open Coverage</span>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
