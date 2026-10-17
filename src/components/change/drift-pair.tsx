@@ -30,7 +30,7 @@ export function DriftPair({ drift, stacked }: { drift: DriftFlag; stacked?: bool
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
-        <MonoLabel>Drift {drift.id} · policy and procedure disagree</MonoLabel>
+        <MonoLabel>Drift · policy and procedure disagree</MonoLabel>
         <span className="t-data shrink-0 text-[11.5px] text-ink">rule: {drift.duty_limit}</span>
       </div>
       <div className={`grid gap-px overflow-hidden rounded-[10px] bg-line shadow-[0_0_0_1px_var(--line)] ${stacked ? "grid-cols-1" : "grid-cols-2 max-sm:grid-cols-1"}`}>

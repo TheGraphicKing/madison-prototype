@@ -111,7 +111,7 @@ export function taskSpec(t: Task, h?: Handoff): TaskSpec {
     }
     case "T-287": {
       const g = knownGaps[0];
-      base.provided.push({ kind: "record", label: `Known gap ${g.id}`, text: g.rationale });
+      base.provided.push({ kind: "record", label: "The known gap on record", text: g.rationale });
       return {
         ...base,
         decision: true,

@@ -1,0 +1,60 @@
+/: 58 controls
+/rules/: 61 controls
+/rules/RC-2026-014/: 38 controls
+/rules/RC-2026-011/: 42 controls
+/rules/RC-2026-016/: 42 controls
+/rules/RC-2026-018/: 27 controls
+/rules/RC-2026-019/: 39 controls
+/rules/RC-2026-017/: 38 controls
+/rules/RC-2026-013/: 40 controls
+/rules/RC-2026-009/: 39 controls
+/rules/RC-2026-012/: 38 controls
+/rules/RC-2026-014/?view=list: 19 controls
+/coverage/: 52 controls
+/coverage/?view=map: 48 controls
+/coverage/?view=rules: 51 controls
+/coverage/?view=documents: 42 controls
+/coverage/?view=calendar: 43 controls
+/obligations/: 27 controls
+/obligations/D-1005-E2/: 31 controls
+/obligations/D-208-W1/?tab=open: 22 controls
+/tasks/: 22 controls
+/reports/: 18 controls
+/reports/board-pack/: 31 controls
+/reports/exam/: 32 controls
+/record/: 19 controls
+/record/?view=list: 38 controls
+
+1470x704 u-anthony: 609 clicks · 22 dead · 0 console errors
+DEAD / · Reset demo
+DEAD / · Collapse
+DEAD / · Viewing as
+EP
+Elena Petrova
+DEAD / · Color
+DEAD / · Accept the obligations found in 12 CFR 1005.11(c)
+Madison fo
+DEAD / · Decide
+DEAD / · Choose a fix for the MFA gap
+No control requires phishing-re
+DEAD / · Decide
+DEAD / · Confirm 2 proposed links for revised Loan Estimates
+The poli
+DEAD / · Review
+DEAD / · Accept 3 Truth in Savings obligations
+Proposed by Madison, w
+DEAD / · Review
+DEAD / · Review the impact of 31 CFR 1020.220
+Applies to Northgate; o
+DEAD / · Review
+DEAD / · Waiting on Grace Liu
+Does Northgate lend in special flood ha
+DEAD / · Nudge
+DEAD / · Waiting on Corvane Payments
+Check Corvane's answer on ACH di
+DEAD / · Nudge
+DEAD / · Owner
+DEAD / · Deadline
+DEAD / · Show it here
+DEAD / · Ask Madison
+⌘J

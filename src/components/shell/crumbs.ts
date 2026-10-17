@@ -30,7 +30,7 @@ export function crumbsFor(pathname: string): { crumbs: Crumb[]; title: string } 
   }
   if (top === "obligations") {
     const d = getDuty(id);
-    return { crumbs: [{ label: "Obligations", href: "/obligations/" }, { label: id }], title: d ? obligationTitle(d.plain) : id };
+    return { crumbs: [{ label: "Obligations", href: "/obligations/" }, { label: d?.citation ?? "Obligation" }], title: d ? obligationTitle(d.plain) : id };
   }
   if (top === "runs") {
     const r = run(id);

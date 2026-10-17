@@ -7,6 +7,14 @@ mkdirSync(out, { recursive: true });
 const b = await chromium.launch({ args: ["--enable-gpu", "--ignore-gpu-blocklist", "--use-angle=metal"] });
 const ctx = await b.newContext({ viewport: { width: w, height: h } });
 await ctx.addInitScript((t) => { try { const [p, m] = t.split("-"); localStorage.setItem("mad_palette", p); localStorage.setItem("mad_mode", m || "light"); } catch {} }, theme);
+if (process.env.PERSONA)
+  await ctx.addInitScript((id) => {
+    try {
+      const k = "madison-demo-v2";
+      const v = JSON.parse(sessionStorage.getItem(k) || '{"state":{},"version":0}');
+      if (!v.state.persona) { v.state.persona = id; sessionStorage.setItem(k, JSON.stringify(v)); }
+    } catch {}
+  }, process.env.PERSONA);
 const page = await ctx.newPage();
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
@@ -14,7 +22,7 @@ page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 for (const p of pathsArg.split(",")) {
   await page.goto((process.env.BASE ?? "http://localhost:4321") + p, { waitUntil: "networkidle" });
   await page.waitForTimeout(Number(wait));
-  const name = (p.replace(/[/?=&]+/g, "_").replace(/^_|_$/g, "") || "today") + `-${theme}-${size}.png`;
+  const name = (p.replace(/[/?=&]+/g, "_").replace(/^_|_$/g, "") || "today") + `-${process.env.PERSONA ?? "u-elena"}-${theme}-${size}.png`;
   await page.screenshot({ path: `${out}/${name}` });
   console.log("shot", name);
 }

@@ -15,6 +15,7 @@ import type { Run, RuleChange } from "@/data/types";
 import type { ItemInstance, RunState } from "@/lib/player/derive";
 import { PLATFORM_LABEL, STAGE_PLACE, type PlaceKey, type PlatformModel } from "@/lib/change-map";
 import { useLiveField, type LiveTile, type Plot } from "@/lib/coverage-field";
+import { plotShortLabel } from "@/lib/lens";
 import { Blocks, CameraRig, Gate, Label, OverviewButton, Platform, Stage, STATE_HEIGHT, STATE_VAR, useSceneTokens, useZoom, ZoomButtons, type BlockItem, type Frame, type Tokens, type ZoomSignal } from "@/components/scene";
 
 /* ---------- layout ---------- */
@@ -517,7 +518,7 @@ function MapScene({
 
       {/* this regulation's coverage plot, the same blocks as Coverage */}
       {!onlyApplies && plot ? (
-        <PlotHere tk={tk} tiles={plotTiles} changeDuties={changeDuties} label={`${plot.citation} · ${plot.short}`} counts={plot.counts} onHover={onHover} onSelect={() => onSelect("plot")} />
+        <PlotHere tk={tk} tiles={plotTiles} changeDuties={changeDuties} label={plotShortLabel(plot)} counts={plot.counts} onHover={onHover} onSelect={() => onSelect("plot")} />
       ) : null}
 
       {/* static results on the platforms */}

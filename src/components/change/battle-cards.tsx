@@ -437,7 +437,13 @@ export function CloseBody({ change }: { change: RuleChange }) {
     (change.id === "RC-2026-014" && s.decisions.some((d) => d.label === "Accept the impact")) ||
     (change.id === "RC-2026-011" && handoffStatus(handoffById("H-116")!, s) === "done");
   const items = [
-    { label: "Every obligation is covered or accepted", ok: ds.length > 0 && settled === ds.length, detail: `${settled} of ${ds.length}` },
+    // the change's own counts include obligations the demo does not name one by one
+    (() => {
+      const k = change.counts;
+      const total = Math.max(ds.length, k?.duties ?? 0);
+      const done = change.state === "closed" ? total : Math.max(settled, k ? k.covered + k.known_gap : 0);
+      return { label: "Every obligation is covered or accepted", ok: total > 0 && done >= total, detail: `${Math.min(done, total)} of ${total}` };
+    })(),
     { label: "Every vendor in scope has answered", ok: Boolean(vendorsDone), detail: imp ? `${imp.vendors.length} vendors` : "No vendors in scope" },
     { label: "The CCO has signed off", ok: signed, detail: signed ? (change.closed_by ? `${userById(change.closed_by)?.name}, ${fmtDate(change.closed_at)}` : "Signed") : "Not yet" },
   ];

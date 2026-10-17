@@ -9,7 +9,7 @@ const routes = [
   "/", "/rules/", "/rules/RC-2026-014/", "/rules/RC-2026-011/", "/rules/RC-2026-016/", "/rules/RC-2026-018/", "/rules/RC-2026-019/",
   "/runs/run-rule-1005/?mode=replay", "/runs/run-coverage-1026/?mode=replay", "/runs/run-design-mfa/?mode=replay",
   "/coverage/", "/coverage/?view=map", "/coverage/?view=rules", "/coverage/?view=documents", "/coverage/?view=calendar",
-  "/obligations/", "/obligations/D-1005-E2/", "/obligations/D-208-W1/", "/tasks/", "/reports/", "/reports/board-pack/", "/reports/exam/", "/record/", "/gallery/",
+  "/obligations/", "/obligations/D-1005-E2/", "/obligations/D-208-W1/", "/obligations/D-1005-E2/?tab=history", "/obligations/D-1005-E2/?tab=open", "/record/?view=list", "/tasks/", "/reports/", "/reports/board-pack/", "/reports/exam/", "/record/", "/gallery/",
 ];
 // $100,000 is the wire-approval threshold in the rule itself, not a penalty
 const allowedDollars = new Set(["$100,000"]);
@@ -22,6 +22,7 @@ const checks = [
   { name: "model name", re: /claude-|prompt v\d|tokens?\b/gi },
   { name: "raw field name", re: /\b[a-z]+(?:_[a-z]+)+\b/g },
   { name: "raw change id", re: /\bRC-20\d\d-\d{3}\b/g },
+  { name: "internal id", re: /\b(DR|KG|H|T|LNK|E)-\d{3,4}\b/g },
 ];
 
 const browser = await chromium.launch();

@@ -163,7 +163,7 @@ export function resolveRef(ref: string): { label: string; detail?: string; href:
   const chg = getChange(ref);
   if (chg) return { label: `${chg.citation} ${chg.title}`, detail: chg.id, href: `/rules/${chg.id}/` };
   const dr = driftById(ref);
-  if (dr) return { label: `Drift ${dr.id}`, detail: dr.summary, href: `/rules/${getDuty(dr.obligation_id)?.change_id ?? ""}/?step=whats_left` };
+  if (dr) return { label: `Drift: ${dr.summary}`, detail: undefined, href: `/rules/${getDuty(dr.obligation_id)?.change_id ?? ""}/?step=whats_left` };
   return undefined;
 }
 

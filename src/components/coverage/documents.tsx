@@ -92,7 +92,7 @@ export function Documents() {
               <div key={d.id} className="mt-10 max-w-[820px]">
                 <DriftPair drift={d} />
                 <Link href={`/obligations/${d.obligation_id}/`} className="mt-3 inline-block text-[14px] underline underline-offset-4">
-                  Open {d.obligation_id}: {getDuty(d.obligation_id)?.plain}
+                  Open the obligation: {getDuty(d.obligation_id)?.plain}
                 </Link>
               </div>
             ))}

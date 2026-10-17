@@ -10,6 +10,9 @@ export function obligationWords(text: string): string {
     .replace(/\bConsumer EFT\b/g, "Consumer electronic transfers")
     // internal process tags are not bank words: "(card_disputes)" is dropped
     .replace(/\s\([a-z]+(?:_[a-z]+)+\)/g, "")
+    // internal ids of drifts and known gaps are not bank words
+    .replace(/\b([Dd])rift DR-\d+\b/g, (_m, d) => `${d}rift`)
+    .replace(/\b([Kk])nown gap KG-\d+\b/g, (_m, k) => `${k}nown gap`)
     // any other raw field name reads as words: "flood_zone_lending" becomes "flood zone lending"
     .replace(/\b[a-z]+(?:_[a-z]+)+\b/g, (m) => m.replace(/_/g, " "));
 }
